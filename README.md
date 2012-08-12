@@ -3,6 +3,9 @@
 
 A tiny JavaScript class to generate YouTube-like hashes from one or many ids.
 
+**This is a client-side JavaScript version of hashids.**
+For Node.js version check out: [https://github.com/ivanakimov/hashids.node.js](https://github.com/ivanakimov/hashids.node.js)
+
 ## Contents
 
 * **hashids.js** - hashids class
@@ -10,8 +13,6 @@ A tiny JavaScript class to generate YouTube-like hashes from one or many ids.
 * LICENSE
 
 ## What's it for?
-
-This is a client-side JavaScript version of: [https://github.com/ivanakimov/hashids.node.js](https://github.com/ivanakimov/hashids.node.js)
 
 Generating **unique hashes** is beneficial when you do not want to expose your database ids in the URL. It's even more helpful when you do not have to look up in the database what record belongs to what hash.
 
