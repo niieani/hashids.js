@@ -2,7 +2,6 @@
 # hashids
 
 A tiny JavaScript class to generate YouTube-like hashes from one or many ids.
-
 **This is a client-side JavaScript version of hashids.**
 For Node.js version check out: [https://github.com/ivanakimov/hashids.node.js](https://github.com/ivanakimov/hashids.node.js)
 
@@ -39,8 +38,8 @@ All integers are expected to be positive.
 To encode a single number:
 	
 ```javascript
-var hashids = new hashids('this is my salt');
-var hash = hashids.encode(12345);
+var hashids = new hashids('this is my salt'),
+	hash = hashids.encode(12345);
 ```
 
 var `hash` is now going to be:
@@ -50,8 +49,8 @@ var `hash` is now going to be:
 To encode multiple numbers into one hash:
 	
 ```javascript
-var hashids = new hashids('this is my salt');
-var hash = hashids.encode(683, 94108, 123, 5);
+var hashids = new hashids('this is my salt'),
+	hash = hashids.encode(683, 94108, 123, 5);
 ```
 
 var `hash` is now going to be:
@@ -63,13 +62,11 @@ var `hash` is now going to be:
 Hash decoding is done using the same salt value that you have used during encoding:
 
 ```javascript
-var hashids = new hashids('this is my salt');
+var hashids = new hashids('this is my salt'),
+	hash1 = hashids.decode('7OR'),
+	hash2 = hashids.decode('nEfOM6s2oIz');
 
-var hash1 = hashids.decode('7OR');
-console.log(hash1);
-
-var hash2 = hashids.decode('nEfOM6s2oIz');
-console.log(hash2);
+console.log(hash1, hash2);
 ```
 
 Output will be:
