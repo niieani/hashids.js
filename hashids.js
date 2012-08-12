@@ -62,7 +62,7 @@ var hashids = (function() {
 			alphabet = this.alphabet,
 			args = Array.prototype.slice.call(arguments);
 		
-		for (i = 0; i < arguments.length; i++) {
+		for (var i = 0; i != arguments.length; i++) {
 			
 			number = arguments[i];
 			if (number < 0) {
@@ -97,12 +97,12 @@ var hashids = (function() {
 			
 			subHash = hash;
 			
-			for (i = 0; i < this.separators.length; i++)
+			for (var i = 0; i < this.separators.length; i++)
 				subHash = subHash.replace(new RegExp(this.separators[i], 'g'), ' ');
 			
 			hashArray = subHash.split(' ');
 			
-			for (i = 0; i < hashArray.length; i++) {
+			for (var i = 0; i < hashArray.length; i++) {
 				
 				subHash = hashArray[i];
 				number = this.unhash(subHash, alphabet);
@@ -137,7 +137,7 @@ var hashids = (function() {
 		
 		var ret = 0, pos;
 		
-		for (i = 0; i < hash.length; i++) {
+		for (var i = 0; i < hash.length; i++) {
 			pos = alphabet.indexOf(hash[i]);
 			ret += pos * Math.pow(alphabet.length, hash.length - i - 1);
 		}
@@ -498,4 +498,3 @@ var hashids = (function() {
 	return hashids;
 	
 })();
-
