@@ -1,3 +1,4 @@
+[![build status](https://secure.travis-ci.org/ivanakimov/hashids.js.png)](http://travis-ci.org/ivanakimov/hashids.js)
 
 # hashids
 
