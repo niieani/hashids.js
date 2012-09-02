@@ -29,7 +29,7 @@ var hashids = (function() {
 			
 			for (var i = 0, len = alphabet.length; i != len; i++) {
 				if (this.alphabet.indexOf(alphabet[i]) == -1)
-                	this.alphabet += alphabet[i];
+					this.alphabet += alphabet[i];
 			}
 			
 		}

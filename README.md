@@ -33,7 +33,6 @@ You can pass a unique salt value so your hashes differ from everyone else's. I u
 
 var hashes = new hashids("this is my salt"),
 	hash = hashes.encrypt(1234);
-
 ```
 
 `hash` is now going to be:
