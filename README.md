@@ -1,111 +1,220 @@
 
 # hashids
 
-A tiny JavaScript class to generate YouTube-like hashes from one or many ids.
-**This is a client-side JavaScript version of hashids.**
-For Node.js version check out: [https://github.com/ivanakimov/hashids.node.js](https://github.com/ivanakimov/hashids.node.js)
+A small JavaScript class to generate YouTube-like hashes from one or many numbers. This is a client-side version: [http://www.hashids.org/javascript/](http://www.hashids.org/javascript/)
 
-## Contents
+If you are looking for a Node.js library, there's a separate version for that: [http://www.hashids.org/node-js/](http://www.hashids.org/node-js/)
 
-* **hashids.js** - hashids class
-* README.md - documentation and examples
-* LICENSE
+## What is it?
 
-## What's it for?
+hashids (Hash ID's) creates short, unique, decryptable hashes from unsigned integers.
 
-Generating **unique hashes** is beneficial when you do not want to expose your database ids in the URL. It's even more helpful when you do not have to look up in the database what record belongs to what hash.
+It was designed for websites to use in URL shortening, tracking stuff, or making pages private (or at least unguessable).
 
-Instead of storing these hashes in the database and selecting by them, you could encode primary ids and select by those - which is faster. Providing a unique `salt` value to the constructor will make your hashes unique also.
+This algorithm tries to satisfy the following requirements:
 
-Hashes look similar to what YouTube, Bitly, and other popular websites have: `p9`, `pZsCB`, `qKuBQuxc`. They are case-sensitive, include alphanumeric characters and a dash by default.
+1. Hashes must be unique and decryptable.
+2. They should be able to contain more than one integer (so you can use them in complex or clustered systems).
+3. You should be able to specify minimum hash length.
+4. Hashes should not contain basic English curse words (since they are meant to appear in public places - like the URL).
 
-(You can customize the alphabet from which your hashes are created.)
+Instead of showing items as `1`, `2`, or `3`, you could show them as `U6dc`, `u87U`, and `HMou`.
+You don't have to store these hashes in the database, but can encrypt + decrypt on the fly.
 
-## What's different?
+All integers need to be greater than or equal to zero.
 
-With this class you could encode several ids into one hash. If you have several objects to keep track of, you could use for example `userId`, `univesityId` and `classId` -- passing *all three ids* at the same time and getting back *one hash*.
+## Sample usage
 
-This is really useful for complex or clustered systems where you need to remember more than one id.
+#### Encrypting one number
 
-There is no limit to how many ids you can encode into one hash. The more ids you provide and the bigger the numbers, the longer your hash will be.
-
-## Sample Usage
-
-All integers are expected to be positive.
-
-### Encoding:
-
-To encode a single number:
-	
-```javascript
-var hashids = new hashids('this is my salt'),
-	hash = hashids.encode(12345);
-```
-
-var `hash` is now going to be:
-
-	7OR
-
-To encode multiple numbers into one hash:
-	
-```javascript
-var hashids = new hashids('this is my salt'),
-	hash = hashids.encode(683, 94108, 123, 5);
-```
-
-var `hash` is now going to be:
-	
-	nEfOM6s2oIz
-	
-### Decoding:
-
-Hash decoding is done using the same salt value that you have used during encoding:
+You can pass a unique salt value so your hashes differ from everyone else's. I use "**this is my salt**" as an example.
 
 ```javascript
-var hashids = new hashids('this is my salt'),
-	hash1 = hashids.decode('7OR'),
-	hash2 = hashids.decode('nEfOM6s2oIz');
 
-console.log(hash1, hash2);
+var hashes = new hashids("this is my salt"),
+	hash = hashes.encrypt(1234);
+
 ```
 
-Output will be:
+`hash` is now going to be:
+	
+	xEXn
+
+#### Decrypting
+
+Notice during decryption, same salt value is used:
 
 ```javascript
-[ 12345 ]
-[ 683, 94108, 123, 5 ]
+
+var hashes = new hashids("this is my salt"),
+	numbers = hashes.decrypt("xEXn");
+
 ```
 
-## Security
+`numbers` is now going to be:
+	
+	[ 1234 ]
 
-The primary purpose of hashids is to make ids look different. It's not meant or tested to be used as a security algorithm.
+#### Decrypting with different salt
 
-Having said that, this class does try to make these hashes un-guessable and unique.
-
-Let's look at the following example:
+Decryption will not work if salt is changed:
 
 ```javascript
-var hashids = new hashids('this is my salt'),
-	hash = hashids.encode(5, 5, 5, 5);
+
+var hashes = new hashids("this is my pepper"),
+	numbers = hashes.decrypt("xEXn");
+
 ```
 
-var `hash` will be:
+`numbers` is now going to be:
 	
-	jie1ws6
+	[]
 	
-You don't see any repeating patterns that might show there's 4 identical numbers in the hash.
+#### Encrypting several numbers
+
+```javascript
+
+var hashes = new hashids("this is my salt"),
+	hash = hashes.encrypt(683, 94108, 123, 5);
+
+```
+
+`hash` is now going to be:
+	
+	zKphM54nuAyu5
+	
+#### Decrypting is done the same way
+
+```javascript
+
+var hashes = new hashids("this is my salt"),
+	numbers = hashes.decrypt("zKphM54nuAyu5");
+
+```
+
+`numbers` is now going to be:
+	
+	[ 683, 94108, 123, 5 ]
+	
+#### Encrypting and specifying minimum hash length
+
+Here we encrypt integer 1, and set the minimum hash length to **17** (by default it's **0** -- meaning hashes will be the shortest possible length).
+
+```javascript
+
+var hashes = new hashids("this is my salt", 17),
+	hash = hashes.encrypt(1);
+
+```
+
+`hash` is now going to be:
+	
+	7rKjHrjiMRirLkHyr
+	
+#### Decrypting
+
+```javascript
+
+var hashes = new hashids("this is my salt", 17),
+	numbers = hashes.decrypt("7rKjHrjiMRirLkHyr");
+
+```
+
+`numbers` is now going to be:
+	
+	[ 1 ]
+	
+#### Specifying custom hash alphabet
+
+Here we set the alphabet to consist of only four letters: "abcd"
+
+```javascript
+
+var hashes = new hashids("this is my salt", 0, "abcd"),
+	hash = hashes.encrypt(1, 2, 3, 4, 5);
+
+```
+
+`hash` is now going to be:
+	
+	adcdacddcdaacdad
+	
+## Randomness
+
+The primary purpose of hashids is to obfuscate ids. It's not meant or tested to be used for security purposes or compression.
+Having said that, this algorithm does try to make these hashes unguessable and unpredictable:
+
+#### Repeating numbers
+
+```javascript
+
+var hashes = new hashids("this is my salt"),
+	hash = hashes.encrypt(5, 5, 5, 5);
+
+```
+
+You don't see any repeating patterns that might show there's 4 identical numbers in the hash:
+
+	GMh5SAt9
 
 Same with incremented numbers:
 
 ```javascript
-var hashids = new hashids('this is my salt'),
-	hash = hashids.encode(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+
+var hashes = new hashids("this is my salt"),
+	hash = hashes.encrypt(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+
 ```
 
-var `hash` will be :
+`hash` will be :
 	
-	6utsaI616snh0SdFthj
+	zEUzHySGIpuyhpF6Tasj
 	
-## Bonus
+### Incrementing number hashes:
 
-Since these hashes are most likely to be used in user-visible places, like the url -- with default alphabet, they should not make up basic curse words -- like the f-bomb or "#2" :P
+```javascript
+
+var hashes = new hashids("this is my salt"),
+	hash1 = hashes.encrypt(1), /* MR */
+	hash2 = hashes.encrypt(2), /* ed */
+	hash3 = hashes.encrypt(3), /* o9 */
+	hash4 = hashes.encrypt(4), /* 4n */
+	hash5 = hashes.encrypt(5); /* a5 */
+
+```
+
+## Bad hashes
+
+I wrote this class with the intent of placing these hashes in visible places - like the URL. If I create a unique hash for each user, it would be unfortunate if the hash ended up accidentally being a bad word. Imagine auto-creating a URL with hash for your user that looks like this - `http://example.com/user/a**hole`
+
+Therefore, this algorithm tries to avoid generating most common English curse words with the default alphabet. This is done by never placing the following letters next to each other:
+	
+	c, C, s, S, f, F, h, H, u, U, i, I, t, T
+	
+## Changelog
+
+**0.1.2 - Current Stable**
+
+	Warning: If you are using 0.1.1 or below, updating to this version will change your hashes.
+
+- Minimum hash length can now be specified
+- Added more randomness to hashes
+- Added unit tests
+- Added example files
+- Changed warnings that can be thrown
+- Renamed `encode/decode` to `encrypt/decrypt`
+- Consistent shuffle does not depend on md5 anymore
+- Speed improvements
+
+**0.1.1**
+
+- Speed improvements
+- Bug fixes
+
+**0.1.0**
+	
+- First commit
+
+## License
+
+MIT License. See the `LICENSE` file.
