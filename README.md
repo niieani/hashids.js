@@ -48,7 +48,6 @@ Notice during decryption, same salt value is used:
 
 var hashes = new hashids("this is my salt"),
 	numbers = hashes.decrypt("xEXn");
-
 ```
 
 `numbers` is now going to be:
@@ -63,7 +62,6 @@ Decryption will not work if salt is changed:
 
 var hashes = new hashids("this is my pepper"),
 	numbers = hashes.decrypt("xEXn");
-
 ```
 
 `numbers` is now going to be:
@@ -76,7 +74,6 @@ var hashes = new hashids("this is my pepper"),
 
 var hashes = new hashids("this is my salt"),
 	hash = hashes.encrypt(683, 94108, 123, 5);
-
 ```
 
 `hash` is now going to be:
@@ -89,7 +86,6 @@ var hashes = new hashids("this is my salt"),
 
 var hashes = new hashids("this is my salt"),
 	numbers = hashes.decrypt("zKphM54nuAyu5");
-
 ```
 
 `numbers` is now going to be:
@@ -104,7 +100,6 @@ Here we encrypt integer 1, and set the minimum hash length to **17** (by default
 
 var hashes = new hashids("this is my salt", 17),
 	hash = hashes.encrypt(1);
-
 ```
 
 `hash` is now going to be:
@@ -117,7 +112,6 @@ var hashes = new hashids("this is my salt", 17),
 
 var hashes = new hashids("this is my salt", 17),
 	numbers = hashes.decrypt("7rKjHrjiMRirLkHyr");
-
 ```
 
 `numbers` is now going to be:
@@ -132,7 +126,6 @@ Here we set the alphabet to consist of only four letters: "abcd"
 
 var hashes = new hashids("this is my salt", 0, "abcd"),
 	hash = hashes.encrypt(1, 2, 3, 4, 5);
-
 ```
 
 `hash` is now going to be:
@@ -150,7 +143,6 @@ Having said that, this algorithm does try to make these hashes unguessable and u
 
 var hashes = new hashids("this is my salt"),
 	hash = hashes.encrypt(5, 5, 5, 5);
-
 ```
 
 You don't see any repeating patterns that might show there's 4 identical numbers in the hash:
@@ -163,7 +155,6 @@ Same with incremented numbers:
 
 var hashes = new hashids("this is my salt"),
 	hash = hashes.encrypt(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-
 ```
 
 `hash` will be :
@@ -180,7 +171,6 @@ var hashes = new hashids("this is my salt"),
 	hash3 = hashes.encrypt(3), /* o9 */
 	hash4 = hashes.encrypt(4), /* 4n */
 	hash5 = hashes.encrypt(5); /* a5 */
-
 ```
 
 ## Bad hashes
