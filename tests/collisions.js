@@ -6,7 +6,7 @@ var startAt = 0,
 
 /* this script will create hashes and check against each other to make sure there are no collisions */
 
-var hashes = new hashids('this is my salt');
+var hashes = new hashids("this is my salt");
 
 var hashObj = {},
 	total = 0,
