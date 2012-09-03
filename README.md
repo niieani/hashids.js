@@ -23,7 +23,7 @@ You don't have to store these hashes in the database, but can encrypt + decrypt 
 
 All integers need to be greater than or equal to zero.
 
-## Sample usage
+## Usage
 
 #### Encrypting one number
 
@@ -32,12 +32,12 @@ You can pass a unique salt value so your hashes differ from everyone else's. I u
 ```javascript
 
 var hashes = new hashids("this is my salt"),
-	hash = hashes.encrypt(1234);
+	hash = hashes.encrypt(12345);
 ```
 
 `hash` is now going to be:
 	
-	xEXn
+	ryKo
 
 #### Decrypting
 
@@ -46,12 +46,12 @@ Notice during decryption, same salt value is used:
 ```javascript
 
 var hashes = new hashids("this is my salt"),
-	numbers = hashes.decrypt("xEXn");
+	numbers = hashes.decrypt("ryKo");
 ```
 
 `numbers` is now going to be:
 	
-	[ 1234 ]
+	[ 12345 ]
 
 #### Decrypting with different salt
 
@@ -60,7 +60,7 @@ Decryption will not work if salt is changed:
 ```javascript
 
 var hashes = new hashids("this is my pepper"),
-	numbers = hashes.decrypt("xEXn");
+	numbers = hashes.decrypt("ryKo");
 ```
 
 `numbers` is now going to be:
@@ -93,24 +93,24 @@ var hashes = new hashids("this is my salt"),
 	
 #### Encrypting and specifying minimum hash length
 
-Here we encrypt integer 1, and set the minimum hash length to **17** (by default it's **0** -- meaning hashes will be the shortest possible length).
+Here we encrypt integer 1, and set the minimum hash length to **8** (by default it's **0** -- meaning hashes will be the shortest possible length).
 
 ```javascript
 
-var hashes = new hashids("this is my salt", 17),
+var hashes = new hashids("this is my salt", 8),
 	hash = hashes.encrypt(1);
 ```
 
 `hash` is now going to be:
 	
-	7rKjHrjiMRirLkHyr
+	rjiMRirL
 	
 #### Decrypting
 
 ```javascript
 
-var hashes = new hashids("this is my salt", 17),
-	numbers = hashes.decrypt("7rKjHrjiMRirLkHyr");
+var hashes = new hashids("this is my salt", 8),
+	numbers = hashes.decrypt("rjiMRirL");
 ```
 
 `numbers` is now going to be:
@@ -203,6 +203,12 @@ Therefore, this algorithm tries to avoid generating most common English curse wo
 **0.1.0**
 	
 - First commit
+
+## Contact
+
+Follow me [@IvanAkimov](http://twitter.com/ivanakimov)
+
+Or [http://ivanakimov.com](http://ivanakimov.com)
 
 ## License
 
