@@ -8,11 +8,11 @@
 	hashids may be freely distributed under the MIT license.
 */
 
-var hashids = (function() {
+var Hashids = (function() {
 	
-	function hashids(salt, minHashLength, alphabet) {
+	function Hashids(salt, minHashLength, alphabet) {
 		
-		this.version = "0.1.3";
+		this.version = "0.1.4";
 		
 		this.salt = salt != null ? salt : "";
 		this.alphabet = "xcS4F6h89aUbideAI7tkynuopqrXCgTE5GBKHLMjfRsz";
@@ -66,7 +66,7 @@ var hashids = (function() {
 		
 	}
 	
-	hashids.prototype.encrypt = function() {
+	Hashids.prototype.encrypt = function() {
 		
 		var ret = "",
 			numbers = [];
@@ -86,7 +86,7 @@ var hashids = (function() {
 		
 	};
 	
-	hashids.prototype.decrypt = function(hash) {
+	Hashids.prototype.decrypt = function(hash) {
 		
 		var ret = [];
 		
@@ -97,7 +97,7 @@ var hashids = (function() {
 		
 	};
 	
-	hashids.prototype.encode = function(numbers, alphabet, salt, minHashLength) {
+	Hashids.prototype.encode = function(numbers, alphabet, salt, minHashLength) {
 		
 		var ret = "",
 			seps = this.consistentShuffle(this.seps, numbers).split(""),
@@ -173,7 +173,7 @@ var hashids = (function() {
 		
 	};
 	
-	hashids.prototype.decode = function(hash) {
+	Hashids.prototype.decode = function(hash) {
 		
 		var ret = [];
 		
@@ -186,7 +186,7 @@ var hashids = (function() {
 			for (var i = 0, len = this.guards.length; i != len; i++)
 				hash = hash.replace(new RegExp(this.guards[i], "g"), " ");
 			
-			hashSplit = hash.split(" ");
+			var hashSplit = hash.split(" ");
 			
 			var i = 0;
 			if (hashSplit.length == 3 || hashSplit.length == 2)
@@ -228,7 +228,7 @@ var hashids = (function() {
 		
 	};
 	
-	hashids.prototype.consistentShuffle = function(alphabet, salt) {
+	Hashids.prototype.consistentShuffle = function(alphabet, salt) {
 		
 		var ret = "";
 		
@@ -292,7 +292,7 @@ var hashids = (function() {
 		
 	};
 	
-	hashids.prototype.hash = function(number, alphabet) {
+	Hashids.prototype.hash = function(number, alphabet) {
 		
 		var hash = "",
 			alphabetLength = alphabet.length;
@@ -306,7 +306,7 @@ var hashids = (function() {
 		
 	};
 	
-	hashids.prototype.unhash = function(hash, alphabet) {
+	Hashids.prototype.unhash = function(hash, alphabet) {
 		
 		var number = 0, pos;
 		
@@ -319,6 +319,6 @@ var hashids = (function() {
 		
 	};
 	
-	return hashids;
+	return Hashids;
 	
 })();
