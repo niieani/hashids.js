@@ -1,0 +1,12 @@
+{
+  "name": "hashids",
+  "version": "0.3.0",
+  "main": "lib/hashids.min.js",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

@@ -1,43 +1,46 @@
 
-# hashids
+![hashids](http://www.hashids.org.s3.amazonaws.com/public/img/hashids.png "Hashids")
 
-A small JavaScript class to generate YouTube-like hashes from one or many numbers. This is a client-side version: [http://www.hashids.org/javascript/](http://www.hashids.org/javascript/)
+======
 
-If you are looking for a Node.js library, there's a separate version for that: [http://www.hashids.org/node-js/](http://www.hashids.org/node-js/)
+Full Documentation
+-------
 
-## What is it?
+A small JavaScript class to generate YouTube-like hashes from one or many numbers. Use hashids when you do not want to expose your database ids to the user. Read full documentation at: [http://www.hashids.org/js/](http://www.hashids.org/js/)
 
-hashids (Hash ID's) creates short, unique, decryptable hashes from unsigned integers.
+If you are looking for a **Node.js version**, there's a separate repo: [https://github.com/ivanakimov/hashids.node.js](https://github.com/ivanakimov/hashids.node.js)
 
-It was designed for websites to use in URL shortening, tracking stuff, or making pages private (or at least unguessable).
+Installation
+-------
 
-This algorithm tries to satisfy the following requirements:
+1. Bower it up: [http://bower.io/](http://bower.io/)
+2. Install:
+	
+	`bower install hashids`
+	
+Or just:
 
-1. Hashes must be unique and decryptable.
-2. They should be able to contain more than one integer (so you can use them in complex or clustered systems).
-3. You should be able to specify minimum hash length.
-4. Hashes should not contain basic English curse words (since they are meant to appear in public places - like the URL).
+	`<script type="text/javascript" src="lib/hashids.min.js"></script>`
 
-Instead of showing items as `1`, `2`, or `3`, you could show them as `U6dc`, `u87U`, and `HMou`.
-You don't have to store these hashes in the database, but can encrypt + decrypt on the fly.
 
-All integers need to be greater than or equal to zero.
-
-## Usage
+Usage
+-------
 
 #### Encrypting one number
 
-You can pass a unique salt value so your hashes differ from everyone else's. I use "**this is my salt**" as an example.
+You can pass a unique salt value so your hashes differ from everyone else's. I use "this is my salt" as an example.
 
 ```javascript
 
-var hashids = new Hashids("this is my salt"),
-	hash = hashids.encrypt(12345);
+var Hashids = require("hashids"),
+	hashids = new Hashids("this is my salt");
+
+var hash = hashids.encrypt(12345);
 ```
 
 `hash` is now going to be:
 	
-	ryBo
+	NkK9
 
 #### Decrypting
 
@@ -45,8 +48,10 @@ Notice during decryption, same salt value is used:
 
 ```javascript
 
-var hashids = new Hashids("this is my salt"),
-	numbers = hashids.decrypt("ryBo");
+var Hashids = require("hashids"),
+	hashids = new Hashids("this is my salt");
+
+var numbers = hashids.decrypt("NkK9");
 ```
 
 `numbers` is now going to be:
@@ -59,8 +64,10 @@ Decryption will not work if salt is changed:
 
 ```javascript
 
-var hashids = new Hashids("this is my pepper"),
-	numbers = hashids.decrypt("ryBo");
+var Hashids = require("hashids"),
+	hashids = new Hashids("this is my pepper");
+
+var numbers = hashids.decrypt("NkK9");
 ```
 
 `numbers` is now going to be:
@@ -71,20 +78,32 @@ var hashids = new Hashids("this is my pepper"),
 
 ```javascript
 
-var hashids = new Hashids("this is my salt"),
-	hash = hashids.encrypt(683, 94108, 123, 5);
+var Hashids = require("hashids"),
+	hashids = new Hashids("this is my salt");
+
+var hash = hashids.encrypt(683, 94108, 123, 5);
 ```
 
 `hash` is now going to be:
 	
-	zBphL54nuMyu5
+	aBMswoO2UB3Sj
 	
+You can also pass an array:
+
+```javascript
+
+var arr = [683, 94108, 123, 5];
+var hash = hashids.encrypt(arr);
+```
+
 #### Decrypting is done the same way
 
 ```javascript
 
-var hashids = new Hashids("this is my salt"),
-	numbers = hashids.decrypt("zBphL54nuMyu5");
+var Hashids = require("hashids"),
+	hashids = new Hashids("this is my salt");
+
+var numbers = hashids.decrypt("aBMswoO2UB3Sj");
 ```
 
 `numbers` is now going to be:
@@ -93,24 +112,28 @@ var hashids = new Hashids("this is my salt"),
 	
 #### Encrypting and specifying minimum hash length
 
-Here we encrypt integer 1, and set the minimum hash length to **8** (by default it's **0** -- meaning hashes will be the shortest possible length).
+Here we encrypt integer 1, and set the **minimum** hash length to **8** (by default it's **0** -- meaning hashes will be the shortest possible length).
 
 ```javascript
 
-var hashids = new Hashids("this is my salt", 8),
-	hash = hashids.encrypt(1);
+var Hashids = require("hashids"),
+	hashids = new Hashids("this is my salt", 8);
+
+var hash = hashids.encrypt(1);
 ```
 
 `hash` is now going to be:
 	
-	b9iLXiAa
+	gB0NV05e
 	
 #### Decrypting
 
 ```javascript
 
-var hashids = new Hashids("this is my salt", 8),
-	numbers = hashids.decrypt("b9iLXiAa");
+var Hashids = require("hashids"),
+	hashids = new Hashids("this is my salt", 8);
+
+var numbers = hashids.decrypt("gB0NV05e");
 ```
 
 `numbers` is now going to be:
@@ -119,19 +142,22 @@ var hashids = new Hashids("this is my salt", 8),
 	
 #### Specifying custom hash alphabet
 
-Here we set the alphabet to consist of only four letters: "abcd"
+Here we set the alphabet to consist of valid hex characters: "0123456789abcdef"
 
 ```javascript
 
-var hashids = new Hashids("this is my salt", 0, "abcd"),
-	hash = hashids.encrypt(1, 2, 3, 4, 5);
+var Hashids = require("hashids"),
+	hashids = new Hashids("this is my salt", 0, "0123456789abcdef");
+
+var hash = hashids.encrypt(1234567);
 ```
 
 `hash` is now going to be:
 	
-	adcdacddcdaacdad
+	b332db5
 	
-## Randomness
+Randomness
+-------
 
 The primary purpose of hashids is to obfuscate ids. It's not meant or tested to be used for security purposes or compression.
 Having said that, this algorithm does try to make these hashes unguessable and unpredictable:
@@ -140,49 +166,71 @@ Having said that, this algorithm does try to make these hashes unguessable and u
 
 ```javascript
 
-var hashids = new Hashids("this is my salt"),
-	hash = hashids.encrypt(5, 5, 5, 5);
+var Hashids = require("hashids"),
+	hashids = new Hashids("this is my salt");
+
+var hash = hashids.encrypt(5, 5, 5, 5);
 ```
 
 You don't see any repeating patterns that might show there's 4 identical numbers in the hash:
 
-	GLh5SMs9
+	1Wc8cwcE
 
 Same with incremented numbers:
 
 ```javascript
 
-var hashids = new Hashids("this is my salt"),
-	hash = hashids.encrypt(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+var Hashids = require("hashids"),
+	hashids = new Hashids("this is my salt");
+
+var hash = hashids.encrypt(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
 ```
 
 `hash` will be :
 	
-	zEUzfySGIpuyhpF6HaC7
+	kRHnurhptKcjIDTWC3sx
 	
-### Incrementing number hashes:
+#### Incrementing number hashes:
 
 ```javascript
 
-var hashids = new Hashids("this is my salt"),
-	hash1 = hashids.encrypt(1), /* LX */
-	hash2 = hashids.encrypt(2), /* ed */
-	hash3 = hashids.encrypt(3), /* o9 */
-	hash4 = hashids.encrypt(4), /* 4n */
-	hash5 = hashids.encrypt(5); /* a5 */
+var Hashids = require("hashids"),
+	hashids = new Hashids("this is my salt");
+
+var hash1 = hashids.encrypt(1), /* NV */
+	hash2 = hashids.encrypt(2), /* 6m */
+	hash3 = hashids.encrypt(3), /* yD */
+	hash4 = hashids.encrypt(4), /* 2l */
+	hash5 = hashids.encrypt(5); /* rD */
 ```
 
-## Bad hashes
+Curses! #$%@
+-------
 
-I wrote this class with the intent of placing these hashes in visible places - like the URL. If I create a unique hash for each user, it would be unfortunate if the hash ended up accidentally being a bad word. Imagine auto-creating a URL with hash for your user that looks like this - `http://example.com/user/a**hole`
+This code was written with the intent of placing created hashes in visible places - like the URL. Which makes it unfortunate if generated hashes accidentally formed a bad word.
 
-Therefore, this algorithm tries to avoid generating most common English curse words with the default alphabet. This is done by never placing the following letters next to each other:
+Therefore, the algorithm tries to avoid generating most common English curse words. This is done by never placing the following letters next to each other:
 	
 	c, C, s, S, f, F, h, H, u, U, i, I, t, T
 	
-## Changelog
+Changelog
+-------
 
-**0.1.4 - Current Stable**
+**0.3.0 - Current Stable**
+
+**PRODUCED HASHES IN THIS VERSION ARE DIFFERENT THAN IN 0.1.4, DO NOT UPDATE IF YOU NEED THEM TO KEEP WORKING:**
+
+- Same algorithm as [PHP](https://github.com/ivanakimov/hashids.php) and [Node.js](https://github.com/ivanakimov/hashids.php) versions now
+- Overall approximately **4x** faster
+- Consistent shuffle function uses slightly modified version of [Fisher–Yates algorithm](http://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle#The_modern_algorithm)
+- Generate large hash strings faster (where _minHashLength_ is more than 1000 chars)
+- When using _minHashLength_, hash character disorder has been improved
+- Basic English curse words will now be avoided even with custom alphabet
+- _encrypt_ function now also accepts array of integers as input
+- Passing JSLint now
+- Support for [Bower](http://bower.io/) package manager
+
+**0.1.4**
 
 - Global var leak for hashSplit (thanks to [@BryanDonovan](https://github.com/BryanDonovan))
 - Class capitalization (thanks to [@BryanDonovan](https://github.com/BryanDonovan))
@@ -216,12 +264,14 @@ Therefore, this algorithm tries to avoid generating most common English curse wo
 	
 - First commit
 
-## Contact
+Contact
+-------
 
 Follow me [@IvanAkimov](http://twitter.com/ivanakimov)
 
 Or [http://ivanakimov.com](http://ivanakimov.com)
 
-## License
+License
+-------
 
-MIT License. See the `LICENSE` file.
+MIT License. See the `LICENSE` file. You can use Hashids in open source projects and commercial products. Don't break the Internet. Kthxbye.
