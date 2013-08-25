@@ -6,7 +6,7 @@
 Full Documentation
 -------
 
-A small JavaScript class to generate YouTube-like hashes from one or many numbers. Use hashids when you do not want to expose your database ids to the user. Read full documentation at: [http://www.hashids.org/js/](http://www.hashids.org/js/)
+A small JavaScript class to generate YouTube-like hashes from one or many numbers. Use hashids when you do not want to expose your database ids to the user. Read full documentation at: [http://www.hashids.org/javascript/](http://www.hashids.org/javascript/)
 
 If you are looking for a **Node.js version**, there's a separate repo: [https://github.com/ivanakimov/hashids.node.js](https://github.com/ivanakimov/hashids.node.js)
 
@@ -20,7 +20,7 @@ Installation
 	
 Or just:
 
-	`<script type="text/javascript" src="lib/hashids.min.js"></script>`
+	<script type="text/javascript" src="lib/hashids.min.js"></script>
 
 
 Usage
