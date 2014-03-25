@@ -155,6 +155,18 @@ var hash = hashids.encrypt(1234567);
 `hash` is now going to be:
 	
 	b332db5
+
+#### Encrypting/Decrypting strings
+
+It's also possible to have strings encrypted/decrypted:
+```javascript
+
+var Hashids = require("hashids"),
+	hashids = new Hashids("this is my salt");
+
+var hash = hashids.encryptFromString("My string to encrypt");
+var myString = hashids.decryptToString(hash);
+```
 	
 Randomness
 -------
