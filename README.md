@@ -25,6 +25,10 @@ Or just:
 
 	<script type="text/javascript" src="lib/hashids.min.js"></script>
 
+Updating from v0.3 to 1.0?
+-------
+
+Read the `CHANGELOG` at the bottom of this readme!
 
 Usage
 -------
