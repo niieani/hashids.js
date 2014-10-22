@@ -223,6 +223,10 @@ Therefore, the algorithm tries to avoid generating most common English curse wor
 Changelog
 -------
 
+**1.0.1**
+
+- *require.js* support by [@nleclerc](https://github.com/nleclerc): <https://github.com/ivanakimov/hashids.js/pull/12>
+
 **1.0.0**
 
 - Several public functions are renamed to be more appropriate:
