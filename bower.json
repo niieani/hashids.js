@@ -1,6 +1,6 @@
 {
   "name": "hashids",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "lib/hashids.min.js",
   "ignore": [
     "**/.*",
