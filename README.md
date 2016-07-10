@@ -1,11 +1,11 @@
 
 [![hashids](http://hashids.org/public/img/hashids.gif "Hashids")](http://hashids.org/)
 
-======
 [![Build Status via Travis CI](https://travis-ci.org/ivanakimov/hashids.js.svg?branch=master)](https://travis-ci.org/ivanakimov/hashids.js)
 [![NPM version](https://img.shields.io/npm/v/hashids.svg)](https://www.npmjs.com/package/hashids)
 [![Coverage Status](https://coveralls.io/repos/ivanakimov/hashids.js/badge.svg?branch=master)](https://coveralls.io/r/ivanakimov/hashids.js?branch=master)
 [![License](https://img.shields.io/packagist/l/hashids/hashids.svg?style=flat)](https://packagist.org/packages/hashids/hashids)
+[![npm downloads](https://img.shields.io/npm/dt/hashids.svg?style=flat-square)](https://github.com/ivanakimov/hashids.js)
 [![Join the chat at https://gitter.im/hashids/hashids](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/hashids/hashids?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 **Hashids** is small JavaScript library to generate YouTube-like ids from numbers. Use it when you don't want to expose your database ids to the user: [http://hashids.org/javascript](http://hashids.org/javascript)
