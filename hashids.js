@@ -14,6 +14,8 @@ export default class Hashids {
 
 		/* alphabet vars */
 
+		this.escapeRegExp = (s) => s.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+
 		this.seps = 'cfhistuCFHISTU';
 		this.minLength = parseInt(minLength, 10) > 0 ? minLength : 0;
 		this.salt = (typeof salt === 'string') ? salt : '';
@@ -223,7 +225,7 @@ export default class Hashids {
 	_decode(id, alphabet) {
 
 		let ret = [], i = 0,
-			r = new RegExp('[' + this.guards + ']', 'g'),
+			r = new RegExp(`[${this.escapeRegExp(this.guards)}]`, 'g'),
 			idBreakdown = id.replace(r, ' '),
 			idArray = idBreakdown.split(' ');
 
@@ -237,7 +239,7 @@ export default class Hashids {
 			const lottery = idBreakdown[0];
 			idBreakdown = idBreakdown.substr(1);
 
-			r = new RegExp('[' + this.seps + ']', 'g');
+			r = new RegExp(`[${this.escapeRegExp(this.seps)}]`, 'g');
 			idBreakdown = idBreakdown.replace(r, ' ');
 			idArray = idBreakdown.split(' ');
 

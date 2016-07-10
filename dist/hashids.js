@@ -62,6 +62,10 @@
 
 			/* alphabet vars */
 
+			this.escapeRegExp = function (s) {
+				return s.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+			};
+
 			this.seps = 'cfhistuCFHISTU';
 			this.minLength = parseInt(minLength, 10) > 0 ? minLength : 0;
 			this.salt = typeof salt === 'string' ? salt : '';
@@ -269,7 +273,7 @@
 
 				var ret = [],
 				    i = 0,
-				    r = new RegExp('[' + this.guards + ']', 'g'),
+				    r = new RegExp('[' + this.escapeRegExp(this.guards) + ']', 'g'),
 				    idBreakdown = id.replace(r, ' '),
 				    idArray = idBreakdown.split(' ');
 
@@ -283,7 +287,7 @@
 					var lottery = idBreakdown[0];
 					idBreakdown = idBreakdown.substr(1);
 
-					r = new RegExp('[' + this.seps + ']', 'g');
+					r = new RegExp('[' + this.escapeRegExp(this.seps) + ']', 'g');
 					idBreakdown = idBreakdown.replace(r, ' ');
 					idArray = idBreakdown.split(' ');
 

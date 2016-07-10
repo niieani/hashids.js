@@ -3,15 +3,16 @@
 
 **1.1.0**:
 
-- ES6 source (lib itself is minified ES5)
+- ES6 source; ES5 dist
 - UMD support ([Node.js repo](https://github.com/ivanakimov/hashids.node.js) is merging into this one)
 - Added Eslint (npm run lint)
 - Added Mocha (npm run test)
-- Added Coveralls (npm run coveralls)
+- Added Coveralls (npm run coverage)
 - Added build script (npm run build)
 - Moved CHANGELOG out of `README.md`
 - `README.md` completely updated
 - `examples/` folder removed; all examples are now in the README
+- [Bug fix](https://github.com/ivanakimov/hashids.node.js/issues/26): escaping regex
 
 **1.0.2**:
 
