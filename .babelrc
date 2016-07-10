@@ -2,9 +2,6 @@
   "presets": ["es2015"],
   "plugins": [
     "add-module-exports",
-    "transform-es2015-modules-umd",
-    ["rename-umd-globals", {
-      "hashids": "Hashids"
-    }]
+    "transform-es2015-modules-umd"
   ]
 }
