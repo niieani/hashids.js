@@ -13,6 +13,16 @@
 - `README.md` completely updated
 - `examples/` folder removed; all examples are now in the README
 - [Bug fix](https://github.com/ivanakimov/hashids.node.js/issues/26): escaping regex
+- Improvement: relaxed parameter checks to `encode()`. All of these are allowed:
+
+	```javascript
+	var hashids = new Hashids();
+
+	hashids.encode(1, 2, 3); // o2fXhV
+	hashids.encode([1, 2, 3]); // o2fXhV
+	hashids.encode('1', '2', '3'); // o2fXhV
+	hashids.encode(['1', '2', '3']); // o2fXhV
+	```
 
 **1.0.2**:
 

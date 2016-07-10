@@ -5,6 +5,7 @@ import { assert } from 'chai';
 const hashids = new Hashids();
 
 const map = {
+	'gY': [0],
 	'jR': [1],
 	'R8ZN0': [928728],
 	'o2fXhV': [1, 2, 3],

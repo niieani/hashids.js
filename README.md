@@ -55,13 +55,15 @@ var numbers = hashids.decode(id); // [1, 2, 3]
 More options
 -------
 
-**Pass an array of numbers:**
+**A few more ways to pass to `encode()`:**
 
 ```javascript
 var hashids = new Hashids();
-var numbers = [1, 2, 3];
 
-console.log(hashids.encode(numbers)); // o2fXhV
+console.log(hashids.encode(1, 2, 3)); // o2fXhV
+console.log(hashids.encode([1, 2, 3])); // o2fXhV
+console.log(hashids.encode('1', '2', '3')); // o2fXhV
+console.log(hashids.encode(['1', '2', '3'])); // o2fXhV
 ```
 
 **Make your ids unique:**
@@ -119,7 +121,16 @@ Pitfalls
 	```
 
 2. Encoding negative numbers is not supported.
-3. Do not use this library as a security tool and do not encode sensitive data. This is **not** an encryption library.
+3. If you pass bogus input to `encode()`, an empty string will be returned:
+
+	```javascript
+	var hashids = new Hashids();
+
+	var id = hashids.encode('a123');
+	console.log(id === ''); // true
+	```
+
+4. Do not use this library as a security tool and do not encode sensitive data. This is **not** an encryption library.
 
 Randomness
 -------

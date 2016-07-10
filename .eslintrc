@@ -17,6 +17,7 @@
     "prefer-const": 2,
     "no-unused-vars": [2, {"vars": "all", "args": "none", "varsIgnorePattern": "[iI]gnored"}],
 	"no-alert": 2,
-	"no-trailing-spaces": 2
+	"no-trailing-spaces": 2,
+	"radix": 2,
   }
 }

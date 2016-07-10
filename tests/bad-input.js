@@ -28,6 +28,26 @@ describe('bad input', () => {
 		assert.equal(id, '');
 	});
 
+	it(`should return an empty string when encoding a negative number`, () => {
+		const id = hashids.encode(-1);
+		assert.equal(id, '');
+	});
+
+	it(`should return an empty string when encoding a null`, () => {
+		const id = hashids.encode(null);
+		assert.equal(id, '');
+	});
+
+	it(`should return an empty string when encoding a NaN`, () => {
+		const id = hashids.encode(NaN);
+		assert.equal(id, '');
+	});
+
+	it(`should return an empty string when encoding an undefined`, () => {
+		const id = hashids.encode(undefined);
+		assert.equal(id, '');
+	});
+
 	it(`should return an empty string when encoding an array with non-numeric input`, () => {
 		const id = hashids.encode(['z']);
 		assert.equal(id, '');

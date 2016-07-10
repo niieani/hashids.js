@@ -96,7 +96,7 @@ export default class Hashids {
 			return ret;
 		}
 
-		if (numbers[0] instanceof Array) {
+		if (numbers[0] && numbers[0].constructor === Array) {
 			numbers = numbers[0];
 			if (!numbers.length) {
 				return ret;
@@ -104,7 +104,10 @@ export default class Hashids {
 		}
 
 		for (let i = 0; i !== numbers.length; i++) {
-			if (typeof numbers[i] !== 'number' || numbers[i] % 1 !== 0 || numbers[i] < 0) {
+			numbers[i] = parseInt(numbers[i], 10);
+			if (numbers[i] >= 0) {
+				continue;
+			} else {
 				return ret;
 			}
 		}
