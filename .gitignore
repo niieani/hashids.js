@@ -1,2 +1,5 @@
+node_modules
 .DS_Store
-Hashids.tmproj
+npm-debug.log
+.nyc_output
+coverage

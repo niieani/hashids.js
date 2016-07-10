@@ -1,303 +1,163 @@
 
-![hashids](http://hashids.org/public/img/hashids-logo-normal.png "Hashids")
+[![hashids](http://hashids.org/public/img/hashids.gif "Hashids")](http://hashids.org/)
 
 ======
+[![Build Status via Travis CI](https://travis-ci.org/ivanakimov/hashids.js.svg?branch=master)](https://travis-ci.org/ivanakimov/hashids.js)
+[![NPM version](https://img.shields.io/npm/v/hashids.svg)](https://www.npmjs.com/package/hashids)
+[![Coverage Status](https://coveralls.io/repos/ivanakimov/hashids.js/badge.svg?branch=master)](https://coveralls.io/r/ivanakimov/hashids.js?branch=master)
+[![License](https://img.shields.io/packagist/l/hashids/hashids.svg?style=flat)](https://packagist.org/packages/hashids/hashids)
+[![Join the chat at https://gitter.im/hashids/hashids](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/hashids/hashids?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-Full Documentation
+**Hashids** is small JavaScript library to generate YouTube-like ids from numbers. Use it when you don't want to expose your database ids to the user: [http://hashids.org/javascript](http://hashids.org/javascript)
+
+Getting started
 -------
 
-A small JavaScript class to generate YouTube-like ids from one or many numbers. Use hashids when you do not want to expose your database ids to the user. Read full documentation at: [http://hashids.org/javascript](http://hashids.org/javascript)
+Install Hashids via:
 
-Node.js
+- [node.js](): `npm install --save hashids`
+- [bower](http://bower.io/): `bower install hashids`
+- [jam](http://jamjs.org/): `jam install hashids`
+
+(or just use the code at `dist/hashids.js`)
+
+Use in the browser (wherever ES5 is supported; 5KB):
+
+```javascript
+<script type="text/javascript" src="hashids.min.js"></script>
+<script type="text/javascript">
+
+    var hashids = new Hashids();
+    console.log(hashids.encode(1));
+
+</script>
+```
+
+Use in Node.js:
+
+```javascript
+var Hashids = require('hashids');
+var hashids = new Hashids();
+
+console.log(hashids.encode(1));
+```
+
+Quick example
 -------
 
-If you are looking for a backend **Node.js version**, there's a separate repo: [https://github.com/ivanakimov/hashids.node.js](https://github.com/ivanakimov/hashids.node.js)
+```javascript
+var hashids = new Hashids();
 
-Installation
+var id = hashids.encode(1, 2, 3); // o2fXhV
+var numbers = hashids.decode(id); // [1, 2, 3]
+```
+
+More options
 -------
 
-1. Bower it up: [http://bower.io/](http://bower.io/)
-2. Install:
-	
-	`bower install hashids`
-	
-Or just:
+**Pass an array of numbers:**
 
-	<script type="text/javascript" src="lib/hashids.min.js"></script>
+```javascript
+var hashids = new Hashids();
+var numbers = [1, 2, 3];
 
-Updating from v0.3 to 1.0?
+console.log(hashids.encode(numbers)); // o2fXhV
+```
+
+**Make your ids unique:**
+
+Pass a project name to make your ids unique:
+
+```javascript
+var hashids = new Hashids('My Project');
+console.log(hashids.encode(1, 2, 3)); // Z4UrtW
+
+var hashids = new Hashids('My Other Project');
+console.log(hashids.encode(1, 2, 3)); // gPUasb
+```
+
+**Use padding to make your ids longer:**
+
+Note that ids are only padded to fit **at least** a certain length. It doesn't mean that your ids will be *exactly* that length.
+
+```javascript
+var hashids = new Hashids(); // no padding
+console.log(hashids.encode(1)); // jR
+
+var hashids = new Hashids('', 10); // pad to length 10
+console.log(hashids.encode(1)); // VolejRejNm
+```
+
+**Pass a custom alphabet:**
+
+```javascript
+var hashids = new Hashids('', 0, 'abcdefghijklmnopqrstuvwxyz'); // all lowercase
+console.log(hashids.encode(1, 2, 3)); // mdfphx
+```
+
+**Encode hex instead of numbers:**
+
+Useful if you want to encode [Mongo](https://www.mongodb.com/)'s ObjectIds. Note that *there is no limit* on how large of a hex number you can pass (it does not have to be Mongo's ObjectId).
+
+```javascript
+var hashids = new Hashids();
+
+var id = hashids.encodeHex('507f1f77bcf86cd799439011'); // y42LW46J9luq3Xq9XMly
+var hex = hashids.decodeHex(id); // 507f1f77bcf86cd799439011
+```
+
+Pitfalls
 -------
 
-Read the `CHANGELOG` at the bottom of this readme!
+1. When decoding, output is always an array of numbers (even if you encode only one number):
 
-Usage
--------
+	```javascript
+	var hashids = new Hashids();
 
-#### Encoding one number
+	var id = hashids.encode(1);
+	console.log(hashids.decode(id)); // [1]
+	```
 
-You can pass a unique salt value so your hashids differ from everyone else's. I use "this is my salt" as an example.
+2. Encoding negative numbers is not supported.
+3. Do not use this library as a security tool and do not encode sensitive data. This is **not** an encryption library.
 
-```javascript
-
-var Hashids = require("hashids"),
-	hashids = new Hashids("this is my salt");
-
-var id = hashids.encode(12345);
-```
-
-`id` is now going to be:
-	
-	NkK9
-
-#### Decoding
-
-Notice during decoding, same salt value is used:
-
-```javascript
-
-var Hashids = require("hashids"),
-	hashids = new Hashids("this is my salt");
-
-var numbers = hashids.decode("NkK9");
-```
-
-`numbers` is now going to be:
-	
-	[ 12345 ]
-
-#### Decoding with different salt
-
-Decoding will not work if salt is changed:
-
-```javascript
-
-var Hashids = require("hashids"),
-	hashids = new Hashids("this is my pepper");
-
-var numbers = hashids.decode("NkK9");
-```
-
-`numbers` is now going to be:
-	
-	[]
-	
-#### Encoding several numbers
-
-```javascript
-
-var Hashids = require("hashids"),
-	hashids = new Hashids("this is my salt");
-
-var id = hashids.encode(683, 94108, 123, 5);
-```
-
-`id` is now going to be:
-	
-	aBMswoO2UB3Sj
-	
-You can also pass an array:
-
-```javascript
-
-var arr = [683, 94108, 123, 5];
-var id = hashids.encode(arr);
-```
-
-#### Decoding is done the same way
-
-```javascript
-
-var Hashids = require("hashids"),
-	hashids = new Hashids("this is my salt");
-
-var numbers = hashids.decode("aBMswoO2UB3Sj");
-```
-
-`numbers` is now going to be:
-	
-	[ 683, 94108, 123, 5 ]
-	
-#### Encoding and specifying minimum id length
-
-Here we encode integer 1, and set the **minimum** id length to **8** (by default it's **0** -- meaning hashes will be the shortest possible length).
-
-```javascript
-
-var Hashids = require("hashids"),
-	hashids = new Hashids("this is my salt", 8);
-
-var id = hashids.encode(1);
-```
-
-`id` is now going to be:
-	
-	gB0NV05e
-	
-#### Decoding
-
-```javascript
-
-var Hashids = require("hashids"),
-	hashids = new Hashids("this is my salt", 8);
-
-var numbers = hashids.decode("gB0NV05e");
-```
-
-`numbers` is now going to be:
-	
-	[ 1 ]
-	
-#### Specifying custom id alphabet
-
-Here we set the alphabet to consist of valid hex characters: "0123456789abcdef"
-
-```javascript
-
-var Hashids = require("hashids"),
-	hashids = new Hashids("this is my salt", 0, "0123456789abcdef");
-
-var id = hashids.encode(1234567);
-```
-
-`id` is now going to be:
-	
-	b332db5
-	
 Randomness
 -------
 
-The primary purpose of hashids is to obfuscate ids. It's not meant or tested to be used for security purposes or compression.
-Having said that, this algorithm does try to make these hashes unguessable and unpredictable:
+The primary purpose of Hashids is to obfuscate ids. It's not meant or tested to be used as a security or compression tool. Having said that, this algorithm does try to make these ids random and unpredictable:
 
-#### Repeating numbers
+No repeating patterns showing there are 3 identical numbers in the id:
 
 ```javascript
-
-var Hashids = require("hashids"),
-	hashids = new Hashids("this is my salt");
-
-var id = hashids.encode(5, 5, 5, 5);
+var hashids = new Hashids();
+console.log(hashids.encode(5, 5, 5)); // A6t1tQ
 ```
-
-You don't see any repeating patterns that might show there's 4 identical numbers in the hash:
-
-	1Wc8cwcE
 
 Same with incremented numbers:
 
 ```javascript
+var hashids = new Hashids();
 
-var Hashids = require("hashids"),
-	hashids = new Hashids("this is my salt");
+console.log(hashids.encode(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)); // wpfLh9iwsqt0uyCEFjHM
 
-var id = hashids.encode(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-```
-
-`id` will be :
-	
-	kRHnurhptKcjIDTWC3sx
-	
-#### Incrementing number ids:
-
-```javascript
-
-var Hashids = require("hashids"),
-	hashids = new Hashids("this is my salt");
-
-var id1 = hashids.encode(1), /* NV */
-	id2 = hashids.encode(2), /* 6m */
-	id3 = hashids.encode(3), /* yD */
-	id4 = hashids.encode(4), /* 2l */
-	id5 = hashids.encode(5); /* rD */
+console.log(hashids.encode(1)); // jR
+console.log(hashids.encode(2)); // k5
+console.log(hashids.encode(3)); // l5
+console.log(hashids.encode(4)); // mO
+console.log(hashids.encode(5)); // nR
 ```
 
 Curses! #$%@
 -------
 
-This code was written with the intent of placing created hashes in visible places - like the URL. Which makes it unfortunate if generated hashes accidentally formed a bad word.
+This code was written with the intent of placing created ids in visible places, like the URL. Therefore, the algorithm tries to avoid generating most common English curse words by generating ids that never have the following letters next to each other:
 
-Therefore, the algorithm tries to avoid generating most common English curse words. This is done by never placing the following letters next to each other:
-	
-	c, C, s, S, f, F, h, H, u, U, i, I, t, T
-	
-Changelog
+	c, f, h, i, s, t, u
+
+Support
 -------
 
-**1.0.2**
-
-- Support for older browsers (using `charAt`) by [@tauanz](https://github.com/tauanz): <https://github.com/ivanakimov/hashids.js/pull/15>
-
-**1.0.1**
-
-- *require.js* support by [@nleclerc](https://github.com/nleclerc): <https://github.com/ivanakimov/hashids.js/pull/12>
-
-**1.0.0**
-
-- Several public functions are renamed to be more appropriate:
-	- Function `encrypt()` changed to `encode()`
-	- Function `decrypt()` changed to `decode()`
-	- Function `encryptHex()` changed to `encodeHex()`
-	- Function `decryptHex()` changed to `decodeHex()`
-	
-	Hashids was designed to encode integers, primary ids at most. We've had several requests to encrypt sensitive data with Hashids and this is the wrong algorithm for that. So to encourage more appropriate use, `encrypt/decrypt` is being "downgraded" to `encode/decode`.
-
-- Version tag added: `1.0`
-- `README.md` updated
-
-**0.3.0 - Current Stable**
-
-**PRODUCED HASHES IN THIS VERSION ARE DIFFERENT THAN IN 0.1.4, DO NOT UPDATE IF YOU NEED THEM TO KEEP WORKING:**
-
-- Same algorithm as [PHP](https://github.com/ivanakimov/hashids.php) and [Node.js](https://github.com/ivanakimov/hashids.node.js) versions now
-- Overall approximately **4x** faster
-- Consistent shuffle function uses slightly modified version of [Fisher–Yates algorithm](http://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle#The_modern_algorithm)
-- Generate large hash strings faster (where _minHashLength_ is more than 1000 chars)
-- When using _minHashLength_, hash character disorder has been improved
-- Basic English curse words will now be avoided even with custom alphabet
-- _encrypt_ function now also accepts array of integers as input
-- Passing JSLint now
-- Support for [Bower](http://bower.io/) package manager
-
-**0.1.4**
-
-- Global var leak for hashSplit (thanks to [@BryanDonovan](https://github.com/BryanDonovan))
-- Class capitalization (thanks to [@BryanDonovan](https://github.com/BryanDonovan))
-
-**0.1.3**
-
-	Warning: If you are using 0.1.2 or below, updating to this version will change your hashes.
-
-- Updated default alphabet (thanks to [@speps](https://github.com/speps))
-- Constructor removes duplicate characters for default alphabet as well (thanks to [@speps](https://github.com/speps))
-
-**0.1.2**
-
-	Warning: If you are using 0.1.1 or below, updating to this version will change your hashes.
-
-- Minimum hash length can now be specified
-- Added more randomness to hashes
-- Added unit tests
-- Added example files
-- Changed warnings that can be thrown
-- Renamed `encode/decode` to `encrypt/decrypt`
-- Consistent shuffle does not depend on md5 anymore
-- Speed improvements
-
-**0.1.1**
-
-- Speed improvements
-- Bug fixes
-
-**0.1.0**
-	
-- First commit
-
-Contact
--------
-
-Follow me [@IvanAkimov](http://twitter.com/ivanakimov)
-
-Or [http://ivanakimov.com](http://ivanakimov.com)
+Have a question? Ping me [@IvanAkimov](http://twitter.com/ivanakimov) or [ivanakimov.com](http://ivanakimov.com)
 
 License
 -------

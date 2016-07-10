@@ -1,0 +1,54 @@
+{
+  "author": "Ivan Akimov <ivan@barreleye.com> (https://twitter.com/IvanAkimov)",
+  "name": "hashids",
+  "description": "Generate YouTube-like ids from numbers. Use Hashids when you do not want to expose your database ids to the user.",
+  "version": "1.1.0",
+  "homepage": "http://hashids.org/javascript",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ivanakimov/hashids.js"
+  },
+  "bugs": {
+    "url": "https://github.com/ivanakimov/issues"
+  },
+  "main": "dist/hashids.js",
+  "scripts": {
+    "lint": "eslint hashids.js tests",
+    "test": "mocha tests --compilers js:babel-core/register",
+    "coverage": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
+    "build:node": "babel hashids.js -o dist/hashids.js",
+    "minify": "uglifyjs dist/hashids.js -o dist/hashids.min.js --source-map dist/hashids.min.map --compress --mangle",
+    "build": "npm run build:node && npm run minify",
+    "clean": "rm -rf coverage .nyc_output npm-debug.log",
+    "all": "npm run lint && npm run coverage && npm run build && npm run clean"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "babel-cli": "^6.10.1",
+    "babel-core": "^6.10.4",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-plugin-rename-umd-globals": "0.0.2",
+    "babel-plugin-transform-es2015-modules-umd": "^6.8.0",
+    "babel-preset-es2015": "^6.9.0",
+    "chai": "^3.5.0",
+    "coveralls": "^2.11.9",
+    "eslint": "^3.0.1",
+    "mocha": "^2.5.3",
+    "nyc": "^7.0.0",
+    "uglify-js": "^2.7.0"
+  },
+  "license": "MIT",
+  "keywords": [
+    "hashids",
+    "hashid",
+    "hash",
+    "ids",
+    "youtube",
+    "bitly",
+    "obfuscate",
+    "encode",
+    "decode",
+    "encrypt",
+    "decrypt"
+  ]
+}
