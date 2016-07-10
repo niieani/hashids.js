@@ -1,12 +1,12 @@
 
 [![hashids](http://hashids.org/public/img/hashids.gif "Hashids")](http://hashids.org/)
 
-[![Build Status via Travis CI](https://travis-ci.org/ivanakimov/hashids.js.svg?branch=master)](https://travis-ci.org/ivanakimov/hashids.js)
-[![NPM version](https://img.shields.io/npm/v/hashids.svg)](https://www.npmjs.com/package/hashids)
-[![Coverage Status](https://coveralls.io/repos/ivanakimov/hashids.js/badge.svg?branch=master)](https://coveralls.io/r/ivanakimov/hashids.js?branch=master)
-[![License](https://img.shields.io/packagist/l/hashids/hashids.svg?style=flat)](https://packagist.org/packages/hashids/hashids)
-[![npm downloads](https://img.shields.io/npm/dt/hashids.svg?style=flat-square)](https://github.com/ivanakimov/hashids.js)
-[![Join the chat at https://gitter.im/hashids/hashids](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/hashids/hashids?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Build Status][travis-image]][travis-url]
+[![Coveralls Status][coveralls-image]][coveralls-url]
+[![NPM downloads][npm-downloads-image]][npm-url]
+[![NPM version][npm-version-image]][npm-url]
+[![License][license-image]][license-url]
+[![Chat][chat-image]][chat-url]
 
 **Hashids** is small JavaScript library to generate YouTube-like ids from numbers. Use it when you don't want to expose your database ids to the user: [http://hashids.org/javascript](http://hashids.org/javascript)
 
@@ -163,3 +163,19 @@ License
 -------
 
 MIT License. See the `LICENSE` file. You can use Hashids in open source projects and commercial products. Don't break the Internet. Kthxbye.
+
+[travis-url]: https://travis-ci.org/ivanakimov/hashids.js
+[travis-image]: https://travis-ci.org/ivanakimov/hashids.js.svg
+
+[coveralls-url]: https://coveralls.io/github/ivanakimov/hashids.js
+[coveralls-image]: https://coveralls.io/repos/github/ivanakimov/hashids.js/badge.svg
+
+[npm-downloads-image]: https://img.shields.io/npm/dm/hashids.svg?style=flat-square
+[npm-version-image]: https://img.shields.io/npm/v/hashids.svg
+[npm-url]: https://www.npmjs.com/package/hashids
+
+[license-url]: https://github.com/ivanakimov/hashids.js/blob/master/LICENSE
+[license-image]: https://img.shields.io/packagist/l/hashids/hashids.svg?style=flat
+
+[chat-url]: https://gitter.im/hashids/hashids?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
+[chat-image]: https://badges.gitter.im/Join%20Chat.svg
