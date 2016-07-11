@@ -9,7 +9,7 @@
     "url": "https://github.com/ivanakimov/hashids.js"
   },
   "bugs": {
-    "url": "https://github.com/ivanakimov/issues"
+    "url": "https://github.com/ivanakimov/hashids.js/issues"
   },
   "main": "dist/hashids.js",
   "scripts": {
