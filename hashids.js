@@ -12,6 +12,14 @@ export default class Hashids {
 
 		let uniqueAlphabet = '', sepsLength, diff;
 
+		this.filterInt = (value) => {
+			if(/^(\-|\+)?([0-9]+|Infinity)$/.test(value)) {
+				return parseInt(value, 10);
+			}
+
+			return NaN;
+		}
+
 		/* alphabet vars */
 
 		this.escapeRegExp = (s) => s.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
@@ -104,7 +112,7 @@ export default class Hashids {
 		}
 
 		for (let i = 0; i !== numbers.length; i++) {
-			numbers[i] = parseInt(numbers[i], 10);
+			numbers[i] = this.filterInt(numbers[i]);
 			if (numbers[i] >= 0) {
 				continue;
 			} else {
