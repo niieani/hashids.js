@@ -33,6 +33,11 @@ describe('bad input', () => {
 		assert.equal(id, '');
 	});
 
+	it(`should return an empty string when encoding a string with non-numeric characters`, () => {
+		const id = hashids.encode('6B');
+		assert.equal(id, '');
+	});
+
 	it(`should return an empty string when encoding a null`, () => {
 		const id = hashids.encode(null);
 		assert.equal(id, '');
