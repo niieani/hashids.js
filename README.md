@@ -126,7 +126,7 @@ Pitfalls
 	```javascript
 	var hashids = new Hashids();
 
-	var id = hashids.encode('a123');
+	var id = hashids.encode('123a');
 	console.log(id === ''); // true
 	```
 

@@ -60,11 +60,17 @@
 			    sepsLength = void 0,
 			    diff = void 0;
 
-			/* alphabet vars */
+			/* funcs */
 
 			this.escapeRegExp = function (s) {
 				return s.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
 			};
+			this.parseInt = function (v, radix) {
+				return (/^(\-|\+)?([0-9]+|Infinity)$/.test(v) ? parseInt(v, radix) : NaN
+				);
+			};
+
+			/* alphabet vars */
 
 			this.seps = 'cfhistuCFHISTU';
 			this.minLength = parseInt(minLength, 10) > 0 ? minLength : 0;
@@ -155,7 +161,7 @@
 				}
 
 				for (var i = 0; i !== numbers.length; i++) {
-					numbers[i] = parseInt(numbers[i], 10);
+					numbers[i] = this.parseInt(numbers[i], 10);
 					if (numbers[i] >= 0) {
 						continue;
 					} else {

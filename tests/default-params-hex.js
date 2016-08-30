@@ -1,5 +1,5 @@
 
-import Hashids from '../hashids';
+import Hashids from '../lib/hashids';
 import { assert } from 'chai';
 
 const hashids = new Hashids();

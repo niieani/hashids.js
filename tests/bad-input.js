@@ -1,5 +1,5 @@
 
-import Hashids from '../hashids';
+import Hashids from '../lib/hashids';
 import { assert } from 'chai';
 
 const hashids = new Hashids();
@@ -34,7 +34,12 @@ describe('bad input', () => {
 	});
 
 	it(`should return an empty string when encoding a string with non-numeric characters`, () => {
-		const id = hashids.encode('6B');
+		assert.equal(hashids.encode('6B'), '');
+		assert.equal(hashids.encode('123a'), '');
+	});
+
+	it(`should return an empty string when encoding infinity`, () => {
+		const id = hashids.encode(Infinity);
 		assert.equal(id, '');
 	});
 

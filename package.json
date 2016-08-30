@@ -2,21 +2,21 @@
   "author": "Ivan Akimov <ivan@barreleye.com> (https://twitter.com/IvanAkimov)",
   "name": "hashids",
   "description": "Generate YouTube-like ids from numbers. Use Hashids when you do not want to expose your database ids to the user.",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "homepage": "http://hashids.org/javascript",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ivanakimov/hashids.js"
+    "url": "git+https://github.com/ivanakimov/hashids.js.git"
   },
   "bugs": {
     "url": "https://github.com/ivanakimov/hashids.js/issues"
   },
   "main": "dist/hashids.js",
   "scripts": {
-    "lint": "eslint hashids.js tests",
+    "lint": "eslint lib tests",
     "test": "mocha tests --compilers js:babel-core/register",
     "coverage": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
-    "build:node": "babel hashids.js -o dist/hashids.js",
+    "build:node": "babel lib/hashids.js -o dist/hashids.js",
     "rename:global": "sed -i '' 's/global.hashids/global.Hashids/g' dist/hashids.js",
     "minify": "uglifyjs dist/hashids.js -o dist/hashids.min.js --source-map dist/hashids.min.map --compress --mangle",
     "build": "npm run test && npm run build:node && npm run rename:global && npm run minify",

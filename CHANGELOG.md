@@ -1,6 +1,12 @@
 
 # CHANGELOG
 
+**1.1.1**:
+
+- Enforce stricter integer parsing on encode function ([PR #24](https://github.com/ivanakimov/hashids.js/pull/24))
+- Moved source from `hashids.js` to `lib/hashids.js`
+- Minor `README.md` cleanup
+
 **1.1.0**:
 
 - ES6 source; ES5 dist
