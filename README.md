@@ -173,7 +173,7 @@ Have a question? Ping me [@IvanAkimov](http://twitter.com/ivanakimov) or [ivanak
 License
 -------
 
-MIT License. See the `LICENSE` file. You can use Hashids in open source projects and commercial products. Don't break the Internet. Kthxbye.
+MIT License. See the [LICENSE](LICENSE) file. You can use Hashids in open source projects and commercial products. Don't break the Internet. Kthxbye.
 
 [travis-url]: https://travis-ci.org/ivanakimov/hashids.js
 [travis-image]: https://travis-ci.org/ivanakimov/hashids.js.svg
