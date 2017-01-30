@@ -165,11 +165,6 @@ This code was written with the intent of placing created ids in visible places, 
 
 	c, f, h, i, s, t, u
 
-Support
--------
-
-Have a question? Ping me [@IvanAkimov](http://twitter.com/ivanakimov) or [ivanakimov.com](http://ivanakimov.com)
-
 License
 -------
 
