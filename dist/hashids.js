@@ -326,16 +326,20 @@
 					return alphabet;
 				}
 
+				alphabet = alphabet.split("");
+
 				for (var i = alphabet.length - 1, v = 0, p = 0, j = 0; i > 0; i--, v++) {
 
 					v %= salt.length;
-					p += integer = salt.charAt(v).charCodeAt(0);
+					p += integer = salt.charCodeAt(v);
 					j = (integer + v + p) % i;
 
 					var tmp = alphabet[j];
-					alphabet = alphabet.substr(0, j) + alphabet.charAt(i) + alphabet.substr(j + 1);
-					alphabet = alphabet.substr(0, i) + tmp + alphabet.substr(i + 1);
+					alphabet[j] = alphabet[i];
+					alphabet[i] = tmp;
 				}
+
+				alphabet = alphabet.join("");
 
 				return alphabet;
 			}
@@ -356,14 +360,11 @@
 			key: '_fromAlphabet',
 			value: function _fromAlphabet(input, alphabet) {
 
-				var number = 0;
-
-				for (var i = 0; i < input.length; i++) {
-					var pos = alphabet.indexOf(input[i]);
-					number += pos * Math.pow(alphabet.length, input.length - i - 1);
-				}
-
-				return number;
+				return input.split("").map(function (item) {
+					return alphabet.indexOf(item);
+				}).reduce(function (carry, item) {
+					return carry * alphabet.length + item;
+				}, 0);
 			}
 		}]);
 
