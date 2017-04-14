@@ -97,6 +97,8 @@ var hashids = new Hashids('', 0, 'abcdefghijklmnopqrstuvwxyz'); // all lowercase
 console.log(hashids.encode(1, 2, 3)); // mdfphx
 ```
 
+Default alphabet is `abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890`.
+
 **Encode hex instead of numbers:**
 
 Useful if you want to encode [Mongo](https://www.mongodb.com/)'s ObjectIds. Note that *there is no limit* on how large of a hex number you can pass (it does not have to be Mongo's ObjectId).
