@@ -18,7 +18,7 @@
     "coverage": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
     "build:node": "babel lib/hashids.js -o dist/hashids.js",
     "rename:global": "sed -i '' 's/global.hashids/global.Hashids/g' dist/hashids.js",
-    "minify": "uglifyjs dist/hashids.js -o dist/hashids.min.js --source-map dist/hashids.min.map --compress --mangle",
+    "minify": "cd dist && uglifyjs hashids.js -o hashids.min.js --source-map hashids.min.map --compress --mangle",
     "build": "npm run test && npm run build:node && npm run rename:global && npm run minify",
     "clean": "rm -rf coverage .nyc_output npm-debug.log",
     "all": "npm run lint && npm run coverage && npm run build && npm run clean"
