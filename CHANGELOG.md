@@ -1,6 +1,11 @@
 
 # CHANGELOG
 
+**1.1.2**:
+
+- fixed issue with sourceMappingURL in hashids.min.js ([PR #38](https://github.com/ivanakimov/hashids.js/pull/38))
+- added `package-lock.json`
+
 **1.1.1**:
 
 - Enforce stricter integer parsing on encode function ([PR #24](https://github.com/ivanakimov/hashids.js/pull/24))
