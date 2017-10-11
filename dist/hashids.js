@@ -43,9 +43,9 @@
 
 	var Hashids = function () {
 		function Hashids() {
-			var salt = arguments.length <= 0 || arguments[0] === undefined ? '' : arguments[0];
-			var minLength = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
-			var alphabet = arguments.length <= 2 || arguments[2] === undefined ? 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890' : arguments[2];
+			var salt = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+			var minLength = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+			var alphabet = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
 
 			_classCallCheck(this, Hashids);
 
