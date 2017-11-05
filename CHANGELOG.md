@@ -1,6 +1,10 @@
 
 # CHANGELOG
 
+**1.1.3**:
+
+- looks like some bad input could generate negative numbers, which when passed to `_encode` would crash because it can't handle those <https://github.com/ivanakimov/hashids.js/issues/34>
+
 **1.1.2**:
 
 - fixed issue with sourceMappingURL in hashids.min.js ([PR #38](https://github.com/ivanakimov/hashids.js/pull/38))
