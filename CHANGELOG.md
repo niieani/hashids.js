@@ -1,9 +1,10 @@
 
 # CHANGELOG
 
-**1.1.3**:
+**1.1.4**:
 
 - looks like some bad input could generate negative numbers, which when passed to `_encode` would crash because it can't handle those <https://github.com/ivanakimov/hashids.js/issues/34>
+*NOTE:* do not use `1.1.3`, it wasn't re-built
 
 **1.1.2**:
 

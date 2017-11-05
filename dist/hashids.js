@@ -309,7 +309,7 @@
 						ret.push(this._fromAlphabet(subId, alphabet));
 					}
 
-					if (this._encode(ret) !== id) {
+					if (this.encode(ret) !== id) {
 						ret = [];
 					}
 				}
