@@ -8,6 +8,7 @@
 - path of the source file changed from `dist/hashids.min.map` to `dist/hashids.min.js.map`
 - regex cleanup
 - precommit hook to run lint and test
+- adding node 8+10 to `.travis.yml`
 
 **1.1.4**:
 
