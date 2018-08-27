@@ -1,6 +1,14 @@
 
 # CHANGELOG
 
+**1.1.5**:
+
+- `package.json` updates
+- `.gitattributes` marks `package-lock.json` as binary
+- path of the source file changed from `dist/hashids.min.map` to `dist/hashids.min.js.map`
+- regex cleanup
+- precommit hook to run lint and test
+
 **1.1.4**:
 
 - looks like some bad input could generate negative numbers, which when passed to `_encode` would crash because it can't handle those <https://github.com/ivanakimov/hashids.js/issues/34>

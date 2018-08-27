@@ -66,7 +66,7 @@
 				return s.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
 			};
 			this.parseInt = function (v, radix) {
-				return (/^(\-|\+)?([0-9]+|Infinity)$/.test(v) ? parseInt(v, radix) : NaN
+				return (/^(-|\+)?([0-9]+|Infinity)$/.test(v) ? parseInt(v, radix) : NaN
 				);
 			};
 
