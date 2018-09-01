@@ -27,6 +27,12 @@
     "clean": "rm -rf coverage .nyc_output npm-debug.log",
     "all": "npm run lint && npm run coverage && npm run build && npm run clean"
   },
+  "browserslist": [
+    "last 2 version",
+    "> 0.5%",
+    "maintained node versions",
+    "not dead"
+  ],
   "dependencies": {},
   "devDependencies": {
     "@babel/cli": "^7.0.0",
