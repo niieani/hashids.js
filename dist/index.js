@@ -335,3 +335,5 @@
 
   _exports.default = Hashids;
 });
+
+//# sourceMappingURL=index.js.map
