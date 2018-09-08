@@ -8,15 +8,11 @@
 - upgrade to babel 7 and update other `devDependencies`
 - expose both as a default and a commonjs export (fixes TypeScript typings)
 - add support for `.mjs`
-
-**1.1.5**:
-
 - `package.json` updates
 - `.gitattributes` marks `package-lock.json` as binary
 - path of the source file changed from `dist/hashids.min.map` to `dist/hashids.min.js.map`
-- regex cleanup
+- minor regex cleanup
 - precommit hook to run lint and test
-- adding node 8+10 to `.travis.yml`
 
 **1.1.4**:
 
