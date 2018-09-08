@@ -1,6 +1,14 @@
 
 # CHANGELOG
 
+**1.2.0**:
+
+- drop unsupported node versions (6 and above is still supported)
+- drop support for browsers with global market share < 0.5%
+- upgrade to babel 7 and update other `devDependencies`
+- expose both as a default and a commonjs export (fixes TypeScript typings)
+- add support for `.mjs`
+
 **1.1.5**:
 
 - `package.json` updates
