@@ -2,7 +2,7 @@
   "author": "Ivan Akimov <ivan@barreleye.com> (https://twitter.com/IvanAkimov)",
   "name": "hashids",
   "description": "Generate YouTube-like ids from numbers. Use Hashids when you do not want to expose your database ids to the user.",
-  "version": "1.1.4",
+  "version": "1.2.0",
   "homepage": "http://hashids.org/javascript",
   "repository": {
     "type": "git",
@@ -44,7 +44,7 @@
     "eslint": "^5.4.0",
     "husky": "^0.14.3",
     "mocha": "^5.2.0",
-    "nyc": "^12.0.2",
+    "nyc": "^13.0.1",
     "uglify-js": "^3.4.8"
   },
   "license": "MIT",
