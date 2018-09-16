@@ -1,7 +1,11 @@
 
 # CHANGELOG
 
-**1.2.0**:
+**1.2.1**:
+
+- fixes a bug issue https://github.com/ivanakimov/hashids.js/issues/54
+
+**1.2.0** (do not use):
 
 - drop unsupported node versions (6 and above is still supported)
 - drop support for browsers with global market share < 0.5%
