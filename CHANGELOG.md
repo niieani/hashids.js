@@ -1,7 +1,11 @@
 
 # CHANGELOG
 
-**1.2.1**:
+**1.2.2**:
+
+- another issue https://github.com/ivanakimov/hashids.js/issues/56
+
+**1.2.1** (do not use):
 
 - fixes a bug issue https://github.com/ivanakimov/hashids.js/issues/54
 
