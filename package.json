@@ -18,6 +18,7 @@
     "precommit": "npm run lint && npm run test",
     "lint": "eslint lib tests",
     "test": "mocha tests --require @babel/register",
+    "test-modules": "node --experimental-modules node_modules/mocha/bin/_mocha tests-mjs",
     "coverage": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
     "build:node": "babel lib/hashids.js --source-maps -o dist/index.js",
     "build:modules": "BABEL_MODULES=1 babel lib/hashids.js --source-maps -o dist/hashids.mjs && cp dist/hashids.mjs dist/hashids-esm.js",
@@ -37,8 +38,10 @@
   "devDependencies": {
     "@babel/cli": "^7.0.0",
     "@babel/core": "^7.0.0",
+    "@babel/plugin-syntax-dynamic-import": "7.0.0",
     "@babel/preset-env": "^7.0.0",
     "@babel/register": "^7.0.0",
+    "babel-eslint": "9.0.0",
     "chai": "^4.1.2",
     "coveralls": "^3.0.2",
     "eslint": "^5.4.0",
