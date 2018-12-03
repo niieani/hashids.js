@@ -110,6 +110,17 @@ var id = hashids.encodeHex('507f1f77bcf86cd799439011'); // y42LW46J9luq3Xq9XMly
 var hex = hashids.decodeHex(id); // 507f1f77bcf86cd799439011
 ```
 
+**Encode bigint numbers:**
+
+Useful if you want to encode [PostgreSQL](https://www.postgresql.org/)'s bigint. Note that currently pg javascript driver handles bigint as string since it's support is a current draft.
+
+```javascript
+var hashids = new Hashids();
+
+var id = hashids.encodeBI('50374626472636434472463271'); // ww2Vn9oypBtv1PZ2Rpp
+var hex = hashids.decodeBI(id); // 50374626472636434472463271
+```
+
 Pitfalls
 -------
 
