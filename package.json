@@ -34,7 +34,9 @@
     "maintained node versions",
     "not dead"
   ],
-  "dependencies": {},
+  "dependencies": {
+    "big-integer": "^1.6.38"
+  },
   "devDependencies": {
     "@babel/cli": "^7.0.0",
     "@babel/core": "^7.0.0",
