@@ -88,16 +88,14 @@ describe('bad input', () => {
 		assert.deepEqual(numbers, []);
 	});
 
-	it(`should throw an error when encoding non-integer input`, () => {
-		assert.throws(() => {
-			hashids.encodeBI('z');
-		});
+	it(`should return an empty string when encoding non-integer input`, () => {
+		const id = hashids.encodeBI('z');
+		assert.equal(id, '');
 	});
 
-	it(`should throw an error when decoding invalid BI id`, () => {
-		assert.throws(() => {
-			hashids.decodeBI('f');
-		});
+	it(`should return an empty array when decoding invalid BI id`, () => {
+		const numbers = hashids.decodeBI('f');
+		assert.deepEqual(numbers, []);
 	});
 
 });
