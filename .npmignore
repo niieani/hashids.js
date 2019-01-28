@@ -1,0 +1,10 @@
+.babelrc.js
+.editorconfig
+.eslintrc
+.gitattributes
+.gitignore
+.travis.yml
+bower.json
+dist/*
+tests-mjs/*
+tests/*
