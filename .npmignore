@@ -3,8 +3,8 @@
 .eslintrc
 .gitattributes
 .gitignore
+.nyc_output
 .travis.yml
 bower.json
-dist/*
 tests-mjs/*
 tests/*
