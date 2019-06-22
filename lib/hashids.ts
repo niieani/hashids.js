@@ -43,8 +43,8 @@ export default class Hashids {
 
       if (sepsLength > this.seps.length) {
         diff = sepsLength - this.seps.length
-        this.seps += this.alphabet.substr(0, diff)
-        this.alphabet = this.alphabet.substr(diff)
+        this.seps += unicodeSubstr(this.alphabet, 0, diff)
+        this.alphabet = unicodeSubstr(this.alphabet, diff)
       }
     }
 
@@ -52,11 +52,11 @@ export default class Hashids {
     const guardCount = Math.ceil(this.alphabet.length / guardDiv)
 
     if (this.alphabet.length < 3) {
-      this.guards = this.seps.substr(0, guardCount)
-      this.seps = this.seps.substr(guardCount)
+      this.guards = unicodeSubstr(seps, 0, guardCount)
+      this.seps = unicodeSubstr(seps, guardCount)
     } else {
-      this.guards = this.alphabet.substr(0, guardCount)
-      this.alphabet = this.alphabet.substr(guardCount)
+      this.guards = unicodeSubstr(alphabet, 0, guardCount)
+      this.alphabet = unicodeSubstr(alphabet, guardCount)
     }
   }
 
@@ -244,6 +244,8 @@ export const keepUniqueChars = (str: string) => Array.from(new Set(str)).join(''
 export const withoutChars = ([...str]: string, [...without]: string) =>
   str.filter((char) => !without.includes(char)).join('')
 
+export const unicodeSubstr = ([...str]: string, from: number, to?: number) => str.slice(from, to).join('')
+
 function shuffle(alphabet: string, salt: string) {
   let integer
 
@@ -251,7 +253,7 @@ function shuffle(alphabet: string, salt: string) {
     return alphabet
   }
 
-  const alphabetChars = alphabet.split('')
+  const alphabetChars = [...alphabet]
 
   for (let i = alphabetChars.length - 1, v = 0, p = 0, j = 0; i > 0; i--, v++) {
     v %= salt.length
