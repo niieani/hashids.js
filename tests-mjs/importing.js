@@ -2,7 +2,7 @@
 // alternatively, if you use something like webpack
 // that's why it is in a separate file
 describe('importing', () => {
-	it('loads via .mjs', () => {
-		return import('./importing.mjs');
-	});
-});
+  it('loads via .mjs', () => {
+    return import('./importing.mjs')
+  })
+})
