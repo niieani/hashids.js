@@ -1,5 +1,5 @@
 import Hashids from '../lib/hashids'
-import {assert} from 'chai'
+import expect from 'expect'
 
 describe('encode types', () => {
   const testParams = (...numbers) => {
@@ -9,23 +9,23 @@ describe('encode types', () => {
     const decodedNumbers = hashids.decode(id)
     const encodedId = hashids.encode(decodedNumbers)
 
-    assert.isOk(id)
-    assert.equal(id, encodedId)
+    expect(id).toBeTruthy()
+    expect(id).toEqual(encodedId)
   }
 
-  it(`should encode 1, 2, 3`, () => {
+  test(`should encode 1, 2, 3`, () => {
     testParams(1, 2, 3)
   })
 
-  it(`should encode [1, 2, 3]`, () => {
+  test(`should encode [1, 2, 3]`, () => {
     testParams('1', '2', '3')
   })
 
-  it(`should encode '1', '2', '3'`, () => {
+  test(`should encode '1', '2', '3'`, () => {
     testParams([1, 2, 3])
   })
 
-  it(`should encode ['1', '2', '3']`, () => {
+  test(`should encode ['1', '2', '3']`, () => {
     testParams(['1', '2', '3'])
   })
 })

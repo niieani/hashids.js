@@ -4,6 +4,13 @@ module.exports = {
 			'@babel/preset-env',
 			{
 				modules: process.env.BABEL_MODULES ? false : 'umd',
+				...process.env.NODE_ENV === 'test'
+					? {
+						targets: {
+							"node": "current"
+						}
+					}
+					: {},
 			}
 		],
 	],

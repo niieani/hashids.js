@@ -1,5 +1,5 @@
 import Hashids from '../lib/hashids'
-import {assert} from 'chai'
+import expect from 'expect'
 
 describe('custom alphabet', () => {
   const testAlphabet = (alphabet) => {
@@ -9,32 +9,32 @@ describe('custom alphabet', () => {
     const id = hashids.encode(numbers)
     const decodedNumbers = hashids.decode(id)
 
-    assert.deepEqual(decodedNumbers, numbers)
+    expect(decodedNumbers).toEqual(numbers)
   }
 
-  it(`should work with the worst alphabet`, () => {
+  test(`should work with the worst alphabet`, () => {
     testAlphabet('cCsSfFhHuUiItT01')
   })
 
-  it(`should work with half the alphabet being separators`, () => {
+  test(`should work with half the alphabet being separators`, () => {
     testAlphabet('abdegjklCFHISTUc')
   })
 
-  it(`should work with exactly 2 separators`, () => {
+  test(`should work with exactly 2 separators`, () => {
     testAlphabet('abdegjklmnopqrSF')
   })
 
-  it(`should work with no separators`, () => {
+  test(`should work with no separators`, () => {
     testAlphabet('abdegjklmnopqrvwxyzABDEGJKLMNOPQRVWXYZ1234567890')
   })
 
-  it(`should work with super long alphabet`, () => {
+  test(`should work with super long alphabet`, () => {
     testAlphabet(
       'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890`~!@#$%^&*()-_=+\\|\'";:/?.>,<{[}]',
     )
   })
 
-  it(`should work with a weird alphabet`, () => {
+  test(`should work with a weird alphabet`, () => {
     testAlphabet('`~!@#$%^&*()-_=+\\|\'";:/?.>,<{[}]')
   })
 })
