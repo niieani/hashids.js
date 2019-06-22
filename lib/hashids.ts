@@ -75,7 +75,7 @@ export default class Hashids {
     }
 
     for (let i = 0; i !== numbers.length; i++) {
-      numbers[i] = this.parseInt(numbers[i], 10)
+      numbers[i] = _parseInt(numbers[i], 10)
       if (numbers[i] >= 0) {
         continue
       } else {
@@ -86,7 +86,7 @@ export default class Hashids {
     return this._encode(numbers)
   }
 
-  decode(id) {
+  decode(id: string) {
     const ret = []
 
     if (!id || !id.length || typeof id !== 'string') {
@@ -132,15 +132,14 @@ export default class Hashids {
       numbersIdInt += numbers[i] % (i + 100)
     }
 
-    ret = alphabet.charAt(numbersIdInt % alphabet.length)
     const lottery = ret
 
     for (let i = 0; i !== numbers.length; i++) {
       let number = numbers[i]
       const buffer = lottery + this.salt + alphabet
 
-      alphabet = shuffle(alphabet, buffer.substr(0, alphabet.length))
-      const last = this._toAlphabet(number, alphabet)
+      alphabet = shuffle(alphabet, unicodeSubstr(buffer, 0))
+      const last = toAlphabet(number, alphabet)
 
       ret += last
 
@@ -183,7 +182,7 @@ export default class Hashids {
   _decode(id, alphabet) {
     let ret = [],
       i = 0,
-      r = new RegExp(`[${this.escapeRegExp(this.guards)}]`, 'g'),
+      r = new RegExp(`[${escapeRegExp(this.guards)}]`, 'g'),
       idBreakdown = id.replace(r, ' '),
       idArray = idBreakdown.split(' ')
 
@@ -196,7 +195,7 @@ export default class Hashids {
       const lottery = idBreakdown[0]
       idBreakdown = idBreakdown.substr(1)
 
-      r = new RegExp(`[${this.escapeRegExp(this.seps)}]`, 'g')
+      r = new RegExp(`[${escapeRegExp(this.seps)}]`, 'g')
       idBreakdown = idBreakdown.replace(r, ' ')
       idArray = idBreakdown.split(' ')
 
@@ -205,7 +204,7 @@ export default class Hashids {
         const buffer = lottery + this.salt + alphabet
 
         alphabet = shuffle(alphabet, buffer.substr(0, alphabet.length))
-        ret.push(this._fromAlphabet(subId, alphabet))
+        ret.push(fromAlphabet(subId, alphabet))
       }
 
       if (this.encode(ret) !== id) {
@@ -214,24 +213,6 @@ export default class Hashids {
     }
 
     return ret
-  }
-
-  _toAlphabet(input, alphabet) {
-    let id = ''
-
-    do {
-      id = alphabet.charAt(input % alphabet.length) + id
-      input = parseInt(input / alphabet.length, 10)
-    } while (input)
-
-    return id
-  }
-
-  _fromAlphabet(input, alphabet) {
-    return input
-      .split('')
-      .map((item) => alphabet.indexOf(item))
-      .reduce((carry, item) => carry * alphabet.length + item, 0)
   }
 }
 
@@ -268,3 +249,22 @@ function shuffle(alphabet: string, salt: string) {
   return alphabetChars.join('')
 }
 
+const escapeRegExp = (s) => s.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
+const _parseInt = (v: string, radix: number) =>
+  /^(-|\+)?([0-9]+|Infinity)$/.test(v) ? parseInt(v, radix) : NaN
+
+const toAlphabet = (input: number, alphabet: string) => {
+  let id = ''
+
+  do {
+    id = alphabet.charAt(input % alphabet.length) + id
+    input = parseInt(input / alphabet.length, 10)
+  } while (input)
+
+  return id
+}
+
+const fromAlphabet = (input: string, alphabet: string) =>
+  [...input]
+    .map((item) => alphabet.indexOf(item))
+    .reduce((carry, item) => carry * alphabet.length + item, 0)
