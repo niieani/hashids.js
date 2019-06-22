@@ -17,6 +17,8 @@
   "scripts": {
     "precommit": "npm run lint && npm run test",
     "lint": "eslint lib tests",
+    "prettier:check": "prettier --check",
+    "prettier:write": "prettier --write lib/* tests*/*",
     "test": "mocha tests --require @babel/register",
     "test-modules": "node --experimental-modules node_modules/mocha/bin/_mocha tests-mjs",
     "coverage": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
@@ -48,6 +50,7 @@
     "husky": "^2.4.1",
     "mocha": "^6.1.4",
     "nyc": "^14.1.1",
+    "prettier": "^1.18.2",
     "uglify-js": "^3.4.8"
   },
   "license": "MIT",
@@ -63,5 +66,13 @@
     "decode",
     "encrypt",
     "decrypt"
-  ]
+  ],
+  "prettier": {
+    "semi": false,
+    "tabWidth": 2,
+    "singleQuote": true,
+    "trailingComma": "all",
+    "arrowParens": "always",
+    "bracketSpacing": false
+  }
 }
