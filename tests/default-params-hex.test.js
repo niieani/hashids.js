@@ -1,5 +1,5 @@
 import Hashids from '../lib/hashids'
-import {assert} from 'chai'
+import expect from 'expect'
 
 const hashids = new Hashids()
 
@@ -20,15 +20,15 @@ describe('encodeHex/decodeHex using default params', () => {
   for (const id in map) {
     const hex = map[id]
 
-    it(`should encode '0x${hex.toUpperCase()}' to '${id}'`, () => {
-      assert.equal(id, hashids.encodeHex(hex))
+    test(`should encode '0x${hex.toUpperCase()}' to '${id}'`, () => {
+      expect(id).toEqual(hashids.encodeHex(hex))
     })
 
-    it(`should encode '0x${hex.toUpperCase()}' to '${id}' and decode back correctly`, () => {
+    test(`should encode '0x${hex.toUpperCase()}' to '${id}' and decode back correctly`, () => {
       const encodedId = hashids.encodeHex(hex)
       const decodedHex = hashids.decodeHex(encodedId)
 
-      assert.deepEqual(hex.toLowerCase(), decodedHex)
+      expect(hex.toLowerCase()).toEqual(decodedHex)
     })
   }
 })

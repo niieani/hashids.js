@@ -1,5 +1,5 @@
 import Hashids from '../lib/hashids'
-import {assert} from 'chai'
+import expect from 'expect'
 
 describe('min length', () => {
   const testMinLength = (minLength) => {
@@ -9,27 +9,27 @@ describe('min length', () => {
     const id = hashids.encode(numbers)
     const decodedNumbers = hashids.decode(id)
 
-    assert.deepEqual(decodedNumbers, numbers)
-    assert.isAtLeast(id.length, minLength)
+    expect(decodedNumbers).toEqual(numbers)
+    expect(id.length).toBeGreaterThanOrEqual(minLength)
   }
 
-  it(`should work when 0`, () => {
+  test(`should work when 0`, () => {
     testMinLength(0)
   })
 
-  it(`should work when 1`, () => {
+  test(`should work when 1`, () => {
     testMinLength(1)
   })
 
-  it(`should work when 10`, () => {
+  test(`should work when 10`, () => {
     testMinLength(10)
   })
 
-  it(`should work when 999`, () => {
+  test(`should work when 999`, () => {
     testMinLength(999)
   })
 
-  it(`should work when 1000`, () => {
+  test(`should work when 1000`, () => {
     testMinLength(1000)
   })
 })

@@ -1,5 +1,5 @@
 import Hashids from '../lib/hashids'
-import {assert} from 'chai'
+import expect from 'expect'
 
 describe('custom salt', () => {
   const testSalt = (salt) => {
@@ -9,28 +9,28 @@ describe('custom salt', () => {
     const id = hashids.encode(numbers)
     const decodedNumbers = hashids.decode(id)
 
-    assert.deepEqual(decodedNumbers, numbers)
+    expect(decodedNumbers).toEqual(numbers)
   }
 
-  it(`should work with ''`, () => {
+  test(`should work with ''`, () => {
     testSalt('')
   })
 
-  it(`should work with '   '`, () => {
+  test(`should work with '   '`, () => {
     testSalt('   ')
   })
 
-  it(`should work with 'this is my salt'`, () => {
+  test(`should work with 'this is my salt'`, () => {
     testSalt('this is my salt')
   })
 
-  it(`should work with a really long salt`, () => {
+  test(`should work with a really long salt`, () => {
     testSalt(
       'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890`~!@#$%^&*()-_=+\\|\'";:/?.>,<{[}]',
     )
   })
 
-  it(`should work with a weird salt`, () => {
+  test(`should work with a weird salt`, () => {
     testSalt('`~!@#$%^&*()-_=+\\|\'";:/?.>,<{[}]')
   })
 })

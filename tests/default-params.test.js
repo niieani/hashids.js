@@ -1,5 +1,5 @@
 import Hashids from '../lib/hashids'
-import {assert} from 'chai'
+import expect from 'expect'
 
 const hashids = new Hashids()
 
@@ -55,19 +55,19 @@ describe('encode/decode using default params', () => {
   for (const id in map) {
     const numbers = map[id]
 
-    it(`should encode [${numbers}] to '${id}' (passing array of numbers)`, () => {
-      assert.equal(id, hashids.encode(numbers))
+    test(`should encode [${numbers}] to '${id}' (passing array of numbers)`, () => {
+      expect(id).toEqual(hashids.encode(numbers))
     })
 
-    it(`should encode [${numbers}] to '${id}' (passing numbers)`, () => {
-      assert.equal(id, hashids.encode.apply(hashids, numbers))
+    test(`should encode [${numbers}] to '${id}' (passing numbers)`, () => {
+      expect(id).toEqual(hashids.encode.apply(hashids, numbers))
     })
 
-    it(`should encode [${numbers}] to '${id}' and decode back correctly`, () => {
+    test(`should encode [${numbers}] to '${id}' and decode back correctly`, () => {
       const encodedId = hashids.encode(numbers)
       const decodedNumbers = hashids.decode(encodedId)
 
-      assert.deepEqual(numbers, decodedNumbers)
+      expect(numbers).toEqual(decodedNumbers)
     })
   }
 })

@@ -19,15 +19,14 @@
     "lint": "eslint lib tests",
     "prettier:check": "prettier --check",
     "prettier:write": "prettier --write lib/* tests*/*",
-    "test": "mocha tests --require @babel/register",
-    "test-modules": "node --experimental-modules node_modules/mocha/bin/_mocha tests-mjs",
-    "coverage": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
+    "test": "jest",
+    "coverage": "jest --coverage && cat ./tests/coverage/lcov.info | coveralls",
     "build:node": "babel lib/hashids.js --source-maps -o dist/index.js",
     "build:modules": "BABEL_MODULES=1 babel lib/hashids.js --source-maps -o dist/hashids.mjs && cp dist/hashids.mjs dist/hashids-esm.js",
     "rename:global": "sed -i '' 's/global.hashids/global.Hashids/g' dist/index.js",
     "minify": "cd dist && uglifyjs index.js -o hashids.min.js --source-map \"url=hashids.min.js.map\" --compress --mangle",
     "build": "npm run test && npm run build:node && npm run build:modules && npm run rename:global && npm run minify",
-    "clean": "rm -rf coverage .nyc_output npm-debug.log",
+    "clean": "rm -rf coverage npm-debug.log",
     "all": "npm run lint && npm run coverage && npm run build && npm run clean"
   },
   "browserslist": [
@@ -43,13 +42,14 @@
     "@babel/plugin-syntax-dynamic-import": "7.2.0",
     "@babel/preset-env": "^7.0.0",
     "@babel/register": "^7.0.0",
+    "@types/jest": "^24.0.15",
+    "@types/node": "^12.0.10",
     "babel-eslint": "10.0.2",
-    "chai": "^4.1.2",
     "coveralls": "^3.0.2",
     "eslint": "^6.0.0",
+    "expect": "^24.8.0",
     "husky": "^2.4.1",
-    "mocha": "^6.1.4",
-    "nyc": "^14.1.1",
+    "jest": "^24.8.0",
     "prettier": "^1.18.2",
     "uglify-js": "^3.4.8"
   },
@@ -74,5 +74,10 @@
     "trailingComma": "all",
     "arrowParens": "always",
     "bracketSpacing": false
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "lib/**/*.js"
+    ]
   }
 }
