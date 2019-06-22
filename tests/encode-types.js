@@ -1,36 +1,31 @@
-
-import Hashids from '../lib/hashids';
-import { assert } from 'chai';
+import Hashids from '../lib/hashids'
+import {assert} from 'chai'
 
 describe('encode types', () => {
+  const testParams = (...numbers) => {
+    const hashids = new Hashids()
 
-	const testParams = (...numbers) => {
+    const id = hashids.encode.apply(hashids, numbers)
+    const decodedNumbers = hashids.decode(id)
+    const encodedId = hashids.encode(decodedNumbers)
 
-		const hashids = new Hashids();
+    assert.isOk(id)
+    assert.equal(id, encodedId)
+  }
 
-		const id = hashids.encode.apply(hashids, numbers);
-		const decodedNumbers = hashids.decode(id);
-		const encodedId = hashids.encode(decodedNumbers);
+  it(`should encode 1, 2, 3`, () => {
+    testParams(1, 2, 3)
+  })
 
-		assert.isOk(id);
-		assert.equal(id, encodedId);
+  it(`should encode [1, 2, 3]`, () => {
+    testParams('1', '2', '3')
+  })
 
-	};
+  it(`should encode '1', '2', '3'`, () => {
+    testParams([1, 2, 3])
+  })
 
-	it(`should encode 1, 2, 3`, () => {
-		testParams(1, 2, 3);
-	});
-
-	it(`should encode [1, 2, 3]`, () => {
-		testParams('1', '2', '3');
-	});
-
-	it(`should encode '1', '2', '3'`, () => {
-		testParams([1, 2, 3]);
-	});
-
-	it(`should encode ['1', '2', '3']`, () => {
-		testParams(['1', '2', '3']);
-	});
-
-});
+  it(`should encode ['1', '2', '3']`, () => {
+    testParams(['1', '2', '3'])
+  })
+})
