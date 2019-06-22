@@ -1,74 +1,44 @@
 export default class Hashids {
+  private alphabet: string
+  private seps: string
+  private guards: string
+
   constructor(
-    salt = '',
-    minLength = 0,
+    private salt = '',
+    private minLength = 0,
     alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890',
+    seps = 'cfhistuCFHISTU',
   ) {
-    const minAlphabetLength = 16
-    const sepDiv = 3.5
-    const guardDiv = 12
-
-    const errorAlphabetLength =
-      'error: alphabet must contain at least X unique characters'
-    const errorAlphabetSpace = 'error: alphabet cannot contain spaces'
-
-    let uniqueAlphabet = '',
-      sepsLength,
-      diff
-
-    /* funcs */
-
-    this.escapeRegExp = (s) => s.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
-    this.parseInt = (v, radix) =>
-      /^(-|\+)?([0-9]+|Infinity)$/.test(v) ? parseInt(v, radix) : NaN
-
-    /* alphabet vars */
-
-    this.seps = 'cfhistuCFHISTU'
-    this.minLength = parseInt(minLength, 10) > 0 ? minLength : 0
-    this.salt = typeof salt === 'string' ? salt : ''
-
-    if (typeof alphabet === 'string') {
-      this.alphabet = alphabet
+    if (typeof minLength !== 'number') {
+      throw new Error(`Provided 'minLength' has to be a number (is ${typeof minLength})`)
+    }
+    if (typeof salt !== 'string') {
+      throw new Error(`Provided 'salt' has to be a string (is ${typeof salt})`)
+    }
+    if (typeof alphabet !== 'string') {
+      throw new Error(`Provided alphabet has to be a string (is ${typeof alphabet})`)
     }
 
-    for (let i = 0; i !== this.alphabet.length; i++) {
-      if (uniqueAlphabet.indexOf(this.alphabet.charAt(i)) === -1) {
-        uniqueAlphabet += this.alphabet.charAt(i)
-      }
-    }
-
-    this.alphabet = uniqueAlphabet
+    /** `alphabet` should not contains `seps` */
+    const filteredAlpabet = withoutChars(alphabet, seps)
+    this.alphabet = keepUniqueChars(filteredAlpabet)
 
     if (this.alphabet.length < minAlphabetLength) {
-      throw errorAlphabetLength.replace('X', minAlphabetLength)
+      throw new Error(`error: alphabet must contain at least ${minAlphabetLength} unique characters`)
     }
 
-    if (this.alphabet.search(' ') !== -1) {
-      throw errorAlphabetSpace
+    if (this.alphabet.indexOf(' ') !== -1) {
+      throw new Error('error: alphabet cannot contain spaces')
     }
 
-    /*
-			`this.seps` should contain only characters present in `this.alphabet`
-			`this.alphabet` should not contains `this.seps`
-		*/
+    /** `seps` should contain only characters present in `alphabet` */
+    const filteredSeps = withoutChars(seps, this.alphabet)
+    this.seps = shuffle(filteredSeps, salt)
 
-    for (let i = 0; i !== this.seps.length; i++) {
-      const j = this.alphabet.indexOf(this.seps.charAt(i))
-      if (j === -1) {
-        this.seps = this.seps.substr(0, i) + ' ' + this.seps.substr(i + 1)
-      } else {
-        this.alphabet =
-          this.alphabet.substr(0, j) + ' ' + this.alphabet.substr(j + 1)
-      }
-    }
+    let sepsLength
+    let diff
 
-    this.alphabet = this.alphabet.replace(/ /g, '')
-
-    this.seps = this.seps.replace(/ /g, '')
-    this.seps = this._shuffle(this.seps, this.salt)
-
-    if (!this.seps.length || this.alphabet.length / this.seps.length > sepDiv) {
+    if (!this.seps.length || (this.alphabet.length / this.seps.length) > sepDiv) {
       sepsLength = Math.ceil(this.alphabet.length / sepDiv)
 
       if (sepsLength > this.seps.length) {
@@ -78,7 +48,7 @@ export default class Hashids {
       }
     }
 
-    this.alphabet = this._shuffle(this.alphabet, this.salt)
+    this.alphabet = shuffle(this.alphabet, salt)
     const guardCount = Math.ceil(this.alphabet.length / guardDiv)
 
     if (this.alphabet.length < 3) {
@@ -169,7 +139,7 @@ export default class Hashids {
       let number = numbers[i]
       const buffer = lottery + this.salt + alphabet
 
-      alphabet = this._shuffle(alphabet, buffer.substr(0, alphabet.length))
+      alphabet = shuffle(alphabet, buffer.substr(0, alphabet.length))
       const last = this._toAlphabet(number, alphabet)
 
       ret += last
@@ -198,7 +168,7 @@ export default class Hashids {
 
     const halfLength = parseInt(alphabet.length / 2, 10)
     while (ret.length < this.minLength) {
-      alphabet = this._shuffle(alphabet, alphabet)
+      alphabet = shuffle(alphabet, alphabet)
       ret = alphabet.substr(halfLength) + ret + alphabet.substr(0, halfLength)
 
       const excess = ret.length - this.minLength
@@ -234,7 +204,7 @@ export default class Hashids {
         const subId = idArray[j]
         const buffer = lottery + this.salt + alphabet
 
-        alphabet = this._shuffle(alphabet, buffer.substr(0, alphabet.length))
+        alphabet = shuffle(alphabet, buffer.substr(0, alphabet.length))
         ret.push(this._fromAlphabet(subId, alphabet))
       }
 
@@ -244,30 +214,6 @@ export default class Hashids {
     }
 
     return ret
-  }
-
-  _shuffle(alphabet, salt) {
-    let integer
-
-    if (!salt.length) {
-      return alphabet
-    }
-
-    alphabet = alphabet.split('')
-
-    for (let i = alphabet.length - 1, v = 0, p = 0, j = 0; i > 0; i--, v++) {
-      v %= salt.length
-      p += integer = salt.charCodeAt(v)
-      j = (integer + v + p) % i
-
-      const tmp = alphabet[j]
-      alphabet[j] = alphabet[i]
-      alphabet[i] = tmp
-    }
-
-    alphabet = alphabet.join('')
-
-    return alphabet
   }
 
   _toAlphabet(input, alphabet) {
@@ -288,3 +234,35 @@ export default class Hashids {
       .reduce((carry, item) => carry * alphabet.length + item, 0)
   }
 }
+
+const minAlphabetLength = 16
+const sepDiv = 3.5
+const guardDiv = 12
+
+export const keepUniqueChars = (str: string) => Array.from(new Set(str)).join('')
+
+export const withoutChars = ([...str]: string, [...without]: string) =>
+  str.filter((char) => !without.includes(char)).join('')
+
+function shuffle(alphabet: string, salt: string) {
+  let integer
+
+  if (!salt.length) {
+    return alphabet
+  }
+
+  const alphabetChars = alphabet.split('')
+
+  for (let i = alphabetChars.length - 1, v = 0, p = 0, j = 0; i > 0; i--, v++) {
+    v %= salt.length
+    p += integer = salt.charCodeAt(v)
+    j = (integer + v + p) % i
+
+    const tmp = alphabetChars[j]
+    alphabetChars[j] = alphabetChars[i]
+    alphabetChars[i] = tmp
+  }
+
+  return alphabetChars.join('')
+}
+
