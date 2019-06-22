@@ -13,7 +13,6 @@
   },
   "rules": {
     "eqeqeq": 2,
-    "indent": ["error", "tab"],
     "no-var": 2,
     "prefer-const": 2,
     "no-unused-vars": [2, {"vars": "all", "args": "none", "varsIgnorePattern": "[iI]gnored"}],
