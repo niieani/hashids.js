@@ -8,7 +8,11 @@ import expect from 'expect'
 describe('importing', () => {
   test('loads via .mjs', async () => {
     expect.assertions(1)
-    const p = childProcess.spawn('node', ['--experimental-modules', './importing.mjs'], {cwd: __dirname})
+    const p = childProcess.spawn(
+      'node',
+      ['--experimental-modules', './importing.mjs'],
+      {cwd: __dirname},
+    )
 
     p.stderr.on('data', (d) => console.log(d.toString()))
 
