@@ -42,6 +42,7 @@ describe('bad input', () => {
   })
 
   test(`should return an empty string when encoding a null`, () => {
+    // @ts-ignore
     const id = hashids.encode(null)
     expect(id).toEqual('')
   })
@@ -52,6 +53,7 @@ describe('bad input', () => {
   })
 
   test(`should return an empty string when encoding an undefined`, () => {
+    // @ts-ignore
     const id = hashids.encode(undefined)
     expect(id).toEqual('')
   })
@@ -62,6 +64,7 @@ describe('bad input', () => {
   })
 
   test(`should return an empty array when decoding nothing`, () => {
+    // @ts-ignore
     const numbers = hashids.decode()
     expect(numbers).toEqual([])
   })
@@ -81,8 +84,8 @@ describe('bad input', () => {
     expect(id).toEqual('')
   })
 
-  test(`should return an empty array when hex-decoding invalid id`, () => {
-    const numbers = hashids.decodeHex('f')
-    expect(numbers).toEqual([])
+  test(`should return an empty string when hex-decoding invalid id`, () => {
+    const hex = hashids.decodeHex('f')
+    expect(hex).toEqual('')
   })
 })
