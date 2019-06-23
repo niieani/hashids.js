@@ -15,7 +15,6 @@
   "module": "dist/hashids-esm",
   "browser": "dist/hashids.min",
   "scripts": {
-    "precommit": "npm run lint && npm run test",
     "lint": "eslint lib tests",
     "prettier:check": "prettier --check",
     "prettier:write": "prettier --write lib/* tests*/*",
@@ -25,9 +24,14 @@
     "build:modules": "BABEL_MODULES=1 babel lib/hashids.ts --source-maps -o dist/hashids.mjs && cp dist/hashids.mjs dist/hashids-esm.js",
     "rename:global": "sed -i '' 's/global.hashids/global.Hashids/g' dist/index.js",
     "minify": "cd dist && uglifyjs index.js -o hashids.min.js --source-map \"url=hashids.min.js.map\" --compress --mangle",
-    "build": "npm run test && npm run build:node && npm run build:modules && npm run rename:global && npm run minify",
-    "clean": "rm -rf coverage npm-debug.log",
-    "all": "npm run lint && npm run coverage && npm run build && npm run clean"
+    "build": "yarn run test && yarn run build:node && yarn run build:modules && yarn run rename:global && yarn run minify",
+    "clean": "rm -rf coverage yarn-debug.log",
+    "all": "yarn run lint && yarn run coverage && yarn run build && yarn run clean"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn run lint && yarn run test"
+    }
   },
   "browserslist": [
     "last 2 version",
