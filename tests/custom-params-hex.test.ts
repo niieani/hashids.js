@@ -27,14 +27,14 @@ describe('encodeHex/decodeHex using default params', () => {
     const hex = map[id]
 
     test(`should encode '0x${hex.toUpperCase()}' to '${id}'`, () => {
-      expect(id).toEqual(hashids.encodeHex(hex))
+      expect(hashids.encodeHex(hex)).toEqual(id)
     })
 
     test(`should encode '0x${hex.toUpperCase()}' to '${id}' and decode back correctly`, () => {
       const encodedId = hashids.encodeHex(hex)
       const decodedHex = hashids.decodeHex(encodedId)
 
-      expect(hex.toLowerCase()).toEqual(decodedHex)
+      expect(decodedHex).toBe(hex.toLowerCase())
     })
 
     test(`id length should be at least ${minLength}`, () => {

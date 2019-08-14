@@ -11,27 +11,23 @@ export default class Hashids {
   ) {
     if (typeof minLength !== 'number') {
       throw new Error(
-        `Provided 'minLength' has to be a number (is ${typeof minLength})`,
+        `Hashids: Provided 'minLength' has to be a number (is ${typeof minLength})`,
       )
     }
     if (typeof salt !== 'string') {
-      throw new Error(`Provided 'salt' has to be a string (is ${typeof salt})`)
+      throw new Error(`Hashids: Provided 'salt' has to be a string (is ${typeof salt})`)
     }
     if (typeof alphabet !== 'string') {
       throw new Error(
-        `Provided alphabet has to be a string (is ${typeof alphabet})`,
+        `Hashids: Provided alphabet has to be a string (is ${typeof alphabet})`,
       )
-    }
-
-    if (alphabet.indexOf(' ') !== -1) {
-      throw new Error('error: alphabet cannot contain spaces')
     }
 
     const uniqueAlphabet = keepUniqueChars(alphabet)
 
     if (uniqueAlphabet.length < minAlphabetLength) {
       throw new Error(
-        `error: alphabet must contain at least ${minAlphabetLength} unique characters, provided: ${uniqueAlphabet}`,
+        `Hashids: alphabet must contain at least ${minAlphabetLength} unique characters, provided: ${uniqueAlphabet}`,
       )
     }
 
@@ -71,22 +67,21 @@ export default class Hashids {
 
   encode(numbers: string): string
   // eslint-disable-next-line no-dupe-class-members
-  encode(numbers: Array<number>): string
+  encode(numbers: Array<number | bigint>): string
   // eslint-disable-next-line no-dupe-class-members
-  encode(...numbers: Array<number>): string
+  encode(...numbers: Array<number | bigint>): string
   // eslint-disable-next-line no-dupe-class-members
   encode(numbers: Array<string>): string
   // eslint-disable-next-line no-dupe-class-members
   encode(...numbers: Array<string>): string
   // eslint-disable-next-line no-dupe-class-members
-  encode<T extends string | number>(
+  encode<T extends string | number | bigint>(
     first: Array<T> | T,
     ...numbers: Array<T>
   ): string {
     const ret = ''
 
     if (Array.isArray(first)) {
-      // @ts-ignore
       numbers = first
     } else {
       // eslint-disable-next-line eqeqeq
@@ -98,60 +93,79 @@ export default class Hashids {
     }
 
     if (!numbers.every(isIntegerNumber)) {
-      // @ts-ignore
-      numbers = numbers.map((n) => safeParseInt10(String(n), 10))
+      numbers = numbers.map(
+        (n) => (typeof n === 'bigint' || typeof n === 'number') ? n : safeParseInt10(String(n))
+      ) as Array<T>
     }
 
-    // @ts-ignore
-    if (!numbers.every(isPositiveAndFinite)) {
+    if (!(numbers as Array<number | bigint>).every(isPositiveAndFinite)) {
       return ret
     }
 
     return this._encode(numbers as Array<number>)
   }
 
-  decode(id: string) {
-    const ret: Array<number> = []
-
-    if (!id || !id.length || typeof id !== 'string') {
-      return ret
-    }
-
+  decode(id: string): Array<number | bigint> {
+    if (!id || typeof id !== 'string' || id.length === 0) return []
     return this._decode(id, this.alphabet)
   }
 
-  encodeHex(hex: string): string {
-    hex = hex.toString()
-    if (!/^[0-9a-fA-F]+$/.test(hex)) {
-      return ''
+  /**
+   * @description Splits a hex string into groups of 12-digit hexadecimal numbers,
+   * then prefixes each with '1' and encodes the resulting array of numbers
+   *
+   * Encoding '00000000000f00000000000f000f' would be the equivalent of:
+   * Hashids.encode([0x100000000000f, 0x100000000000f, 0x1000f])
+   *
+   * This means that if your environment supports BigInts,
+   * you will get different (shorter) results if you provide
+   * a BigInt representation of your hex and use `encode` directly, e.g.:
+   * Hashids.encode(BigInt(`0x${hex}`))
+   *
+   * To decode such a representation back to a hex string, use the following snippet:
+   * Hashids.decode(id)[0].toString(16)
+   */
+  encodeHex(hex: string | bigint): string {
+    switch (typeof hex) {
+      case 'bigint':
+        hex = hex.toString(16)
+        break
+      case 'string':
+        if (!/^[0-9a-fA-F]+$/.test(hex)) return ''
+        break
+      default:
+        throw new Error(`Hashids: The provided value is neither a string, nor a BigInt (got: ${typeof hex})`)
     }
 
-    const numbers = hex.match(/[\w\W]{1,12}/g)
-    if (!numbers) return ''
-
-    const decNumbers = Array.from(numbers, (value) => parseInt(`1${value}`, 16))
-    return this.encode(decNumbers)
+    const numbers = splitAtIntervalAndMap(hex, 12, (part) => parseInt(`1${part}`, 16))
+    return this.encode(numbers)
   }
 
   decodeHex(id: string) {
-    const numbers = this.decode(id)
-    return numbers.map((number) => number.toString(16).substr(1)).join('')
+    return this.decode(id)
+      .map((number) => number.toString(16).slice(1))
+      .join('')
   }
 
-  _encode(numbers: Array<number>): string {
+  _encode(numbers: Array<number | bigint>): string {
     let ret: string
     let alphabet = this.alphabet
-    let numbersIdInt = 0
 
-    for (let i = 0; i !== numbers.length; i++) {
-      numbersIdInt += numbers[i] % (i + 100)
-    }
+    const numbersIdInt = numbers.reduce<number>(
+      (last, number, i) =>
+        last + (typeof number === 'bigint'
+          ? Number(number % BigInt(i + 100))
+          : number % (i + 100)),
+      0
+    )
 
-    ret = alphabet.charAt(numbersIdInt % alphabet.length)
+    ret = [...alphabet][numbersIdInt % [...alphabet].length]
     const lottery = ret
 
-    for (let i = 0; i !== numbers.length; i++) {
-      let number = numbers[i]
+    const seps = [...this.seps]
+    const guards = [...this.guards]
+
+    numbers.forEach((number, i) => {
       const buffer = lottery + this.salt + alphabet
 
       alphabet = shuffle(alphabet, unicodeSubstr(buffer, 0))
@@ -160,72 +174,61 @@ export default class Hashids {
       ret += last
 
       if (i + 1 < numbers.length) {
-        number %= last.charCodeAt(0) + i
-        const sepsIndex = number % this.seps.length
-        ret += this.seps.charAt(sepsIndex)
+        const charCode = last.codePointAt(0)! + i
+        const extraNumber = (typeof number === 'bigint'
+          ? Number(number % BigInt(charCode))
+          : number % charCode)
+        ret += seps[extraNumber % seps.length]
+      }
+    })
+
+    if ([...ret].length < this.minLength) {
+      const prefixGuardIndex = (numbersIdInt + [...ret][0].codePointAt(0)!) % guards.length
+      ret = guards[prefixGuardIndex] + ret
+
+      if ([...ret].length < this.minLength) {
+        const suffixGuardIndex = (numbersIdInt + [...ret][2].codePointAt(0)!) % guards.length
+        ret = ret + guards[suffixGuardIndex]
       }
     }
 
-    if (ret.length < this.minLength) {
-      let guardIndex =
-        (numbersIdInt + ret[0].charCodeAt(0)) % this.guards.length
-      let guard = this.guards[guardIndex]
-
-      ret = guard + ret
-
-      if (ret.length < this.minLength) {
-        guardIndex = (numbersIdInt + ret[2].charCodeAt(0)) % this.guards.length
-        guard = this.guards[guardIndex]
-
-        ret += guard
-      }
-    }
-
-    const halfLength = Math.floor(alphabet.length / 2)
-    while (ret.length < this.minLength) {
+    const halfLength = Math.floor([...alphabet].length / 2)
+    while ([...ret].length < this.minLength) {
       alphabet = shuffle(alphabet, alphabet)
-      ret = alphabet.substr(halfLength) + ret + alphabet.substr(0, halfLength)
+      ret = unicodeSubstr(alphabet, halfLength) + ret + unicodeSubstr(alphabet, 0, halfLength)
 
-      const excess = ret.length - this.minLength
+      const excess = [...ret].length - this.minLength
       if (excess > 0) {
-        ret = ret.substr(excess / 2, this.minLength)
+        ret = unicodeSubstr(ret, excess / 2, this.minLength)
       }
     }
 
     return ret
   }
 
-  _decode(id: string, alphabet: string): Array<number> {
-    let ret: Array<number> = []
-    let i = 0
+  _decode(id: string, alphabet: string): Array<number | bigint> {
+    const idGuardsArray = splitAtMatch(id, (char) => this.guards.includes(char))
+    const splitIndex = idGuardsArray.length === 3 || idGuardsArray.length === 2 ? 1 : 0
 
-    let idBreakdown = replaceGuardsWithSpaces(id, this.guards)
-    let idArray = idBreakdown.split(' ')
+    const idBreakdown = idGuardsArray[splitIndex]
+    const idBreakdownArray = [...idBreakdown]
+    if (idBreakdownArray.length === 0) return []
 
-    if (idArray.length === 3 || idArray.length === 2) {
-      i = 1
-    }
+    const [lotteryChar, ...chars] = idBreakdownArray
+    const rest = chars.join('')
+    const idArray = splitAtMatch(rest, (char) => this.seps.includes(char))
 
-    idBreakdown = idArray[i]
-    if (typeof idBreakdown[0] !== 'undefined') {
-      const lottery = idBreakdown[0]
-      idBreakdown = replaceGuardsWithSpaces(idBreakdown.substr(1), this.seps)
-      idArray = idBreakdown.split(' ')
-
-      for (let j = 0; j !== idArray.length; j++) {
-        const subId = idArray[j]
-        const buffer = lottery + this.salt + alphabet
-
-        alphabet = shuffle(alphabet, buffer.substr(0, alphabet.length))
-        ret.push(fromAlphabet(subId, alphabet))
+    const {result} = idArray.reduce(({result, lastAlphabet}, subId) => {
+      const buffer = lotteryChar + this.salt + lastAlphabet
+      const nextAlphabet = shuffle(lastAlphabet, unicodeSubstr(buffer, 0, [...lastAlphabet].length))
+      return {
+        result: [...result, fromAlphabet(subId, nextAlphabet)],
+        lastAlphabet: nextAlphabet,
       }
+    }, {result: [] as Array<number | bigint>, lastAlphabet: alphabet})
 
-      if (this.encode(ret) !== id) {
-        ret = []
-      }
-    }
-
-    return ret
+    if (this._encode(result) !== id) return []
+    return result
   }
 }
 
@@ -243,13 +246,15 @@ export const onlyChars = ([...str]: string, [...only]: string) =>
   str.filter((char) => only.includes(char)).join('')
 
 export const unicodeSubstr = ([...str]: string, from: number, to?: number) =>
-  str.slice(from, to).join('')
+  str.slice(from, to === undefined ? undefined : from + to).join('')
 
-const isIntegerNumber = (n: number | string) =>
-  !Number.isNaN(Number(n)) && Math.floor(Number(n)) === n
-const isPositiveAndFinite = (n: number) => n >= 0 && Number.isFinite(n)
+const isIntegerNumber = (n: number | bigint | string) =>
+  typeof n === 'bigint' || (!Number.isNaN(Number(n)) && Math.floor(Number(n)) === n)
 
-function shuffle(alphabet: string, salt: string) {
+const isPositiveAndFinite = (n: number | bigint) =>
+  typeof n === 'bigint' || (n >= 0 && Number.isSafeInteger(n))
+
+function shuffle(alphabet: string, [...salt]: string) {
   let integer: number
 
   if (!salt.length) {
@@ -258,38 +263,74 @@ function shuffle(alphabet: string, salt: string) {
 
   const alphabetChars = [...alphabet]
 
-  for (let i = alphabetChars.length - 1, v = 0, p = 0, j = 0; i > 0; i--, v++) {
+  for (let i = alphabetChars.length - 1, v = 0, p = 0; i > 0; i--, v++) {
     v %= salt.length
-    p += integer = salt.charCodeAt(v)
-    j = (integer + v + p) % i
+    p += integer = salt[v].codePointAt(0)!
+    const j = (integer + v + p) % i
 
-    const tmp = alphabetChars[j]
-    alphabetChars[j] = alphabetChars[i]
-    alphabetChars[i] = tmp
+    // swap characters at positions i and j
+    ;[alphabetChars[j], alphabetChars[i]] = [alphabetChars[i], alphabetChars[j]]
   }
 
   return alphabetChars.join('')
 }
 
-const toAlphabet = (input: number, alphabet: string) => {
+const toAlphabet = (input: number | bigint, [...alphabet]: string) => {
   let id = ''
 
-  do {
-    id = alphabet.charAt(input % alphabet.length) + id
-    input = Math.floor(input / alphabet.length)
-  } while (input)
+  if (typeof input === 'bigint') {
+    const alphabetLength = BigInt(alphabet.length)
+    do {
+      id = alphabet[Number(input % alphabetLength)] + id
+      input = input / alphabetLength
+    } while (input)
+  } else {
+    do {
+      id = alphabet[input % alphabet.length] + id
+      input = Math.floor(input / alphabet.length)
+    } while (input)
+  }
 
   return id
 }
 
-const fromAlphabet = (input: string, alphabet: string) =>
-  [...input]
+const fromAlphabet = ([...input]: string, [...alphabet]: string) =>
+  input
     .map((item) => alphabet.indexOf(item))
-    .reduce((carry, item) => carry * alphabet.length + item, 0)
+    .reduce((carry, index) => {
+      if (typeof carry === 'bigint') {
+        return carry * BigInt(alphabet.length) + BigInt(index)
+      }
+      const value = carry * alphabet.length + index
+      const isSafeValue = Number.isSafeInteger(value)
+      if (isSafeValue) {
+        return value
+      } else {
+        if (typeof BigInt === 'function') {
+          return BigInt(carry) * BigInt(alphabet.length) + BigInt(index)
+        } else {
+          // we do not have support for BigInt:
+          throw new Error(`Unable to decode the provided string, due to lack of support for BigInt numbers in the current environment`)
+        }
+      }
+    }, 0 as number | bigint)
 
-const replaceGuardsWithSpaces = ([...chars]: string, guards: string) =>
-  chars.map((char) => (guards.includes(char) ? ' ' : char)).join('')
+const splitAtMatch = ([...chars]: string, match: (char: string) => boolean) =>
+  chars.reduce(
+    (groups, char) =>
+      match(char)
+        ? [...groups, '']
+        : [...groups.slice(0, -1), groups[groups.length - 1] + char], ['']
+  )
 
-const safeNumberRegExp = /^(-|\+)?([0-9]+|Infinity)$/
-const safeParseInt10 = (str: string) =>
-  safeNumberRegExp.test(str) ? parseInt(str, 10) : NaN
+const safeToParseNumberRegExp = /^\+?[0-9]+$/
+const safeParseInt10 = (str: string) => safeToParseNumberRegExp.test(str) ? parseInt(str, 10) : NaN
+
+/** note: this doesn't need to support unicode, since it's used to split hex strings only */
+const splitAtIntervalAndMap = <T>(str : string, nth : number, map : (n : string) => T) : Array<T> =>
+  Array.from<never, T>(
+    {length: Math.ceil(str.length / nth)},
+    (_, index) => map(
+      str.slice(index * nth, (index + 1) * nth)
+    )
+  )

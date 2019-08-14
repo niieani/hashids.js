@@ -2,7 +2,7 @@ import Hashids from '../lib/hashids'
 import expect from 'expect'
 
 describe('custom salt', () => {
-  const testSalt = (salt) => {
+  const testSalt = (salt: string) => {
     const hashids = new Hashids(salt)
     const numbers = [1, 2, 3]
 

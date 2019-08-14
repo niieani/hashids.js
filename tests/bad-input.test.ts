@@ -1,5 +1,4 @@
 import Hashids from '../lib/hashids'
-import expect from 'expect'
 
 const hashids = new Hashids()
 
@@ -10,10 +9,10 @@ describe('bad input', () => {
     }).toThrow()
   })
 
-  test(`should throw an error when alphabet has spaces`, () => {
+  test(`should not throw an error when alphabet has spaces`, () => {
     expect(() => {
       const hashidsIgnored = new Hashids('', 0, 'a cdefghijklmnopqrstuvwxyz')
-    }).toThrow()
+    }).not.toThrow()
   })
 
   test(`should return an empty string when encoding nothing`, () => {

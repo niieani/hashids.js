@@ -1,6 +1,7 @@
+// @ts-ignore
 import ImportedHashids from '../'
+// @ts-ignore
 import * as AsteriskImportedHashids from '../'
-import expect from 'expect'
 
 describe('requiring', () => {
   test('via node', () => {
@@ -11,7 +12,7 @@ describe('requiring', () => {
   })
 
   test('via babel-es interop', () => {
-    function _interopRequireDefault(obj) {
+    function _interopRequireDefault(obj: any) {
       return obj && obj.__esModule ? obj : {default: obj}
     }
     const _hashids = require('../')

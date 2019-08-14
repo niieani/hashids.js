@@ -1,8 +1,7 @@
 import Hashids from '../lib/hashids'
-import expect from 'expect'
 
 describe('min length', () => {
-  const testMinLength = (minLength) => {
+  const testMinLength = (minLength: number) => {
     const hashids = new Hashids('', minLength)
     const numbers = [1, 2, 3]
 
@@ -10,7 +9,7 @@ describe('min length', () => {
     const decodedNumbers = hashids.decode(id)
 
     expect(decodedNumbers).toEqual(numbers)
-    expect(id.length).toBeGreaterThanOrEqual(minLength)
+    expect([...id].length).toBeGreaterThanOrEqual(minLength)
   }
 
   test(`should work when 0`, () => {

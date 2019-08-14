@@ -1,8 +1,7 @@
 import Hashids from '../lib/hashids'
-import expect from 'expect'
 
 describe('custom alphabet', () => {
-  const testAlphabet = (alphabet) => {
+  const testAlphabet = (alphabet: string) => {
     const hashids = new Hashids('', 0, alphabet)
     const numbers = [1, 2, 3]
 
@@ -14,6 +13,10 @@ describe('custom alphabet', () => {
 
   test(`should work with the worst alphabet`, () => {
     testAlphabet('cCsSfFhHuUiItT01')
+  })
+
+  test(`should work with an alphabet containing spaces`, () => {
+    testAlphabet('cCsSfFhH uUiItT01')
   })
 
   test(`should work with half the alphabet being separators`, () => {
@@ -36,5 +39,13 @@ describe('custom alphabet', () => {
 
   test(`should work with a weird alphabet`, () => {
     testAlphabet('`~!@#$%^&*()-_=+\\|\'";:/?.>,<{[}]')
+  })
+
+  test(`should work with an alphabet with unicode chars`, () => {
+    testAlphabet('😀😁😂🤣😃😄😅😆😉😊😋😎😍😘🥰😗😙😚')
+  })
+
+  test(`should work with an alphabet with complex unicode chars`, () => {
+    testAlphabet('🤺👩🏿‍🦳🛁👩🏻🦷🤦‍♂️🐁☝🏼✍🏾👉🏽🇸🇰❤️🍭')
   })
 })
