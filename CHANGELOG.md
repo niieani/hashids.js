@@ -1,5 +1,30 @@
-
 # CHANGELOG
+
+**2.0.0**:
+
+This is pretty much a TypeScript rewrite.
+
+### Breaking changes
+
+- BREAKING CHANGE: Hashids now throws errors when being constructed with incorrect options (previously, it silently falled back to defaults)
+- BREAKING CHANGE: when used from Node (without ESM enabled), you now need to `require('hashids/cjs')`
+
+### Features
+
+- transparent support of `BigInt`s. If your environment supports them,
+  you can use the standard API to encode and decode them.
+  Note that trying to decode a `BigInt` hashid on an unsupported environment will throw an error.
+- lifted the limitation that the alphabet cannot containin spaces
+- both the alphabet and salt may now contain multi-byte characters (e.g. for an emoji-based alphabet)
+
+### Chores
+
+- upgraded all dependencies
+- tests now use `jest` testing framework
+- extracted static methods to helper functions
+- converted the implementation to TypeScript
+- added `prettier`
+- added stricter `eslint` rules
 
 **1.2.2**:
 
@@ -25,7 +50,7 @@
 **1.1.4**:
 
 - looks like some bad input could generate negative numbers, which when passed to `_encode` would crash because it can't handle those <https://github.com/ivanakimov/hashids.js/issues/34>
-*NOTE:* do not use `1.1.3`, it wasn't re-built
+  _NOTE:_ do not use `1.1.3`, it wasn't re-built
 
 **1.1.2**:
 
@@ -52,14 +77,14 @@
 - [Bug fix](https://github.com/ivanakimov/hashids.node.js/issues/26): escaping regex
 - Improvement: relaxed parameter checks to `encode()`. All of these are allowed:
 
-	```javascript
-	var hashids = new Hashids();
+      	```javascript
+      	var hashids = new Hashids();
 
-	hashids.encode(1, 2, 3); // o2fXhV
-	hashids.encode([1, 2, 3]); // o2fXhV
-	hashids.encode('1', '2', '3'); // o2fXhV
-	hashids.encode(['1', '2', '3']); // o2fXhV
-	```
+      	hashids.encode(1, 2, 3); // o2fXhV
+      	hashids.encode([1, 2, 3]); // o2fXhV
+      	hashids.encode('1', '2', '3'); // o2fXhV
+      	hashids.encode(['1', '2', '3']); // o2fXhV
+      	```
 
 **1.0.2**:
 
@@ -67,17 +92,13 @@
 
 **1.0.1**:
 
-- *require.js* support by [@nleclerc](https://github.com/nleclerc): <https://github.com/ivanakimov/hashids.js/pull/12>
+- _require.js_ support by [@nleclerc](https://github.com/nleclerc): <https://github.com/ivanakimov/hashids.js/pull/12>
 
 **1.0.0**:
 
-- Several public functions are renamed to be more appropriate:
-	- Function `encrypt()` changed to `encode()`
-	- Function `decrypt()` changed to `decode()`
-	- Function `encryptHex()` changed to `encodeHex()`
-	- Function `decryptHex()` changed to `decodeHex()`
+- Several public functions are renamed to be more appropriate: - Function `encrypt()` changed to `encode()` - Function `decrypt()` changed to `decode()` - Function `encryptHex()` changed to `encodeHex()` - Function `decryptHex()` changed to `decodeHex()`
 
-	Hashids was designed to encode integers, primary ids at most. We've had several requests to encrypt sensitive data with Hashids and this is the wrong algorithm for that. So to encourage more appropriate use, `encrypt/decrypt` is being "downgraded" to `encode/decode`.
+      	Hashids was designed to encode integers, primary ids at most. We've had several requests to encrypt sensitive data with Hashids and this is the wrong algorithm for that. So to encourage more appropriate use, `encrypt/decrypt` is being "downgraded" to `encode/decode`.
 
 - Version tag added: `1.0`
 - `README.md` updated
@@ -103,14 +124,14 @@
 
 **0.1.3**:
 
-	Warning: If you are using 0.1.2 or below, updating to this version will change your hashes.
+    Warning: If you are using 0.1.2 or below, updating to this version will change your hashes.
 
 - Updated default alphabet (thanks to [@speps](https://github.com/speps))
 - Constructor removes duplicate characters for default alphabet as well (thanks to [@speps](https://github.com/speps))
 
 **0.1.2**:
 
-	Warning: If you are using 0.1.1 or below, updating to this version will change your hashes.
+    Warning: If you are using 0.1.1 or below, updating to this version will change your hashes.
 
 - Minimum hash length can now be specified
 - Added more randomness to hashes
