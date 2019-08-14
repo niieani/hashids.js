@@ -1,8 +1,5 @@
 language: node_js
 
-stages:
-  - basic
-
 matrix:
   include:
     - os: linux
@@ -26,3 +23,15 @@ matrix:
 sudo: false
 script: yarn run $JOB_PART
 after_script: yarn run coverage
+
+jobs:
+  include:
+    # Define the release stage that runs semantic-release
+    - stage: release
+      node_js: "12"
+      # Advanced: optionally overwrite your default `script` step to skip the tests
+      # script: skip
+      deploy:
+        provider: script
+        skip_cleanup: true
+        script: yarn run build && yarn run semantic-release
