@@ -3,7 +3,6 @@
 // that's why it is in a separate file
 
 import childProcess from 'child_process'
-import expect from 'expect'
 
 describe('importing', () => {
   test('loads via .mjs', async () => {
@@ -14,11 +13,13 @@ describe('importing', () => {
       {cwd: __dirname},
     )
 
+    // eslint-disable-next-line no-console
     p.stderr.on('data', (d) => console.log(d.toString()))
 
     const code = await new Promise((resolve) => {
       p.on('close', (code, _signal) => resolve(code))
     })
+
     expect(code).toBe(0)
   })
 })
