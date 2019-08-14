@@ -49,18 +49,19 @@ const map = {
     19,
     20,
   ],
+  N95VW0Lo06rQBvJDOE2BVvREP86AqvYN4O9g9p: [928728n ** 10n],
+  Nxg09EA2O86Q42n7JDVpTNoC4l: [1000n ** 10n, 100, 100],
+  pm73zwE83gAw8ME82P1l8JQk3gxA05nmLxWq7RnQ: [6582018229284824168619876730229402019930943462534319453394436095n],
 }
 
 describe('encode/decode using default params', () => {
-  for (const id in map) {
-    const numbers = map[id]
-
+  Object.entries(map).forEach(([id, numbers]) => {
     test(`should encode [${numbers}] to '${id}' (passing array of numbers)`, () => {
       expect(id).toEqual(hashids.encode(numbers))
     })
 
     test(`should encode [${numbers}] to '${id}' (passing numbers)`, () => {
-      expect(id).toEqual(hashids.encode.apply(hashids, numbers))
+      expect(id).toEqual(hashids.encode(...numbers))
     })
 
     test(`should encode [${numbers}] to '${id}' and decode back correctly`, () => {
@@ -69,5 +70,5 @@ describe('encode/decode using default params', () => {
 
       expect(numbers).toEqual(decodedNumbers)
     })
-  }
+  })
 })
