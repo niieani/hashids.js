@@ -1,24 +1,11 @@
 // @ts-ignore
-import ImportedHashids from '../'
-// @ts-ignore
-import * as AsteriskImportedHashids from '../'
+import ImportedHashids from '../cjs'
 
 describe('requiring', () => {
   test('via node', () => {
-    const Hashids = require('../')
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const Hashids = require('../cjs')
     expect(typeof Hashids).toBe('function')
-    const instance = new Hashids('Not Real', 5, 'ABCDEFGHJKMNPQRTWXY234689')
-    expect(instance).toBeInstanceOf(Hashids)
-  })
-
-  test('via babel-es interop', () => {
-    function _interopRequireDefault(obj: any) {
-      return obj && obj.__esModule ? obj : {default: obj}
-    }
-    const _hashids = require('../')
-    const _hashids2 = _interopRequireDefault(_hashids)
-    expect(typeof _hashids2.default).toBe('function')
-    const Hashids = _hashids2.default
     const instance = new Hashids('Not Real', 5, 'ABCDEFGHJKMNPQRTWXY234689')
     expect(instance).toBeInstanceOf(Hashids)
   })
@@ -31,15 +18,5 @@ describe('requiring', () => {
       'ABCDEFGHJKMNPQRTWXY234689',
     )
     expect(instance).toBeInstanceOf(ImportedHashids)
-  })
-
-  test('via babel asterisk import', () => {
-    expect(typeof AsteriskImportedHashids).toBe('function')
-    const instance = new AsteriskImportedHashids(
-      'Not Real',
-      5,
-      'ABCDEFGHJKMNPQRTWXY234689',
-    )
-    expect(instance).toBeInstanceOf(AsteriskImportedHashids)
   })
 })

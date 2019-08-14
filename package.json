@@ -1,32 +1,45 @@
 {
-  "author": "Ivan Akimov <ivan@barreleye.com> (https://twitter.com/IvanAkimov)",
+  "author": "hashids.org <npm@invent.life> (https://github.com/hashids)",
   "name": "hashids",
   "description": "Generate YouTube-like ids from numbers. Use Hashids when you do not want to expose your database ids to the user.",
-  "version": "1.2.2",
+  "contributors": [
+    {
+      "name": "Ivan Akimov",
+      "email": "ivan@barreleye.com",
+      "url": "https://twitter.com/IvanAkimov"
+    },
+    {
+      "name": "Bazyli Brzóska",
+      "email": "npm@invent.life",
+      "url": "https://twitter.com/niieani"
+    }
+  ],
+  "version": "0.0.0-development",
   "homepage": "http://hashids.org/javascript",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ivanakimov/hashids.js.git"
+    "url": "https://github.com/niieani/hashids.js.git"
   },
   "bugs": {
-    "url": "https://github.com/ivanakimov/hashids.js/issues"
+    "url": "https://github.com/niieani/hashids.js/issues"
   },
-  "main": "dist/hashids",
-  "module": "dist/hashids-esm",
+  "main": "dist/hashids.mjs",
+  "module": "dist/hashids.mjs",
   "browser": "dist/hashids.min",
   "scripts": {
-    "lint": "eslint lib tests",
-    "prettier:check": "prettier --check",
+    "lint": "eslint lib/* tests/*",
+    "prettier:check": "prettier --check lib/* tests*/*",
     "prettier:write": "prettier --write lib/* tests*/*",
     "test": "jest",
     "coverage": "jest --coverage && cat ./tests/coverage/lcov.info | coveralls",
-    "build:node": "babel lib/hashids.ts --source-maps -o dist/index.js",
-    "build:modules": "BABEL_MODULES=1 babel lib/hashids.ts --source-maps -o dist/hashids.mjs && cp dist/hashids.mjs dist/hashids-esm.js",
-    "rename:global": "sed -i '' 's/global.hashids/global.Hashids/g' dist/index.js",
-    "minify": "cd dist && uglifyjs index.js -o hashids.min.js --source-map \"url=hashids.min.js.map\" --compress --mangle",
-    "build": "yarn run test && yarn run build:node && yarn run build:modules && yarn run rename:global && yarn run minify",
+    "build:umd": "babel lib/hashids.ts --source-maps -o dist/hashids.js",
+    "build:modules": "BABEL_MODULES=1 babel lib/hashids.ts --source-maps -o dist/hashids.mjs",
+    "rename:global": "sed -i '' 's/global.hashids/global.Hashids/g' dist/hashids.js",
+    "minify": "cd dist && uglifyjs hashids.js -o hashids.min.js --source-map \"url=hashids.min.js.map\" --compress --mangle",
+    "build": "yarn run build:umd && yarn run build:modules && yarn run rename:global && yarn run minify",
     "clean": "rm -rf coverage yarn-debug.log",
-    "all": "yarn run lint && yarn run coverage && yarn run build && yarn run clean"
+    "all": "yarn run lint && yarn run coverage && yarn run build && yarn run clean",
+    "semantic-release": "semantic-release"
   },
   "husky": {
     "hooks": {
@@ -41,25 +54,29 @@
   ],
   "dependencies": {},
   "devDependencies": {
-    "@babel/cli": "^7.0.0",
-    "@babel/core": "^7.0.0",
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
     "@babel/plugin-syntax-bigint": "^7.4.4",
-    "@babel/plugin-syntax-dynamic-import": "7.2.0",
-    "@babel/preset-env": "^7.0.0",
+    "@babel/preset-env": "^7.5.5",
     "@babel/preset-typescript": "^7.3.3",
-    "@babel/register": "^7.0.0",
-    "@types/jest": "^24.0.15",
-    "@types/node": "^12.0.10",
-    "@typescript-eslint/eslint-plugin": "^1.10.2",
-    "@typescript-eslint/parser": "^1.10.2",
-    "babel-eslint": "10.0.2",
-    "coveralls": "^3.0.2",
-    "eslint": "^5.0.0",
+    "@babel/register": "^7.5.5",
+    "@types/jest": "^24.0.17",
+    "@types/node": "^12.7.1",
+    "@typescript-eslint/eslint-plugin": "^2.0.0",
+    "@typescript-eslint/parser": "^2.0.0",
+    "babel-eslint": "^10.0.2",
+    "coveralls": "^3.0.6",
+    "eslint": "^6.1.0",
+    "eslint-config-prettier": "^6.0.0",
+    "eslint-plugin-eslint-comments": "^3.1.2",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jest": "^22.15.1",
     "expect": "^24.8.0",
-    "husky": "^2.4.1",
+    "husky": "^3.0.3",
     "jest": "^24.8.0",
     "prettier": "^1.18.2",
-    "typescript": "^3.5.2",
+    "semantic-release": "^16.0.0-beta.22",
+    "typescript": "^3.5.3",
     "uglify-js": "^3.4.8"
   },
   "license": "MIT",
@@ -86,7 +103,7 @@
   },
   "jest": {
     "collectCoverageFrom": [
-      "lib/**/*.js"
+      "lib/**/*.ts"
     ]
   }
 }

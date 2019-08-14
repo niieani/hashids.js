@@ -1,4 +1,5 @@
 {
+  "editor.formatOnSave": true,
   "workbench.colorCustomizations": {
     "editorWarning.foreground": "#b8d2584c",
     "editorInfo.foreground": "#50d5fa14",
@@ -15,5 +16,17 @@
     "statusBar.background": "#39698e",
     "statusBarItem.hoverBackground": "#4884b2",
     "statusBar.foreground": "#e7e7e7"
-  }
+  },
+  "peacock.color": "#39698e",
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "eslint.alwaysShowStatus": true,
+  "eslint.packageManager": "yarn",
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+  "tslint.packageManager": "yarn",
+  "npm.packageManager": "yarn"
 }

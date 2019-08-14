@@ -1,10 +1,9 @@
 import Hashids from '../lib/hashids'
-import expect from 'expect'
 
 describe('custom salt', () => {
   const testSalt = (salt: string) => {
     const hashids = new Hashids(salt)
-    const numbers = [1, 2, 3]
+    const numbers = [1, 2, 3, 98798792847928479238794827394n]
 
     const id = hashids.encode(numbers)
     const decodedNumbers = hashids.decode(id)
@@ -32,5 +31,9 @@ describe('custom salt', () => {
 
   test(`should work with a weird salt`, () => {
     testSalt('`~!@#$%^&*()-_=+\\|\'";:/?.>,<{[}]')
+  })
+
+  test(`should work with an ultra weird salt`, () => {
+    testSalt('🤺👩🏿‍🦳🛁👩🏻🦷🤦‍♂️🐁☝🏼✍🏾👉🏽🇸🇰❤️🍭')
   })
 })

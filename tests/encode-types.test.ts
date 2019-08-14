@@ -1,8 +1,8 @@
 import Hashids from '../lib/hashids'
-import expect from 'expect'
 
 describe('encode types', () => {
-  const testParams = (...numbers : Array<any>) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const testParams = (...numbers: any[]) => {
     const hashids = new Hashids()
 
     const id = hashids.encode(...numbers)

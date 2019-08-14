@@ -5,13 +5,13 @@ const hashids = new Hashids()
 describe('bad input', () => {
   test(`should throw an error when small alphabet`, () => {
     expect(() => {
-      const hashidsIgnored = new Hashids('', 0, '1234567890')
+      void new Hashids('', 0, '1234567890')
     }).toThrow()
   })
 
   test(`should not throw an error when alphabet has spaces`, () => {
     expect(() => {
-      const hashidsIgnored = new Hashids('', 0, 'a cdefghijklmnopqrstuvwxyz')
+      void new Hashids('', 0, 'a cdefghijklmnopqrstuvwxyz')
     }).not.toThrow()
   })
 
