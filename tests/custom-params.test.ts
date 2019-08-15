@@ -31,10 +31,10 @@ describe.each([
     'w1hwinuwt1cbs6xwzafmhdinuotpcosrxaz0fahl',
     [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
   ],
-  [
-    'pm823wg6d1wea8521xa69635n16kl902pw',
-    [827364827638428762424n, 0x410498019283098083n],
-  ],
+  // bigint format:
+  ...(typeof BigInt === 'function'
+    ? require('./bigint-test-cases').customParams
+    : []),
 ] as [string, (number | bigint)[]][])(
   'encode/decode using custom params',
   (id, numbers) => {
