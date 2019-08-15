@@ -31,7 +31,7 @@
     "prettier:check": "prettier --check lib/* tests*/*",
     "prettier:write": "prettier --write lib/* tests*/*",
     "test": "jest",
-    "coverage": "jest --coverage && cat ./tests/coverage/lcov.info | coveralls",
+    "coverage": "jest --coverage && cat coverage/lcov.info | coveralls",
     "build:umd": "babel lib/hashids.ts --source-maps -o dist/hashids.js",
     "build:modules": "BABEL_MODULES=1 babel lib/hashids.ts --source-maps -o dist/hashids.mjs",
     "rename:global": "sed -i '' 's/global.hashids/global.Hashids/g' dist/hashids.js",
