@@ -1,10 +1,11 @@
 {
-  branches: [
-    'master',
+  "tagFormat": "${version}",
+  "branches": [
+    "master",
     {
-      name: 'next',
-      prerelease: 'prerelease',
-      channel: 'next',
-    },
+      "name": "next",
+      "prerelease": "prerelease",
+      "channel": "next"
+    }
   ]
 }
