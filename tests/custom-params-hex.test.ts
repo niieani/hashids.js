@@ -26,14 +26,9 @@ describe.each([
     'fffffffffffffffffffffffffffffffffffffffffffffffffffff',
   ],
   // bigint format:
-  [
-    'grekpy53r2pjxwyjkl9aw0k3t5la1b8d5r1ex9bgeqmy93eata0eq0',
-    0xfffffffffffffffffffffffffffffffffffffffffffffffffffffn,
-  ],
-  [
-    'edjrkn9m6o69s0ewnq5lqanqsmk6loayorlohwd963r53e63xmml29',
-    0xf000000000000000000000000000000000000000000000000000fn,
-  ],
+  ...(typeof BigInt === 'function'
+    ? require('./bigint-test-cases').customParamsHex
+    : []),
 ] as [string, string | bigint][])(
   'encodeHex/decodeHex using default params',
   (id, hex) => {

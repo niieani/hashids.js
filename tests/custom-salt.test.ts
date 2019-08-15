@@ -3,7 +3,15 @@ import Hashids from '../lib/hashids'
 describe('custom salt', () => {
   const testSalt = (salt: string) => {
     const hashids = new Hashids(salt)
-    const numbers = [1, 2, 3, 98798792847928479238794827394n]
+    const numbers = [
+      1,
+      2,
+      3,
+      // bigint format:
+      ...(typeof BigInt === 'function'
+        ? require('./bigint-test-cases').customSaltNumbers
+        : []),
+    ]
 
     const id = hashids.encode(numbers)
     const decodedNumbers = hashids.decode(id)
