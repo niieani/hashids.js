@@ -34,9 +34,8 @@
     "coverage": "jest --coverage && cat coverage/lcov.info | coveralls",
     "build:umd": "babel lib/hashids.ts --source-maps -o dist/hashids.js",
     "build:modules": "BABEL_MODULES=1 babel lib/hashids.ts --source-maps -o dist/hashids.mjs",
-    "rename:global": "sed -i '' 's/global.hashids/global.Hashids/g' dist/hashids.js",
     "minify": "cd dist && uglifyjs hashids.js -o hashids.min.js --source-map \"url=hashids.min.js.map\" --compress --mangle",
-    "build": "yarn run build:umd && yarn run build:modules && yarn run rename:global && yarn run minify",
+    "build": "yarn run build:umd && yarn run build:modules && yarn run minify",
     "clean": "rm -rf coverage yarn-debug.log",
     "all": "yarn run lint && yarn run coverage && yarn run build && yarn run clean",
     "semantic-release": "semantic-release"

@@ -3,7 +3,7 @@ module.exports = {
     [
       '@babel/preset-env',
       {
-        modules: process.env.BABEL_MODULES ? false : 'umd',
+        modules: false,
         ...(process.env.NODE_ENV === 'test'
           ? {
               targets: {
@@ -15,5 +15,11 @@ module.exports = {
     ],
     '@babel/preset-typescript',
   ],
-  plugins: ['@babel/plugin-syntax-bigint'],
+  plugins: [
+    '@babel/plugin-syntax-bigint',
+    ...(process.env.BABEL_MODULES
+      ? []
+      : ['@babel/plugin-transform-modules-umd']),
+  ],
+  moduleId: 'Hashids',
 }
