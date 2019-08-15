@@ -11,6 +11,12 @@ cache:
 matrix:
   fast_finish: true
 
+stages:
+  - test
+  - release
+
+if: tag IS blank
+
 jobs:
   include:
     - stage: test
@@ -22,14 +28,14 @@ jobs:
     # Define the release stage that runs semantic-release
     - stage: release
       node_js: "12"
-      # Advanced: optionally overwrite your default `script` step to skip the tests
-      # script: skip
+      # Advanced: overwrite your default `script` step to skip the tests
+      script: skip
       before_deploy:
         - yarn run build
       deploy:
         provider: script
         skip_cleanup: true
         script: yarn run semantic-release
-      on:
-        tags: true
-        all_branches: true
+        on:
+          repo: niieani/hashids.js
+          all_branches: true
