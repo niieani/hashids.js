@@ -1,37 +1,35 @@
 language: node_js
 
-matrix:
-  include:
-    - os: linux
-      node_js: "12"
-      env: JOB_PART=test
-      stage: basic
-    - os: linux
-      node_js: "10"
-      env: JOB_PART=test
-      stage: basic
-    - os: linux
-      node_js: "8"
-      env: JOB_PART=test
-      stage: basic
-    - os: linux
-      node_js: "6"
-      env: JOB_PART=test
-      stage: basic
-  fast_finish: true
+node_js:
+  - "8"
+  - "10"
+  - "12"
 
-sudo: false
-script: yarn run $JOB_PART
-after_script: yarn run coverage
+cache:
+  yarn: true
+
+matrix:
+  fast_finish: true
 
 jobs:
   include:
+    - stage: test
+      sudo: false
+      script:
+        - yarn run test
+      after_script:
+        - yarn run coverage
     # Define the release stage that runs semantic-release
     - stage: release
       node_js: "12"
       # Advanced: optionally overwrite your default `script` step to skip the tests
       # script: skip
+      before_deploy:
+        - yarn run build
       deploy:
         provider: script
         skip_cleanup: true
-        script: yarn run build && yarn run semantic-release
+        script: yarn run semantic-release
+      on:
+        tags: true
+        all_branches: true
