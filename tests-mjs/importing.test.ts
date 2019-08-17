@@ -1,10 +1,14 @@
-// this will only parse and run if you're using node >= 10 with the --experimental-modules flag
+// this will only parse and run if you're using node >= 12 with the --experimental-modules flag
 // alternatively, if you use something like webpack
 // that's why it is in a separate file
 
 import childProcess from 'child_process'
 
-describe('importing', () => {
+const supportsEsm = /^v\d[2-9]/.test(process.version)
+const describeIfEsm = supportsEsm ? describe : describe.skip
+
+// only run on node >= v12:
+describeIfEsm('importing', () => {
   test('loads via .mjs', async () => {
     expect.assertions(1)
     const p = childProcess.spawn(
