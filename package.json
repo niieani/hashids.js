@@ -23,8 +23,8 @@
   "bugs": {
     "url": "https://github.com/niieani/hashids.js/issues"
   },
-  "main": "dist/hashids.mjs",
-  "module": "dist/hashids.mjs",
+  "main": "esm/index.js",
+  "module": "esm/index.js",
   "browser": "dist/hashids.min",
   "scripts": {
     "lint": "eslint lib/* tests/*",
@@ -33,9 +33,9 @@
     "test": "jest",
     "coverage": "jest --coverage && cat coverage/lcov.info | coveralls",
     "build:umd": "babel lib/hashids.ts --source-maps -o dist/hashids.js",
-    "build:modules": "BABEL_MODULES=1 babel lib/hashids.ts --source-maps -o dist/hashids.mjs",
-    "minify": "cd dist && uglifyjs hashids.js -o hashids.min.js --source-map \"url=hashids.min.js.map\" --compress --mangle",
-    "build": "yarn run build:umd && yarn run build:modules && yarn run minify",
+    "build:esm": "BABEL_MODULES=1 babel lib/hashids.ts --source-maps -o esm/index.js",
+    "minify": "cd dist && terser hashids.js -o hashids.min.js --source-map \"url=hashids.min.js.map\" --compress --mangle",
+    "build": "yarn run build:umd && yarn run build:esm && yarn run minify",
     "clean": "rm -rf coverage yarn-debug.log",
     "all": "yarn run lint && yarn run coverage && yarn run build && yarn run clean",
     "semantic-release": "semantic-release"
@@ -60,7 +60,7 @@
     "@babel/preset-typescript": "^7.3.3",
     "@babel/register": "^7.5.5",
     "@types/jest": "^24.0.17",
-    "@types/node": "^12.7.1",
+    "@types/node": "^12.7.2",
     "@typescript-eslint/eslint-plugin": "^2.0.0",
     "@typescript-eslint/parser": "^2.0.0",
     "babel-eslint": "^10.0.2",
@@ -70,13 +70,12 @@
     "eslint-plugin-eslint-comments": "^3.1.2",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-jest": "^22.15.1",
-    "expect": "^24.8.0",
-    "husky": "^3.0.3",
-    "jest": "^24.8.0",
+    "husky": "^3.0.4",
+    "jest": "^24.9.0",
     "prettier": "^1.18.2",
     "semantic-release": "^16.0.0-beta.22",
-    "typescript": "^3.5.3",
-    "uglify-js": "^3.4.8"
+    "terser": "^4.1.4",
+    "typescript": "^3.5.3"
   },
   "license": "MIT",
   "keywords": [
