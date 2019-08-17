@@ -414,4 +414,4 @@ var splitAtIntervalAndMap = function splitAtIntervalAndMap(str, nth, map) {
   });
 };
 
-//# sourceMappingURL=hashids.mjs.map
+//# sourceMappingURL=index.js.map
