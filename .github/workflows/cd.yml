@@ -1,0 +1,43 @@
+name: CD
+
+on:
+  push:
+    branches:
+      - master
+      - next
+
+jobs:
+  test:
+    name: Test on node ${{ matrix.node }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [8, 10, 12]
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node }}
+      - name: Install dependencies and test
+        run: |
+          yarn
+          yarn test
+
+  publish:
+    name: Publish package to NPM
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+          registry-url: https://registry.npmjs.org/
+      - name: Build and release
+        run: |
+          yarn
+          yarn build
+          yarn semantic-release
+        env:
+          NPM_TOKEN: ${{secrets.NPM_TOKEN}}
+          GH_TOKEN: ${{secrets.GH_TOKEN}}
