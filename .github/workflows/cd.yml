@@ -33,6 +33,8 @@ jobs:
         with:
           node-version: 12
           registry-url: https://registry.npmjs.org/
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
       - name: Build and release
         run: |
           yarn
