@@ -1,4 +1,4 @@
-[![hashids](http://hashids.org/public/img/hashids.gif 'Hashids')](http://hashids.org/)
+[![hashids](http://hashids.org/public/img/hashids.gif 'Hashids')](http://hashids.org/) [![Greenkeeper badge](https://badges.greenkeeper.io/niieani/hashids.js.svg)](https://greenkeeper.io/)
 
 [![Build Status][travis-image]][travis-url]
 [![Coveralls Status][coveralls-image]][coveralls-url]
