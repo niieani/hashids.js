@@ -1,0 +1,10 @@
+{
+  "groups": {
+    "default": {
+      "packages": [
+        "esm/package.json",
+        "package.json"
+      ]
+    }
+  }
+}
