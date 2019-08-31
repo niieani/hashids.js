@@ -63,5 +63,6 @@ jobs:
           yarn build
           yarn semantic-release
         env:
+          NPM_TOKEN: ${{secrets.GH_TOKEN}}
           NODE_AUTH_TOKEN: ${{secrets.GH_TOKEN}}
           GH_TOKEN: ${{secrets.GH_TOKEN}}
