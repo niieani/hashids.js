@@ -42,7 +42,7 @@ jobs:
           yarn semantic-release
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
-          GH_TOKEN: ${{secrets.GH_TOKEN}}
+          GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
   publish-gpr:
     name: Publish package to GitHub Registry
@@ -56,13 +56,13 @@ jobs:
           registry-url: https://npm.pkg.github.com/
           scope: "@niieani"
         env:
-          NODE_AUTH_TOKEN: ${{secrets.GH_TOKEN}}
+          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
       - name: Build and release
         run: |
           yarn
           yarn build
           yarn semantic-release
         env:
-          NPM_TOKEN: ${{secrets.GH_TOKEN}}
-          NODE_AUTH_TOKEN: ${{secrets.GH_TOKEN}}
-          GH_TOKEN: ${{secrets.GH_TOKEN}}
+          NPM_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
