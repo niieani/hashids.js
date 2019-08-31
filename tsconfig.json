@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "module": "esnext",
+    "target": "esnext",
+    "esModuleInterop": true,
+    "outDir": "dist",
+    "rootDir": "lib",
+    "sourceMap": true,
+    "emitDeclarationOnly": true,
+    "declaration": true,
+    "strict": true
+  },
+  "exclude": ["node_modules"]
+}

@@ -1,32 +1,49 @@
 {
-  "author": "Ivan Akimov <ivan@barreleye.com> (https://twitter.com/IvanAkimov)",
+  "author": "hashids.org <npm@invent.life> (https://github.com/hashids)",
   "name": "hashids",
   "description": "Generate YouTube-like ids from numbers. Use Hashids when you do not want to expose your database ids to the user.",
-  "version": "1.2.2",
+  "contributors": [
+    {
+      "name": "Ivan Akimov",
+      "email": "ivan@barreleye.com",
+      "url": "https://twitter.com/IvanAkimov"
+    },
+    {
+      "name": "Bazyli Brzóska",
+      "email": "npm@invent.life",
+      "url": "https://twitter.com/niieani"
+    }
+  ],
+  "version": "0.0.0-development",
   "homepage": "http://hashids.org/javascript",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ivanakimov/hashids.js.git"
+    "url": "https://github.com/niieani/hashids.js.git"
   },
   "bugs": {
-    "url": "https://github.com/ivanakimov/hashids.js/issues"
+    "url": "https://github.com/niieani/hashids.js/issues"
   },
-  "main": "dist/hashids",
-  "module": "dist/hashids-esm",
+  "main": "esm/index.js",
+  "module": "esm/index.js",
   "browser": "dist/hashids.min",
   "scripts": {
-    "precommit": "npm run lint && npm run test",
-    "lint": "eslint lib tests",
-    "test": "mocha tests --require @babel/register",
-    "test-modules": "node --experimental-modules node_modules/mocha/bin/_mocha tests-mjs",
-    "coverage": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
-    "build:node": "babel lib/hashids.js --source-maps -o dist/index.js",
-    "build:modules": "BABEL_MODULES=1 babel lib/hashids.js --source-maps -o dist/hashids.mjs && cp dist/hashids.mjs dist/hashids-esm.js",
-    "rename:global": "sed -i '' 's/global.hashids/global.Hashids/g' dist/index.js",
-    "minify": "cd dist && uglifyjs index.js -o hashids.min.js --source-map \"url=hashids.min.js.map\" --compress --mangle",
-    "build": "npm run test && npm run build:node && npm run build:modules && npm run rename:global && npm run minify",
-    "clean": "rm -rf coverage .nyc_output npm-debug.log",
-    "all": "npm run lint && npm run coverage && npm run build && npm run clean"
+    "lint": "eslint lib/* tests/*",
+    "prettier:check": "prettier --check lib/* tests*/*",
+    "prettier:write": "prettier --write lib/* tests*/*",
+    "test": "jest",
+    "coverage": "jest --coverage && cat coverage/lcov.info | coveralls",
+    "build:umd": "babel lib/hashids.ts --source-maps -o dist/hashids.js",
+    "build:esm": "BABEL_MODULES=1 babel lib/hashids.ts --source-maps -o esm/index.js",
+    "minify": "cd dist && terser hashids.js -o hashids.min.js --source-map \"url=hashids.min.js.map\" --compress --mangle",
+    "build": "yarn run build:umd && yarn run build:esm && yarn run minify",
+    "clean": "rm -rf coverage yarn-debug.log",
+    "all": "yarn run lint && yarn run coverage && yarn run build && yarn run clean",
+    "semantic-release": "semantic-release"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn run lint && yarn run test"
+    }
   },
   "browserslist": [
     "last 2 version",
@@ -36,19 +53,28 @@
   ],
   "dependencies": {},
   "devDependencies": {
-    "@babel/cli": "^7.0.0",
-    "@babel/core": "^7.0.0",
-    "@babel/plugin-syntax-dynamic-import": "7.0.0",
-    "@babel/preset-env": "^7.0.0",
-    "@babel/register": "^7.0.0",
-    "babel-eslint": "9.0.0",
-    "chai": "^4.1.2",
-    "coveralls": "^3.0.2",
-    "eslint": "^5.4.0",
-    "husky": "^0.14.3",
-    "mocha": "^5.2.0",
-    "nyc": "^13.0.1",
-    "uglify-js": "^3.4.8"
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
+    "@babel/plugin-syntax-bigint": "^7.4.4",
+    "@babel/preset-env": "^7.5.5",
+    "@babel/preset-typescript": "^7.3.3",
+    "@babel/register": "^7.5.5",
+    "@types/jest": "^24.0.18",
+    "@types/node": "^12.7.3",
+    "@typescript-eslint/eslint-plugin": "^2.0.0",
+    "@typescript-eslint/parser": "^2.0.0",
+    "coveralls": "^3.0.6",
+    "eslint": "^6.3.0",
+    "eslint-config-prettier": "^6.1.0",
+    "eslint-plugin-eslint-comments": "^3.1.2",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jest": "^22.16.0",
+    "husky": "^3.0.4",
+    "jest": "^24.9.0",
+    "prettier": "^1.18.2",
+    "semantic-release": "^16.0.0-beta.22",
+    "terser": "^4.2.1",
+    "typescript": "^3.6.2"
   },
   "license": "MIT",
   "keywords": [
@@ -63,5 +89,18 @@
     "decode",
     "encrypt",
     "decrypt"
-  ]
+  ],
+  "prettier": {
+    "semi": false,
+    "tabWidth": 2,
+    "singleQuote": true,
+    "trailingComma": "all",
+    "arrowParens": "always",
+    "bracketSpacing": false
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "lib/**/*.ts"
+    ]
+  }
 }

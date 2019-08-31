@@ -1,8 +1,11 @@
-import Hashids from '../';
-import chai from 'chai';
+import Hashids from '../esm/index.js'
 
-const {assert} = chai;
+if (typeof Hashids !== 'function') {
+  throw new Error('Hashids is not a function')
+}
 
-assert.isFunction(Hashids);
-const instance = new Hashids('Not Real', 5, 'ABCDEFGHJKMNPQRTWXY234689');
-assert.instanceOf(instance, Hashids);
+const instance = new Hashids('Not Real', 5, 'ABCDEFGHJKMNPQRTWXY234689')
+
+if (!(instance instanceof Hashids)) {
+  throw new Error('new Hashids(...) did not result in an instance of Hashids')
+}
