@@ -1,9 +1,10 @@
-[![hashids](http://hashids.org/public/img/hashids.gif 'Hashids')](http://hashids.org/) [![Greenkeeper badge](https://badges.greenkeeper.io/niieani/hashids.js.svg)](https://greenkeeper.io/)
+[![hashids](http://hashids.org/public/img/hashids.gif 'Hashids')](http://hashids.org/)
 
 [![Build Status][travis-image]][travis-url]
 [![Coveralls Status][coveralls-image]][coveralls-url]
 [![NPM downloads][npm-downloads-image]][npm-url]
 [![NPM version][npm-version-image]][npm-url]
+[![Greenkeeper badge](https://badges.greenkeeper.io/niieani/hashids.js.svg)](https://greenkeeper.io/)
 [![License][license-image]][license-url]
 [![Chat][chat-image]][chat-url]
 
@@ -136,7 +137,7 @@ const hex = Hashids.decode(id)[0].toString(16) // 507f1f77bcf86cd799439011
 The difference between the two is that the built-in `encodeHex` will
 always result in the same length, even if it contained leading zeros.
 
-For example `hashids.encodeHex('00000000') would encode to`qExOgK7`and decode back to`'00000000'` (length information is preserved).
+For example `hashids.encodeHex('00000000')` would encode to `qExOgK7` and decode back to `'00000000'` (length information is preserved).
 
 ## Pitfalls
 
@@ -188,9 +189,16 @@ console.log(hashids.encode(5)) // nR
 
 ## Curses! #\$%@
 
-This code was written with the intent of placing created ids in visible places, like the URL. Therefore, the algorithm tries to avoid generating most common English curse words by generating ids that never have the following letters next to each other:
+This code was written with the intent of placing created ids in visible places, like the URL. Therefore, by default the algorithm tries to avoid generating most common English curse words by generating ids that never have the following letters next to each other:
 
     c, f, h, i, s, t, u
+
+You may customize the chars that shouldn't be placed next to each other by providing a 4th argument to the Hashids constructor:
+
+```js
+// first 4 arguments will fallback to defaults (empty salt, no minimum length, default alphabet)
+const hashids = new Hashids(undefined, undefined, undefined, 'zyxZYX')
+```
 
 ## BigInt
 
