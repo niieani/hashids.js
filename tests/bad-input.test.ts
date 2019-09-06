@@ -9,6 +9,12 @@ describe('bad input', () => {
     }).toThrow()
   })
 
+  test(`should throw an error when alphabet not a string`, () => {
+    expect(() => {
+      void new Hashids('', 0, 7)
+    }).toThrow(TypeError)
+  })
+
   test(`should not throw an error when alphabet has spaces`, () => {
     expect(() => {
       void new Hashids('', 0, 'a cdefghijklmnopqrstuvwxyz')
