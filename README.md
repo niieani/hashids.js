@@ -50,14 +50,17 @@ Use in the browser without ESM (wherever **ES5** is supported; 5KB):
 </script>
 ```
 
-Use in **Angular/Typescript**:
+Use in **TypeScript**:
+
 ```typescript
 import Hashids from 'hashids';
 
 const hashids = new Hashids();
 console.log(hashids.encode(1));
 ```
-If you get errors `Cannot find name 'BigInt'`, add [`"esnext.bigint"`](https://github.com/microsoft/TypeScript/blob/master/src/lib/esnext.bigint.d.ts) or [`"esnext"`](https://github.com/microsoft/TypeScript/blob/master/src/lib/esnext.d.ts) to your `tsconfig.json` file, under `"lib"`:
+
+If you get errors stating: `Cannot find name 'BigInt'`, add [`"esnext.bigint"`](https://github.com/microsoft/TypeScript/blob/master/src/lib/esnext.bigint.d.ts) or [`"esnext"`](https://github.com/microsoft/TypeScript/blob/master/src/lib/esnext.d.ts) to your `tsconfig.json` file, under `"lib"`:
+
 ```
 {
   "compilerOptions": {
