@@ -82,6 +82,8 @@ const id = hashids.encode(1, 2, 3) // o2fXhV
 const numbers = hashids.decode(id) // [1, 2, 3]
 ```
 
+Try out in [CodeSandbox](https://codesandbox.io/s/javascript-hashids-eq1u5)
+
 ## More options
 
 **A few more ways to pass to `encode()`:**
