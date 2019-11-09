@@ -41,6 +41,7 @@ module.exports = {
         'jest/prefer-to-have-length': 'warn',
         'jest/prefer-spy-on': 'error',
         'jest/valid-expect': 'error',
+        'jest/expect-expect': 'off',
         '@typescript-eslint/ban-ts-ignore': 'off',
       },
     },

@@ -11,6 +11,7 @@ describe('bad input', () => {
 
   test(`should throw an error when alphabet not a string`, () => {
     expect(() => {
+      // @ts-ignore
       void new Hashids('', 0, 7)
     }).toThrow(TypeError)
   })
@@ -92,5 +93,14 @@ describe('bad input', () => {
   test(`should return an empty string when hex-decoding invalid id`, () => {
     const hex = hashids.decodeHex('f')
     expect(hex).toEqual('')
+  })
+
+  // reproduction from https://github.com/niieani/hashids.js/issues/126
+  test(`should throw an error when an id to be decoded contains chars that do not exist in the alphabet`, () => {
+    const hashids = new Hashids('', 6, 'abcdefghjklmnpqrstuvwxyz23456789')
+    expect(hashids.isValidId('[object Object]')).toBe(false)
+    expect(() => {
+      hashids.decode('[object Object]')
+    }).toThrow(Error)
   })
 })

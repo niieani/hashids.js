@@ -3,7 +3,14 @@ module.exports = {
     [
       '@babel/preset-env',
       {
-        modules: false,
+        modules: process.env.BABEL_MODULES ? false : 'umd',
+        loose: true,
+        shippedProposals: true,
+        // we need the spread to not be loose:
+        exclude: [
+          '@babel/plugin-transform-spread',
+          '@babel/plugin-transform-destructuring',
+        ],
         ...(process.env.NODE_ENV === 'test'
           ? {
               targets: {
@@ -17,9 +24,9 @@ module.exports = {
   ],
   plugins: [
     '@babel/plugin-syntax-bigint',
-    ...(process.env.BABEL_MODULES
-      ? []
-      : ['@babel/plugin-transform-modules-umd']),
+    '@babel/plugin-transform-spread',
+    '@babel/plugin-transform-destructuring',
   ],
+  exclude: ['./dist', './cjs', './esm'],
   moduleId: 'Hashids',
 }

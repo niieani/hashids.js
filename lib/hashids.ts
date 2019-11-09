@@ -108,7 +108,7 @@ export default class Hashids {
 
   public decode(id: string): NumberLike[] {
     if (!id || typeof id !== 'string' || id.length === 0) return []
-    return this._decode(id, this.alphabet)
+    return this._decode(id)
   }
 
   /**
@@ -218,7 +218,21 @@ export default class Hashids {
     return ret
   }
 
-  private _decode(id: string, alphabet: string): NumberLike[] {
+  public isValidId(id: string): boolean {
+    return [...id].every(
+      (char) =>
+        this.alphabet.includes(char) ||
+        this.guards.includes(char) ||
+        this.seps.includes(char),
+    )
+  }
+
+  private _decode(id: string): NumberLike[] {
+    if (!this.isValidId(id)) {
+      throw new Error(
+        `The provided ID (${id}) is invalid, as it contains characters that do not exist in the alphabet (${this.guards}${this.seps}${this.alphabet})`,
+      )
+    }
     const idGuardsArray = splitAtMatch(id, (char) => this.guards.includes(char))
     const splitIndex =
       idGuardsArray.length === 3 || idGuardsArray.length === 2 ? 1 : 0
@@ -243,7 +257,7 @@ export default class Hashids {
           lastAlphabet: nextAlphabet,
         }
       },
-      {result: [] as NumberLike[], lastAlphabet: alphabet},
+      {result: [] as NumberLike[], lastAlphabet: this.alphabet},
     )
 
     if (this._encode(result) !== id) return []
@@ -303,12 +317,12 @@ const toAlphabet = (input: NumberLike, [...alphabet]: string) => {
     do {
       id = alphabet[Number(input % alphabetLength)] + id
       input = input / alphabetLength
-    } while (input)
+    } while (input > BigInt(0))
   } else {
     do {
       id = alphabet[input % alphabet.length] + id
       input = Math.floor(input / alphabet.length)
-    } while (input)
+    } while (input > 0)
   }
 
   return id
@@ -316,7 +330,17 @@ const toAlphabet = (input: NumberLike, [...alphabet]: string) => {
 
 const fromAlphabet = ([...input]: string, [...alphabet]: string) =>
   input
-    .map((item) => alphabet.indexOf(item))
+    .map((item) => {
+      const index = alphabet.indexOf(item)
+      if (index === -1) {
+        const inputString = input.join('')
+        const alphabetString = alphabet.join('')
+        throw new Error(
+          `The provided ID (${inputString}) is invalid, as it contains characters that do not exist in the alphabet (${alphabetString})`,
+        )
+      }
+      return index
+    })
     .reduce(
       (carry, index) => {
         if (typeof carry === 'bigint') {
