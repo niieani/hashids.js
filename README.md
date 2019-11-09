@@ -4,7 +4,6 @@
 [![Coveralls Status][coveralls-image]][coveralls-url]
 [![NPM downloads][npm-downloads-image]][npm-url]
 [![NPM version][npm-version-image]][npm-url]
-[![Greenkeeper badge](https://badges.greenkeeper.io/niieani/hashids.js.svg)](https://greenkeeper.io/)
 [![License][license-image]][license-url]
 [![Chat][chat-image]][chat-url]
 
