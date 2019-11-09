@@ -218,6 +218,15 @@ export default class Hashids {
     return ret
   }
 
+  public isValidId(id: string): boolean {
+    return [...id].every(
+      (char) =>
+        this.alphabet.includes(char) ||
+        this.guards.includes(char) ||
+        this.seps.includes(char),
+    )
+  }
+
   private _decode(id: string, alphabet: string): NumberLike[] {
     const idGuardsArray = splitAtMatch(id, (char) => this.guards.includes(char))
     const splitIndex =
