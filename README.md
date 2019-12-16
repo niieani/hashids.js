@@ -19,7 +19,7 @@ Install Hashids via:
 
 (or just use the code at `dist/hashids.js`)
 
-Use in **ESM-compatible** environments (webpack, modern browsers):
+#### Use in **ESM-compatible** environments (webpack, modern browsers)
 
 ```javascript
 import Hashids from 'hashids'
@@ -28,7 +28,7 @@ const hashids = new Hashids()
 console.log(hashids.encode(1))
 ```
 
-Use in **Node.js**:
+#### Use in **CommonJS** environments (most often **Node.js**)
 
 ```javascript
 const Hashids = require('hashids/cjs')
@@ -37,7 +37,7 @@ const hashids = new Hashids()
 console.log(hashids.encode(1))
 ```
 
-Use in the browser without ESM (wherever **ES5** is supported; 5KB):
+#### Use as global in the browser (wherever **ES5** is supported; 5KB)
 
 ```javascript
 <script type="text/javascript" src="hashids.min.js"></script>
@@ -49,14 +49,9 @@ Use in the browser without ESM (wherever **ES5** is supported; 5KB):
 </script>
 ```
 
-Use in **TypeScript**:
+#### Use in **TypeScript**:
 
-```typescript
-import Hashids from 'hashids';
-
-const hashids = new Hashids();
-console.log(hashids.encode(1));
-```
+Import or require based on the environment (see above).
 
 If you get errors stating: `Cannot find name 'BigInt'`, add [`"esnext.bigint"`](https://github.com/microsoft/TypeScript/blob/master/src/lib/esnext.bigint.d.ts) or [`"esnext"`](https://github.com/microsoft/TypeScript/blob/master/src/lib/esnext.d.ts) to your `tsconfig.json` file, under `"lib"`:
 
