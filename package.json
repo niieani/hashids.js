@@ -60,7 +60,7 @@
     "@babel/preset-typescript": "^7.7.2",
     "@babel/register": "^7.7.0",
     "@types/jest": "^24.0.22",
-    "@types/node": "^12.12.7",
+    "@types/node": "^13.1.1",
     "@typescript-eslint/eslint-plugin": "^2.6.1",
     "@typescript-eslint/parser": "^2.6.1",
     "coveralls": "^3.0.7",
