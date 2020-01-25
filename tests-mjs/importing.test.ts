@@ -4,21 +4,26 @@
 
 import childProcess from 'child_process'
 
-const supportsEsm = /^v\d[2-9]/.test(process.version)
+const supportsEsm = /^v\d[3-9]/.test(process.version)
 const describeIfEsm = supportsEsm ? describe : describe.skip
 
-// only run on node >= v12:
+// only run on node >= v13:
 describeIfEsm('importing', () => {
   test('loads via .mjs', async () => {
     expect.assertions(1)
-    const p = childProcess.spawn(
-      'node',
-      ['--experimental-modules', './importing.mjs'],
-      {cwd: __dirname},
-    )
+    const p = childProcess.spawn('node', ['./importing.mjs'], {
+      cwd: __dirname,
+      env: {
+        PATH: process.env.PATH,
+      },
+    })
 
-    // eslint-disable-next-line no-console
-    p.stderr.on('data', (d) => console.log(d.toString()))
+    p.stderr.on('data', (d) => {
+      if (!d.toString().includes('ExperimentalWarning:')) {
+        // eslint-disable-next-line no-console
+        console.log(d.toString())
+      }
+    })
 
     const code = await new Promise((resolve) => {
       p.on('close', (code, _signal) => resolve(code))

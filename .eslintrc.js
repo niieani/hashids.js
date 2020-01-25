@@ -8,9 +8,8 @@ module.exports = {
     'eslint:recommended',
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
+    'plugin:@typescript-eslint/recommended-requiring-type-checking',
     'prettier/@typescript-eslint',
-    // after 2.0 is released:
-    // 'plugin:@typescript-eslint/recommended-requiring-type-checking',
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -59,6 +58,8 @@ module.exports = {
       {vars: 'all', args: 'none', varsIgnorePattern: '[iI]gnored'},
     ],
     '@typescript-eslint/consistent-type-definitions': ['error', 'interface'],
+
+    '@typescript-eslint/prefer-optional-chain': 'error',
     '@typescript-eslint/no-explicit-any': 'error',
     // '@typescript-eslint/no-non-null-assertion': 'off',
     // '@typescript-eslint/no-var-requires': 'off',
