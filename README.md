@@ -9,6 +9,8 @@
 
 **Hashids** is small JavaScript library to generate YouTube-like ids from numbers. Use it when you don't want to expose your database ids to the user: [http://hashids.org/javascript](http://hashids.org/javascript)
 
+[![Play with it using CodeSandbox](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/hashids-demo-54qvc?fontsize=14&hidenavigation=1&module=%2Fsrc%2Findex.ts&theme=dark)
+
 ## Getting started
 
 Install Hashids via:
