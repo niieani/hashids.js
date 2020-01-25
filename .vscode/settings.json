@@ -18,7 +18,7 @@
     "statusBar.foreground": "#e7e7e7"
   },
   "peacock.color": "#39698e",
-  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.tsdk": ".vscode/pnpify/typescript/lib",
   "eslint.alwaysShowStatus": true,
   "eslint.packageManager": "yarn",
   "eslint.validate": [
@@ -28,5 +28,8 @@
     "typescriptreact"
   ],
   "tslint.packageManager": "yarn",
-  "npm.packageManager": "yarn"
+  "npm.packageManager": "yarn",
+  "eslint.nodePath": ".vscode/pnpify",
+  "prettier.prettierPath": ".vscode/pnpify/prettier",
+  "eslint.enable": true
 }

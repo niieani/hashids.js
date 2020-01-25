@@ -13,9 +13,9 @@
 
 Install Hashids via:
 
-- [node.js](https://nodejs.org): `yarn add hashids`
-- [bower](http://bower.io/): `bower install hashids`
-- [jam](http://jamjs.org/): `jam install hashids`
+```shell
+yarn add hashids
+```
 
 (or just use the code at `dist/hashids.js`)
 
@@ -36,6 +36,8 @@ const hashids = new Hashids()
 
 console.log(hashids.encode(1))
 ```
+
+Note: When using Node that supports [conditional exports](https://nodejs.org/api/esm.html#esm_conditional_exports), `require('hashids')` will also work.
 
 #### Use as global in the browser (wherever **ES5** is supported; 5KB)
 

@@ -1,1 +1,3 @@
 /dist
+/.yarn
+/.pnp.js
