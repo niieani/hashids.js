@@ -5,6 +5,7 @@
     "editorInfo.foreground": "#50d5fa14",
     "terminal.ansiBrightBlack": "#50a2ff9c",
     "activityBar.background": "#4884b2",
+    "activityBar.activeBorder": "#712e54",
     "activityBar.foreground": "#e7e7e7",
     "activityBar.inactiveForeground": "#e7e7e799",
     "activityBarBadge.background": "#712e54",

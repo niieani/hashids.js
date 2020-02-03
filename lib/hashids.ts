@@ -1,12 +1,16 @@
 type NumberLike = number | bigint
 
 export default class Hashids {
-  private alphabet: string
-  private seps: string
-  private guards: string
+  private alphabet: string[]
+  private seps: string[]
+  private guards: string[]
+  private salt: string[]
+  private guardsRegExp: RegExp
+  private sepsRegExp: RegExp
+  private allowedCharsRegExp: RegExp
 
   public constructor(
-    private salt = '',
+    salt = '',
     private minLength = 0,
     alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890',
     seps = 'cfhistuCFHISTU',
@@ -27,7 +31,13 @@ export default class Hashids {
       )
     }
 
-    const uniqueAlphabet = keepUniqueChars(alphabet)
+    const saltChars = [...salt]
+    const alphabetChars = [...alphabet]
+    const sepsChars = [...seps]
+
+    this.salt = saltChars
+
+    const uniqueAlphabet = keepUnique(alphabetChars)
 
     if (uniqueAlphabet.length < minAlphabetLength) {
       throw new Error(
@@ -36,37 +46,45 @@ export default class Hashids {
     }
 
     /** `alphabet` should not contains `seps` */
-    this.alphabet = withoutChars(uniqueAlphabet, seps)
+    this.alphabet = withoutChars(uniqueAlphabet, sepsChars)
     /** `seps` should contain only characters present in `alphabet` */
-    const filteredSeps = onlyChars(seps, uniqueAlphabet)
-    this.seps = shuffle(filteredSeps, salt)
+    const filteredSeps = onlyChars(sepsChars, uniqueAlphabet)
+    this.seps = shuffle(filteredSeps, saltChars)
 
     let sepsLength
     let diff
 
     if (
-      [...this.seps].length === 0 ||
-      [...this.alphabet].length / [...this.seps].length > sepDiv
+      this.seps.length === 0 ||
+      this.alphabet.length / this.seps.length > sepDiv
     ) {
-      sepsLength = Math.ceil([...this.alphabet].length / sepDiv)
+      sepsLength = Math.ceil(this.alphabet.length / sepDiv)
 
-      if (sepsLength > [...this.seps].length) {
-        diff = sepsLength - [...this.seps].length
-        this.seps += unicodeSubstr(this.alphabet, 0, diff)
-        this.alphabet = unicodeSubstr(this.alphabet, diff)
+      if (sepsLength > this.seps.length) {
+        diff = sepsLength - this.seps.length
+        this.seps.push(...this.alphabet.slice(0, diff))
+        this.alphabet = this.alphabet.slice(diff)
       }
     }
 
-    this.alphabet = shuffle(this.alphabet, salt)
-    const guardCount = Math.ceil([...this.alphabet].length / guardDiv)
+    this.alphabet = shuffle(this.alphabet, saltChars)
+    const guardCount = Math.ceil(this.alphabet.length / guardDiv)
 
-    if ([...this.alphabet].length < 3) {
-      this.guards = unicodeSubstr(this.seps, 0, guardCount)
-      this.seps = unicodeSubstr(this.seps, guardCount)
+    if (this.alphabet.length < 3) {
+      this.guards = this.seps.slice(0, guardCount)
+      this.seps = this.seps.slice(guardCount)
     } else {
-      this.guards = unicodeSubstr(this.alphabet, 0, guardCount)
-      this.alphabet = unicodeSubstr(this.alphabet, guardCount)
+      this.guards = this.alphabet.slice(0, guardCount)
+      this.alphabet = this.alphabet.slice(guardCount)
     }
+
+    this.guardsRegExp = makeAnyOfCharsRegExp(this.guards)
+    this.sepsRegExp = makeAnyOfCharsRegExp(this.seps)
+    this.allowedCharsRegExp = makeAtLeastSomeCharRegExp([
+      ...this.alphabet,
+      ...this.guards,
+      ...this.seps,
+    ])
   }
 
   public encode(numbers: string): string
@@ -103,7 +121,7 @@ export default class Hashids {
       return ret
     }
 
-    return this._encode(numbers as number[])
+    return this._encode(numbers as number[]).join('')
   }
 
   public decode(id: string): NumberLike[] {
@@ -152,8 +170,7 @@ export default class Hashids {
       .join('')
   }
 
-  private _encode(numbers: NumberLike[]): string {
-    let ret: string
+  private _encode(numbers: NumberLike[]): string[] {
     let alphabet = this.alphabet
 
     const numbersIdInt = numbers.reduce<number>(
@@ -165,53 +182,52 @@ export default class Hashids {
       0,
     )
 
-    ret = [...alphabet][numbersIdInt % [...alphabet].length]
-    const lottery = ret
+    let ret: string[] = [alphabet[numbersIdInt % alphabet.length]]
+    const lottery = ret.slice()
 
-    const seps = [...this.seps]
-    const guards = [...this.guards]
+    const seps = this.seps
+    const guards = this.guards
 
     numbers.forEach((number, i) => {
-      const buffer = lottery + this.salt + alphabet
+      const buffer = lottery.concat(this.salt, alphabet)
 
-      alphabet = shuffle(alphabet, unicodeSubstr(buffer, 0))
+      alphabet = shuffle(alphabet, buffer)
       const last = toAlphabet(number, alphabet)
 
-      ret += last
+      ret.push(...last)
 
       if (i + 1 < numbers.length) {
-        const charCode = last.codePointAt(0)! + i
+        const charCode = last[0].codePointAt(0)! + i
         const extraNumber =
           typeof number === 'bigint'
             ? Number(number % BigInt(charCode))
             : number % charCode
-        ret += seps[extraNumber % seps.length]
+        ret.push(seps[extraNumber % seps.length])
       }
     })
 
-    if ([...ret].length < this.minLength) {
+    if (ret.length < this.minLength) {
       const prefixGuardIndex =
-        (numbersIdInt + [...ret][0].codePointAt(0)!) % guards.length
-      ret = guards[prefixGuardIndex] + ret
+        (numbersIdInt + ret[0].codePointAt(0)!) % guards.length
+      ret.unshift(guards[prefixGuardIndex])
 
-      if ([...ret].length < this.minLength) {
+      if (ret.length < this.minLength) {
         const suffixGuardIndex =
-          (numbersIdInt + [...ret][2].codePointAt(0)!) % guards.length
-        ret = ret + guards[suffixGuardIndex]
+          (numbersIdInt + ret[2].codePointAt(0)!) % guards.length
+        ret.push(guards[suffixGuardIndex])
       }
     }
 
-    const halfLength = Math.floor([...alphabet].length / 2)
-    while ([...ret].length < this.minLength) {
+    const halfLength = Math.floor(alphabet.length / 2)
+    while (ret.length < this.minLength) {
       alphabet = shuffle(alphabet, alphabet)
-      ret =
-        unicodeSubstr(alphabet, halfLength) +
-        ret +
-        unicodeSubstr(alphabet, 0, halfLength)
+      ret.unshift(...alphabet.slice(halfLength))
+      ret.push(...alphabet.slice(0, halfLength))
 
-      const excess = [...ret].length - this.minLength
+      const excess = ret.length - this.minLength
       if (excess > 0) {
-        ret = unicodeSubstr(ret, excess / 2, this.minLength)
+        const halfOfExcess = excess / 2
+        ret = ret.slice(halfOfExcess, halfOfExcess + this.minLength)
       }
     }
 
@@ -219,48 +235,42 @@ export default class Hashids {
   }
 
   public isValidId(id: string): boolean {
-    return [...id].every(
-      (char) =>
-        this.alphabet.includes(char) ||
-        this.guards.includes(char) ||
-        this.seps.includes(char),
-    )
+    return this.allowedCharsRegExp.test(id)
   }
 
   private _decode(id: string): NumberLike[] {
     if (!this.isValidId(id)) {
       throw new Error(
-        `The provided ID (${id}) is invalid, as it contains characters that do not exist in the alphabet (${this.guards}${this.seps}${this.alphabet})`,
+        `The provided ID (${id}) is invalid, as it contains characters that do not exist in the alphabet (${this.guards.join(
+          '',
+        )}${this.seps.join('')}${this.alphabet.join('')})`,
       )
     }
-    const idGuardsArray = splitAtMatch(id, (char) => this.guards.includes(char))
+    const idGuardsArray = id.split(this.guardsRegExp)
     const splitIndex =
       idGuardsArray.length === 3 || idGuardsArray.length === 2 ? 1 : 0
 
     const idBreakdown = idGuardsArray[splitIndex]
-    const idBreakdownArray = [...idBreakdown]
-    if (idBreakdownArray.length === 0) return []
+    if (idBreakdown.length === 0) return []
 
-    const [lotteryChar, ...chars] = idBreakdownArray
-    const rest = chars.join('')
-    const idArray = splitAtMatch(rest, (char) => this.seps.includes(char))
+    const lotteryChar = idBreakdown[Symbol.iterator]().next().value as string
+    const idArray = idBreakdown.slice(lotteryChar.length).split(this.sepsRegExp)
 
-    const {result} = idArray.reduce(
-      ({result, lastAlphabet}, subId) => {
-        const buffer = lotteryChar + this.salt + lastAlphabet
-        const nextAlphabet = shuffle(
-          lastAlphabet,
-          unicodeSubstr(buffer, 0, [...lastAlphabet].length),
-        )
-        return {
-          result: [...result, fromAlphabet(subId, nextAlphabet)],
-          lastAlphabet: nextAlphabet,
-        }
-      },
-      {result: [] as NumberLike[], lastAlphabet: this.alphabet},
-    )
+    let lastAlphabet: string[] = this.alphabet
+    const result: NumberLike[] = []
 
-    if (this._encode(result) !== id) return []
+    for (const subId of idArray) {
+      const buffer = [lotteryChar, ...this.salt, ...lastAlphabet]
+      const nextAlphabet = shuffle(
+        lastAlphabet,
+        buffer.slice(0, lastAlphabet.length),
+      )
+      result.push(fromAlphabet([...subId], nextAlphabet))
+      lastAlphabet = nextAlphabet
+    }
+
+    // if the result is different from what we'd expect, we return an empty result (malformed input):
+    if (this._encode(result).join('') !== id) return []
     return result
   }
 }
@@ -269,17 +279,16 @@ const minAlphabetLength = 16
 const sepDiv = 3.5
 const guardDiv = 12
 
-export const keepUniqueChars = (str: string) =>
-  Array.from(new Set(str)).join('')
+export const keepUnique = <T>(content: Iterable<T>): T[] =>
+  Array.from(new Set(content))
 
-export const withoutChars = ([...str]: string, [...without]: string) =>
-  str.filter((char) => !without.includes(char)).join('')
+export const withoutChars = (
+  chars: string[],
+  withoutChars: string[],
+): string[] => chars.filter((char) => !withoutChars.includes(char))
 
-export const onlyChars = ([...str]: string, [...only]: string) =>
-  str.filter((char) => only.includes(char)).join('')
-
-export const unicodeSubstr = ([...str]: string, from: number, to?: number) =>
-  str.slice(from, to === undefined ? undefined : from + to).join('')
+export const onlyChars = (chars: string[], keepChars: string[]): string[] =>
+  chars.filter((char) => keepChars.includes(char))
 
 const isIntegerNumber = (n: NumberLike | string) =>
   typeof n === 'bigint' ||
@@ -288,96 +297,86 @@ const isIntegerNumber = (n: NumberLike | string) =>
 const isPositiveAndFinite = (n: NumberLike) =>
   typeof n === 'bigint' || (n >= 0 && Number.isSafeInteger(n))
 
-function shuffle(alphabet: string, [...salt]: string) {
-  let integer: number
-
-  if (!salt.length) {
-    return alphabet
+function shuffle(alphabetChars: string[], saltChars: string[]): string[] {
+  if (saltChars.length === 0) {
+    return alphabetChars
   }
 
-  const alphabetChars = [...alphabet]
+  let integer: number
+  const transformed = alphabetChars.slice()
 
-  for (let i = alphabetChars.length - 1, v = 0, p = 0; i > 0; i--, v++) {
-    v %= salt.length
-    p += integer = salt[v].codePointAt(0)!
+  for (let i = transformed.length - 1, v = 0, p = 0; i > 0; i--, v++) {
+    v %= saltChars.length
+    p += integer = saltChars[v].codePointAt(0)!
     const j = (integer + v + p) % i
 
-      // swap characters at positions i and j
-    ;[alphabetChars[j], alphabetChars[i]] = [alphabetChars[i], alphabetChars[j]]
+    // swap characters at positions i and j
+    const a = transformed[i]
+    const b = transformed[j]
+    transformed[j] = a
+    transformed[i] = b
   }
 
-  return alphabetChars.join('')
+  return transformed
 }
 
-const toAlphabet = (input: NumberLike, [...alphabet]: string) => {
-  let id = ''
+const toAlphabet = (input: NumberLike, alphabetChars: string[]): string[] => {
+  const id: string[] = []
 
   if (typeof input === 'bigint') {
-    const alphabetLength = BigInt(alphabet.length)
+    const alphabetLength = BigInt(alphabetChars.length)
     do {
-      id = alphabet[Number(input % alphabetLength)] + id
+      id.unshift(alphabetChars[Number(input % alphabetLength)])
       input = input / alphabetLength
     } while (input > BigInt(0))
   } else {
     do {
-      id = alphabet[input % alphabet.length] + id
-      input = Math.floor(input / alphabet.length)
+      id.unshift(alphabetChars[input % alphabetChars.length])
+      input = Math.floor(input / alphabetChars.length)
     } while (input > 0)
   }
 
   return id
 }
 
-const fromAlphabet = ([...input]: string, [...alphabet]: string) =>
-  input
-    .map((item) => {
-      const index = alphabet.indexOf(item)
-      if (index === -1) {
-        const inputString = input.join('')
-        const alphabetString = alphabet.join('')
+const fromAlphabet = (
+  inputChars: string[],
+  alphabetChars: string[],
+): NumberLike =>
+  inputChars.reduce((carry, item) => {
+    const index = alphabetChars.indexOf(item)
+    if (index === -1) {
+      throw new Error(
+        `The provided ID (${inputChars.join(
+          '',
+        )}) is invalid, as it contains characters that do not exist in the alphabet (${alphabetChars.join(
+          '',
+        )})`,
+      )
+    }
+    if (typeof carry === 'bigint') {
+      return carry * BigInt(alphabetChars.length) + BigInt(index)
+    }
+    const value = carry * alphabetChars.length + index
+    const isSafeValue = Number.isSafeInteger(value)
+    if (isSafeValue) {
+      return value
+    } else {
+      if (typeof BigInt === 'function') {
+        return BigInt(carry) * BigInt(alphabetChars.length) + BigInt(index)
+      } else {
+        // we do not have support for BigInt:
         throw new Error(
-          `The provided ID (${inputString}) is invalid, as it contains characters that do not exist in the alphabet (${alphabetString})`,
+          `Unable to decode the provided string, due to lack of support for BigInt numbers in the current environment`,
         )
       }
-      return index
-    })
-    .reduce(
-      (carry, index) => {
-        if (typeof carry === 'bigint') {
-          return carry * BigInt(alphabet.length) + BigInt(index)
-        }
-        const value = carry * alphabet.length + index
-        const isSafeValue = Number.isSafeInteger(value)
-        if (isSafeValue) {
-          return value
-        } else {
-          if (typeof BigInt === 'function') {
-            return BigInt(carry) * BigInt(alphabet.length) + BigInt(index)
-          } else {
-            // we do not have support for BigInt:
-            throw new Error(
-              `Unable to decode the provided string, due to lack of support for BigInt numbers in the current environment`,
-            )
-          }
-        }
-      },
-      0 as NumberLike,
-    )
-
-const splitAtMatch = ([...chars]: string, match: (char: string) => boolean) =>
-  chars.reduce(
-    (groups, char) =>
-      match(char)
-        ? [...groups, '']
-        : [...groups.slice(0, -1), groups[groups.length - 1] + char],
-    [''],
-  )
+    }
+  }, 0 as NumberLike)
 
 const safeToParseNumberRegExp = /^\+?[0-9]+$/
 const safeParseInt10 = (str: string) =>
   safeToParseNumberRegExp.test(str) ? parseInt(str, 10) : NaN
 
-/** note: this doesn't need to support unicode, since it's used to split hex strings only */
 const splitAtIntervalAndMap = <T>(
   str: string,
   nth: number,
@@ -386,3 +385,26 @@ const splitAtIntervalAndMap = <T>(
   Array.from<never, T>({length: Math.ceil(str.length / nth)}, (_, index) =>
     map(str.slice(index * nth, (index + 1) * nth)),
   )
+
+const makeAnyOfCharsRegExp = (chars: string[]) =>
+  new RegExp(
+    chars
+      .map((char) => escapeRegExp(char))
+      // we need to sort these from longest to shortest,
+      // as they may contain multibyte unicode characters (these should come first)
+      .sort((a, b) => b.length - a.length)
+      .join('|'),
+  )
+
+const makeAtLeastSomeCharRegExp = (chars: string[]) =>
+  new RegExp(
+    `^[${chars
+      .map((char) => escapeRegExp(char))
+      // we need to sort these from longest to shortest,
+      // as they may contain multibyte unicode characters (these should come first)
+      .sort((a, b) => b.length - a.length)
+      .join('')}]+$`,
+  )
+
+const escapeRegExp = (text: string) =>
+  text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')

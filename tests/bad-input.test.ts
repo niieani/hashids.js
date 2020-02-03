@@ -75,6 +75,11 @@ describe('bad input', () => {
     expect(numbers).toEqual([])
   })
 
+  test(`should return an empty array when decoding an empty string`, () => {
+    const numbers = hashids.decode('')
+    expect(numbers).toEqual([])
+  })
+
   test(`should return an empty string when encoding non-numeric input`, () => {
     const id = hashids.encode('z')
     expect(id).toEqual('')
@@ -96,11 +101,20 @@ describe('bad input', () => {
   })
 
   // reproduction from https://github.com/niieani/hashids.js/issues/126
-  test(`should throw an error when an id to be decoded contains chars that do not exist in the alphabet`, () => {
+  test(`should throw an error when an id to be decoded contains chars that do not exist in the alphabet (multiple)`, () => {
     const hashids = new Hashids('', 6, 'abcdefghjklmnpqrstuvwxyz23456789')
     expect(hashids.isValidId('[object Object]')).toBe(false)
     expect(() => {
       hashids.decode('[object Object]')
+    }).toThrow(Error)
+  })
+
+  // reproduction from https://github.com/niieani/hashids.js/issues/126
+  test(`should throw an error when an id to be decoded contains chars that do not exist in the alphabet (single)`, () => {
+    const hashids = new Hashids('', 6, 'abcdefghjklmnpqrstuvwxyz23456789')
+    expect(hashids.isValidId('a1bcdef')).toBe(false)
+    expect(() => {
+      hashids.decode('a1bcdef')
     }).toThrow(Error)
   })
 })

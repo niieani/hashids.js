@@ -1,9 +1,3 @@
-function _toArray(arr) { return _arrayWithHoles(arr) || _iterableToArray(arr) || _nonIterableRest(); }
-
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
@@ -32,7 +26,6 @@ function () {
       seps = 'cfhistuCFHISTU';
     }
 
-    this.salt = salt;
     this.minLength = minLength;
 
     if (typeof minLength !== 'number') {
@@ -47,7 +40,14 @@ function () {
       throw new TypeError("Hashids: Provided alphabet has to be a string (is " + typeof alphabet + ")");
     }
 
-    var uniqueAlphabet = keepUniqueChars(alphabet);
+    var saltChars = _toConsumableArray(salt);
+
+    var alphabetChars = _toConsumableArray(alphabet);
+
+    var sepsChars = _toConsumableArray(seps);
+
+    this.salt = saltChars;
+    var uniqueAlphabet = keepUnique(alphabetChars);
 
     if (uniqueAlphabet.length < minAlphabetLength) {
       throw new Error("Hashids: alphabet must contain at least " + minAlphabetLength + " unique characters, provided: " + uniqueAlphabet);
@@ -55,34 +55,42 @@ function () {
     /** `alphabet` should not contains `seps` */
 
 
-    this.alphabet = withoutChars(uniqueAlphabet, seps);
+    this.alphabet = withoutChars(uniqueAlphabet, sepsChars);
     /** `seps` should contain only characters present in `alphabet` */
 
-    var filteredSeps = onlyChars(seps, uniqueAlphabet);
-    this.seps = shuffle(filteredSeps, salt);
+    var filteredSeps = onlyChars(sepsChars, uniqueAlphabet);
+    this.seps = shuffle(filteredSeps, saltChars);
     var sepsLength;
     var diff;
 
-    if (_toConsumableArray(this.seps).length === 0 || _toConsumableArray(this.alphabet).length / _toConsumableArray(this.seps).length > sepDiv) {
-      sepsLength = Math.ceil(_toConsumableArray(this.alphabet).length / sepDiv);
+    if (this.seps.length === 0 || this.alphabet.length / this.seps.length > sepDiv) {
+      sepsLength = Math.ceil(this.alphabet.length / sepDiv);
 
-      if (sepsLength > _toConsumableArray(this.seps).length) {
-        diff = sepsLength - _toConsumableArray(this.seps).length;
-        this.seps += unicodeSubstr(this.alphabet, 0, diff);
-        this.alphabet = unicodeSubstr(this.alphabet, diff);
+      if (sepsLength > this.seps.length) {
+        var _this$seps;
+
+        diff = sepsLength - this.seps.length;
+
+        (_this$seps = this.seps).push.apply(_this$seps, _toConsumableArray(this.alphabet.slice(0, diff)));
+
+        this.alphabet = this.alphabet.slice(diff);
       }
     }
 
-    this.alphabet = shuffle(this.alphabet, salt);
-    var guardCount = Math.ceil(_toConsumableArray(this.alphabet).length / guardDiv);
+    this.alphabet = shuffle(this.alphabet, saltChars);
+    var guardCount = Math.ceil(this.alphabet.length / guardDiv);
 
-    if (_toConsumableArray(this.alphabet).length < 3) {
-      this.guards = unicodeSubstr(this.seps, 0, guardCount);
-      this.seps = unicodeSubstr(this.seps, guardCount);
+    if (this.alphabet.length < 3) {
+      this.guards = this.seps.slice(0, guardCount);
+      this.seps = this.seps.slice(guardCount);
     } else {
-      this.guards = unicodeSubstr(this.alphabet, 0, guardCount);
-      this.alphabet = unicodeSubstr(this.alphabet, guardCount);
+      this.guards = this.alphabet.slice(0, guardCount);
+      this.alphabet = this.alphabet.slice(guardCount);
     }
+
+    this.guardsRegExp = makeAnyCharRegExp(this.guards);
+    this.sepsRegExp = makeAnyCharRegExp(this.seps);
+    this.allowedCharsRegExp = makeEveryCharRegExp([].concat(_toConsumableArray(this.alphabet), _toConsumableArray(this.guards), _toConsumableArray(this.seps)));
   }
 
   var _proto = Hashids.prototype;
@@ -115,7 +123,7 @@ function () {
       return ret;
     }
 
-    return this._encode(numbers);
+    return this._encode(numbers).join('');
   };
 
   _proto.decode = function decode(id) {
@@ -168,50 +176,57 @@ function () {
   _proto._encode = function _encode(numbers) {
     var _this = this;
 
-    var ret;
     var alphabet = this.alphabet;
     var numbersIdInt = numbers.reduce(function (last, number, i) {
       return last + (typeof number === 'bigint' ? Number(number % BigInt(i + 100)) : number % (i + 100));
     }, 0);
-    ret = _toConsumableArray(alphabet)[numbersIdInt % _toConsumableArray(alphabet).length];
-    var lottery = ret;
-
-    var seps = _toConsumableArray(this.seps);
-
-    var guards = _toConsumableArray(this.guards);
-
+    var ret = [alphabet[numbersIdInt % alphabet.length]];
+    var lottery = ret.slice();
+    var seps = this.seps;
+    var guards = this.guards;
     numbers.forEach(function (number, i) {
-      var buffer = lottery + _this.salt + alphabet;
-      alphabet = shuffle(alphabet, unicodeSubstr(buffer, 0));
+      var _ret;
+
+      var buffer = lottery.concat(_this.salt, alphabet); // const buffer = [...lottery, ...this.salt, ...alphabet]
+
+      alphabet = shuffle(alphabet, buffer);
       var last = toAlphabet(number, alphabet);
-      ret += last;
+
+      (_ret = ret).push.apply(_ret, _toConsumableArray(last));
 
       if (i + 1 < numbers.length) {
-        var charCode = last.codePointAt(0) + i;
+        var charCode = last[0].codePointAt(0) + i;
         var extraNumber = typeof number === 'bigint' ? Number(number % BigInt(charCode)) : number % charCode;
-        ret += seps[extraNumber % seps.length];
+        ret.push(seps[extraNumber % seps.length]);
       }
     });
 
-    if (_toConsumableArray(ret).length < this.minLength) {
-      var prefixGuardIndex = (numbersIdInt + _toConsumableArray(ret)[0].codePointAt(0)) % guards.length;
-      ret = guards[prefixGuardIndex] + ret;
+    if (ret.length < this.minLength) {
+      var prefixGuardIndex = (numbersIdInt + ret[0].codePointAt(0)) % guards.length;
+      ret.unshift(guards[prefixGuardIndex]);
 
-      if (_toConsumableArray(ret).length < this.minLength) {
-        var suffixGuardIndex = (numbersIdInt + _toConsumableArray(ret)[2].codePointAt(0)) % guards.length;
-        ret = ret + guards[suffixGuardIndex];
+      if (ret.length < this.minLength) {
+        var suffixGuardIndex = (numbersIdInt + ret[2].codePointAt(0)) % guards.length;
+        ret.push(guards[suffixGuardIndex]);
       }
     }
 
-    var halfLength = Math.floor(_toConsumableArray(alphabet).length / 2);
+    var halfLength = Math.floor(alphabet.length / 2);
 
-    while (_toConsumableArray(ret).length < this.minLength) {
+    while (ret.length < this.minLength) {
+      var _ret2, _ret3;
+
       alphabet = shuffle(alphabet, alphabet);
-      ret = unicodeSubstr(alphabet, halfLength) + ret + unicodeSubstr(alphabet, 0, halfLength);
-      var excess = _toConsumableArray(ret).length - this.minLength;
+
+      (_ret2 = ret).unshift.apply(_ret2, _toConsumableArray(alphabet.slice(halfLength)));
+
+      (_ret3 = ret).push.apply(_ret3, _toConsumableArray(alphabet.slice(0, halfLength)));
+
+      var excess = ret.length - this.minLength;
 
       if (excess > 0) {
-        ret = unicodeSubstr(ret, excess / 2, this.minLength);
+        var halfOfExcess = excess / 2;
+        ret = ret.slice(halfOfExcess, halfOfExcess + this.minLength);
       }
     }
 
@@ -219,55 +234,61 @@ function () {
   };
 
   _proto.isValidId = function isValidId(id) {
-    var _this2 = this;
-
-    return _toConsumableArray(id).every(function (char) {
-      return _this2.alphabet.includes(char) || _this2.guards.includes(char) || _this2.seps.includes(char);
-    });
-  };
+    return this.allowedCharsRegExp.test(id); // return this._isValidId([...id])
+  } // private _isValidId(idChars: string[]): boolean {
+  //   return idChars.every(
+  //     (char) =>
+  //       this.alphabet.includes(char) ||
+  //       this.guards.includes(char) ||
+  //       this.seps.includes(char),
+  //   )
+  // }
+  ;
 
   _proto._decode = function _decode(id) {
-    var _this3 = this;
-
     if (!this.isValidId(id)) {
-      throw new Error("The provided ID (" + id + ") is invalid, as it contains characters that do not exist in the alphabet (" + this.guards + this.seps + this.alphabet + ")");
+      throw new Error("The provided ID (" + id + ") is invalid, as it contains characters that do not exist in the alphabet (" + this.guards.join('') + this.seps.join('') + this.alphabet.join('') + ")");
     }
 
-    var idGuardsArray = splitAtMatch(id, function (char) {
-      return _this3.guards.includes(char);
-    });
+    var idGuardsArray = id.split(this.guardsRegExp); // splitAtMatch(idChars, (char) =>
+    //   this.guards.includes(char),
+    // )
+
     var splitIndex = idGuardsArray.length === 3 || idGuardsArray.length === 2 ? 1 : 0;
     var idBreakdown = idGuardsArray[splitIndex];
+    if (idBreakdown.length === 0) return [];
+    var lotteryChar = idBreakdown[Symbol.iterator]().next().value;
+    var idArray = idBreakdown.slice(lotteryChar.length).split(this.sepsRegExp); // const idBreakdownArray = [...idBreakdown]
+    // const [lotteryChar, ...rest] = idBreakdownArray
+    // const idArray = rest.join('').split(this.sepsRegExp)
 
-    var idBreakdownArray = _toConsumableArray(idBreakdown);
+    var lastAlphabet = this.alphabet;
+    var result = [];
 
-    if (idBreakdownArray.length === 0) return [];
+    for (var _iterator = idArray, _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[Symbol.iterator]();;) {
+      var _ref;
 
-    var _idBreakdownArray = _toArray(idBreakdownArray),
-        lotteryChar = _idBreakdownArray[0],
-        chars = _idBreakdownArray.slice(1);
+      if (_isArray) {
+        if (_i >= _iterator.length) break;
+        _ref = _iterator[_i++];
+      } else {
+        _i = _iterator.next();
+        if (_i.done) break;
+        _ref = _i.value;
+      }
 
-    var rest = chars.join('');
-    var idArray = splitAtMatch(rest, function (char) {
-      return _this3.seps.includes(char);
-    });
+      var subId = _ref;
+      var buffer = [lotteryChar].concat(_toConsumableArray(this.salt), _toConsumableArray(lastAlphabet));
+      var nextAlphabet = shuffle(lastAlphabet, buffer.slice(0, lastAlphabet.length));
+      result.push(fromAlphabet(_toConsumableArray(subId), nextAlphabet));
+      lastAlphabet = nextAlphabet;
+    } // if the result is different from what we'd expect, we return an empty result (malformed input):
 
-    var _idArray$reduce = idArray.reduce(function (_ref, subId) {
-      var result = _ref.result,
-          lastAlphabet = _ref.lastAlphabet;
-      var buffer = lotteryChar + _this3.salt + lastAlphabet;
-      var nextAlphabet = shuffle(lastAlphabet, unicodeSubstr(buffer, 0, _toConsumableArray(lastAlphabet).length));
-      return {
-        result: [].concat(_toConsumableArray(result), [fromAlphabet(subId, nextAlphabet)]),
-        lastAlphabet: nextAlphabet
-      };
-    }, {
-      result: [],
-      lastAlphabet: this.alphabet
-    }),
-        result = _idArray$reduce.result;
 
-    if (this._encode(result) !== id) return [];
+    if (this._encode(result).join('') !== id) return []; // if (this._encode(result).some((char, index) => idChars[index] !== char)) {
+    //   return []
+    // }
+
     return result;
   };
 
@@ -278,36 +299,18 @@ export { Hashids as default };
 var minAlphabetLength = 16;
 var sepDiv = 3.5;
 var guardDiv = 12;
-export var keepUniqueChars = function keepUniqueChars(str) {
-  return Array.from(new Set(str)).join('');
+export var keepUnique = function keepUnique(content) {
+  return Array.from(new Set(content));
 };
-export var withoutChars = function withoutChars(_ref2, _ref3) {
-  var _ref4 = _toArray(_ref2),
-      str = _ref4.slice(0);
-
-  var _ref5 = _toArray(_ref3),
-      without = _ref5.slice(0);
-
-  return str.filter(function (char) {
-    return !without.includes(char);
-  }).join('');
+export var withoutChars = function withoutChars(chars, _withoutChars) {
+  return chars.filter(function (char) {
+    return !_withoutChars.includes(char);
+  });
 };
-export var onlyChars = function onlyChars(_ref6, _ref7) {
-  var _ref8 = _toArray(_ref6),
-      str = _ref8.slice(0);
-
-  var _ref9 = _toArray(_ref7),
-      only = _ref9.slice(0);
-
-  return str.filter(function (char) {
-    return only.includes(char);
-  }).join('');
-};
-export var unicodeSubstr = function unicodeSubstr(_ref10, from, to) {
-  var _ref11 = _toArray(_ref10),
-      str = _ref11.slice(0);
-
-  return str.slice(from, to === undefined ? undefined : from + to).join('');
+export var onlyChars = function onlyChars(chars, keepChars) {
+  return chars.filter(function (char) {
+    return keepChars.includes(char);
+  });
 };
 
 var isIntegerNumber = function isIntegerNumber(n) {
@@ -318,84 +321,68 @@ var isPositiveAndFinite = function isPositiveAndFinite(n) {
   return typeof n === 'bigint' || n >= 0 && Number.isSafeInteger(n);
 };
 
-function shuffle(alphabet, _ref12) {
-  var _ref13 = _toArray(_ref12),
-      salt = _ref13.slice(0);
+function shuffle(alphabetChars, saltChars) {
+  if (saltChars.length === 0) {
+    return alphabetChars;
+  }
 
   var integer;
+  var transformed = alphabetChars.slice();
 
-  if (!salt.length) {
-    return alphabet;
+  for (var i = transformed.length - 1, v = 0, p = 0; i > 0; i--, v++) {
+    v %= saltChars.length;
+    p += integer = saltChars[v].codePointAt(0);
+    var j = (integer + v + p) % i; // swap characters at positions i and j
+
+    var a = transformed[i];
+    var b = transformed[j];
+    transformed[j] = a;
+    transformed[i] = b;
   }
 
-  var alphabetChars = _toConsumableArray(alphabet);
-
-  for (var i = alphabetChars.length - 1, v = 0, p = 0; i > 0; i--, v++) {
-    v %= salt.length;
-    p += integer = salt[v].codePointAt(0);
-    var j = (integer + v + p) % i // swap characters at positions i and j
-    ;
-    var _ref14 = [alphabetChars[i], alphabetChars[j]];
-    alphabetChars[j] = _ref14[0];
-    alphabetChars[i] = _ref14[1];
-  }
-
-  return alphabetChars.join('');
+  return transformed;
 }
 
-var toAlphabet = function toAlphabet(input, _ref15) {
-  var _ref16 = _toArray(_ref15),
-      alphabet = _ref16.slice(0);
-
-  var id = '';
+var toAlphabet = function toAlphabet(input, alphabetChars) {
+  var id = [];
 
   if (typeof input === 'bigint') {
-    var alphabetLength = BigInt(alphabet.length);
+    var alphabetLength = BigInt(alphabetChars.length);
 
     do {
-      id = alphabet[Number(input % alphabetLength)] + id;
+      id.unshift(alphabetChars[Number(input % alphabetLength)]);
       input = input / alphabetLength;
     } while (input > BigInt(0));
   } else {
     do {
-      id = alphabet[input % alphabet.length] + id;
-      input = Math.floor(input / alphabet.length);
+      id.unshift(alphabetChars[input % alphabetChars.length]);
+      input = Math.floor(input / alphabetChars.length);
     } while (input > 0);
   }
 
   return id;
 };
 
-var fromAlphabet = function fromAlphabet(_ref17, _ref18) {
-  var _ref19 = _toArray(_ref17),
-      input = _ref19.slice(0);
-
-  var _ref20 = _toArray(_ref18),
-      alphabet = _ref20.slice(0);
-
-  return input.map(function (item) {
-    var index = alphabet.indexOf(item);
+var fromAlphabet = function fromAlphabet(inputChars, alphabetChars) {
+  return inputChars.reduce(function (carry, item) {
+    var index = alphabetChars.indexOf(item);
 
     if (index === -1) {
-      var inputString = input.join('');
-      var alphabetString = alphabet.join('');
-      throw new Error("The provided ID (" + inputString + ") is invalid, as it contains characters that do not exist in the alphabet (" + alphabetString + ")");
+      throw new Error("The provided ID (" + inputChars.join('') + ") is invalid, as it contains characters that do not exist in the alphabet (" + alphabetChars.join('') + ")");
     }
 
-    return index;
-  }).reduce(function (carry, index) {
     if (typeof carry === 'bigint') {
-      return carry * BigInt(alphabet.length) + BigInt(index);
+      return carry * BigInt(alphabetChars.length) + BigInt(index);
     }
 
-    var value = carry * alphabet.length + index;
+    var value = carry * alphabetChars.length + index;
     var isSafeValue = Number.isSafeInteger(value);
 
     if (isSafeValue) {
       return value;
     } else {
       if (typeof BigInt === 'function') {
-        return BigInt(carry) * BigInt(alphabet.length) + BigInt(index);
+        return BigInt(carry) * BigInt(alphabetChars.length) + BigInt(index);
       } else {
         // we do not have support for BigInt:
         throw new Error("Unable to decode the provided string, due to lack of support for BigInt numbers in the current environment");
@@ -404,22 +391,11 @@ var fromAlphabet = function fromAlphabet(_ref17, _ref18) {
   }, 0);
 };
 
-var splitAtMatch = function splitAtMatch(_ref21, match) {
-  var _ref22 = _toArray(_ref21),
-      chars = _ref22.slice(0);
-
-  return chars.reduce(function (groups, char) {
-    return match(char) ? [].concat(_toConsumableArray(groups), ['']) : [].concat(_toConsumableArray(groups.slice(0, -1)), [groups[groups.length - 1] + char]);
-  }, ['']);
-};
-
 var safeToParseNumberRegExp = /^\+?[0-9]+$/;
 
 var safeParseInt10 = function safeParseInt10(str) {
   return safeToParseNumberRegExp.test(str) ? parseInt(str, 10) : NaN;
 };
-/** note: this doesn't need to support unicode, since it's used to split hex strings only */
-
 
 var splitAtIntervalAndMap = function splitAtIntervalAndMap(str, nth, map) {
   return Array.from({
@@ -427,6 +403,30 @@ var splitAtIntervalAndMap = function splitAtIntervalAndMap(str, nth, map) {
   }, function (_, index) {
     return map(str.slice(index * nth, (index + 1) * nth));
   });
+};
+
+var makeAnyCharRegExp = function makeAnyCharRegExp(chars) {
+  return new RegExp(chars.map(function (char) {
+    return escapeRegExp(char);
+  }) // we need to sort these from longest to shortest,
+  // as they may contain multibyte unicode characters (these should come first)
+  .sort(function (a, b) {
+    return b.length - a.length;
+  }).join('|'));
+};
+
+var makeEveryCharRegExp = function makeEveryCharRegExp(chars) {
+  return new RegExp("^[" + chars.map(function (char) {
+    return escapeRegExp(char);
+  }) // we need to sort these from longest to shortest,
+  // as they may contain multibyte unicode characters (these should come first)
+  .sort(function (a, b) {
+    return b.length - a.length;
+  }).join('') + "]+$");
+};
+
+var escapeRegExp = function escapeRegExp(text) {
+  return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
 };
 
 //# sourceMappingURL=index.js.map

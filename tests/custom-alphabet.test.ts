@@ -48,4 +48,9 @@ describe('custom alphabet', () => {
   test(`should work with an alphabet with complex unicode chars`, () => {
     testAlphabet('🤺👩🏿‍🦳🛁👩🏻🦷🤦‍♂️🐁☝🏼✍🏾👉🏽🇸🇰❤️🍭')
   })
+
+  test(`should work with alphabet that contains emojis that are subsets of each other`, () => {
+    testAlphabet('😍🧑🏽‍🦳🧑🍷👩🏿‍🦰👩🏾‍🦰👩🏽‍🦰👩🏻‍🦰✍🏾👉🏽👩🏻🦷🤦‍♂️')
+    testAlphabet('😍🧑🧑🏽‍🦳🍷👩🏻‍🦰👩🏿‍🦰👩🏽‍🦰👩🏾‍🦰✍🏾👉🏽👩🏻🦷🤦‍♂️')
+  })
 })
