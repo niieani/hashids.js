@@ -5,6 +5,9 @@ export default class Hashids {
   private seps: string[]
   private guards: string[]
   private salt: string[]
+  private guardsRegExp: RegExp
+  private sepsRegExp: RegExp
+  private allowedCharsRegExp: RegExp
 
   public constructor(
     salt = '',
@@ -74,6 +77,14 @@ export default class Hashids {
       this.guards = this.alphabet.slice(0, guardCount)
       this.alphabet = this.alphabet.slice(guardCount)
     }
+
+    this.guardsRegExp = makeAnyOfCharsRegExp(this.guards)
+    this.sepsRegExp = makeAnyOfCharsRegExp(this.seps)
+    this.allowedCharsRegExp = makeAtLeastSomeCharRegExp([
+      ...this.alphabet,
+      ...this.guards,
+      ...this.seps,
+    ])
   }
 
   public encode(numbers: string): string
@@ -115,7 +126,7 @@ export default class Hashids {
 
   public decode(id: string): NumberLike[] {
     if (!id || typeof id !== 'string' || id.length === 0) return []
-    return this._decode([...id])
+    return this._decode(id)
   }
 
   /**
@@ -172,13 +183,13 @@ export default class Hashids {
     )
 
     let ret: string[] = [alphabet[numbersIdInt % alphabet.length]]
-    const lottery = [...ret]
+    const lottery = ret.slice()
 
     const seps = this.seps
     const guards = this.guards
 
     numbers.forEach((number, i) => {
-      const buffer = [...lottery, ...this.salt, ...alphabet]
+      const buffer = lottery.concat(this.salt, alphabet)
 
       alphabet = shuffle(alphabet, buffer)
       const last = toAlphabet(number, alphabet)
@@ -224,36 +235,26 @@ export default class Hashids {
   }
 
   public isValidId(id: string): boolean {
-    return this._isValidId([...id])
+    return this.allowedCharsRegExp.test(id)
   }
 
-  private _isValidId(idChars: string[]): boolean {
-    return idChars.every(
-      (char) =>
-        this.alphabet.includes(char) ||
-        this.guards.includes(char) ||
-        this.seps.includes(char),
-    )
-  }
-
-  private _decode(idChars: string[]): NumberLike[] {
-    if (!this._isValidId(idChars)) {
+  private _decode(id: string): NumberLike[] {
+    if (!this.isValidId(id)) {
       throw new Error(
-        `The provided ID (${idChars}) is invalid, as it contains characters that do not exist in the alphabet (${this.guards}${this.seps}${this.alphabet})`,
+        `The provided ID (${id}) is invalid, as it contains characters that do not exist in the alphabet (${this.guards.join(
+          '',
+        )}${this.seps.join('')}${this.alphabet.join('')})`,
       )
     }
-    const idGuardsArray = splitAtMatch(idChars, (char) =>
-      this.guards.includes(char),
-    )
+    const idGuardsArray = id.split(this.guardsRegExp)
     const splitIndex =
       idGuardsArray.length === 3 || idGuardsArray.length === 2 ? 1 : 0
 
     const idBreakdown = idGuardsArray[splitIndex]
-    const idBreakdownArray = idBreakdown
-    if (idBreakdownArray.length === 0) return []
+    if (idBreakdown.length === 0) return []
 
-    const [lotteryChar, ...rest] = idBreakdownArray
-    const idArray = splitAtMatch(rest, (char) => this.seps.includes(char))
+    const lotteryChar = idBreakdown[Symbol.iterator]().next().value as string
+    const idArray = idBreakdown.slice(lotteryChar.length).split(this.sepsRegExp)
 
     let lastAlphabet: string[] = this.alphabet
     const result: NumberLike[] = []
@@ -264,11 +265,12 @@ export default class Hashids {
         lastAlphabet,
         buffer.slice(0, lastAlphabet.length),
       )
-      result.push(fromAlphabet(subId, nextAlphabet))
+      result.push(fromAlphabet([...subId], nextAlphabet))
       lastAlphabet = nextAlphabet
     }
 
-    if (this._encode(result).join('') !== idChars.join('')) return []
+    // if the result is different from what we'd expect, we return an empty result (malformed input):
+    if (this._encode(result).join('') !== id) return []
     return result
   }
 }
@@ -296,20 +298,23 @@ const isPositiveAndFinite = (n: NumberLike) =>
   typeof n === 'bigint' || (n >= 0 && Number.isSafeInteger(n))
 
 function shuffle(alphabetChars: string[], saltChars: string[]): string[] {
-  if (!saltChars.length) {
+  if (saltChars.length === 0) {
     return alphabetChars
   }
 
   let integer: number
-  const transformed = [...alphabetChars]
+  const transformed = alphabetChars.slice()
 
   for (let i = transformed.length - 1, v = 0, p = 0; i > 0; i--, v++) {
     v %= saltChars.length
     p += integer = saltChars[v].codePointAt(0)!
     const j = (integer + v + p) % i
 
-      // swap characters at positions i and j
-    ;[transformed[j], transformed[i]] = [transformed[i], transformed[j]]
+    // swap characters at positions i and j
+    const a = transformed[i]
+    const b = transformed[j]
+    transformed[j] = a
+    transformed[i] = b
   }
 
   return transformed
@@ -368,20 +373,6 @@ const fromAlphabet = (
     }
   }, 0 as NumberLike)
 
-const splitAtMatch = (chars: string[], match: (char: string) => boolean) => {
-  let currentGroup: string[] = []
-  const groups: string[][] = [currentGroup]
-  for (const char of chars) {
-    if (match(char)) {
-      currentGroup = []
-      groups.push(currentGroup)
-    } else {
-      currentGroup.push(char)
-    }
-  }
-  return groups
-}
-
 const safeToParseNumberRegExp = /^\+?[0-9]+$/
 const safeParseInt10 = (str: string) =>
   safeToParseNumberRegExp.test(str) ? parseInt(str, 10) : NaN
@@ -394,3 +385,26 @@ const splitAtIntervalAndMap = <T>(
   Array.from<never, T>({length: Math.ceil(str.length / nth)}, (_, index) =>
     map(str.slice(index * nth, (index + 1) * nth)),
   )
+
+const makeAnyOfCharsRegExp = (chars: string[]) =>
+  new RegExp(
+    chars
+      .map((char) => escapeRegExp(char))
+      // we need to sort these from longest to shortest,
+      // as they may contain multibyte unicode characters (these should come first)
+      .sort((a, b) => b.length - a.length)
+      .join('|'),
+  )
+
+const makeAtLeastSomeCharRegExp = (chars: string[]) =>
+  new RegExp(
+    `^[${chars
+      .map((char) => escapeRegExp(char))
+      // we need to sort these from longest to shortest,
+      // as they may contain multibyte unicode characters (these should come first)
+      .sort((a, b) => b.length - a.length)
+      .join('')}]+$`,
+  )
+
+const escapeRegExp = (text: string) =>
+  text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
