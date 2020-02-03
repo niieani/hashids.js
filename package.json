@@ -43,7 +43,8 @@
     "build": "yarn run build:umd && yarn run build:esm && yarn run minify",
     "clean": "rm -rf coverage yarn-debug.log",
     "all": "yarn run lint && yarn run coverage && yarn run build && yarn run clean",
-    "semantic-release": "semantic-release"
+    "semantic-release": "semantic-release",
+    "benchmark": "yarn ts-node -O '{\"module\": \"commonjs\"}' -T tests/benchmark"
   },
   "husky": {
     "hooks": {
@@ -79,7 +80,9 @@
     "eslint-plugin-jest": "^23.6.0",
     "husky": "^4.2.1",
     "jest": "^25.1.0",
+    "nodemark": "^0.3.0",
     "prettier": "^1.19.1",
+    "require-from-web": "^1.1.1",
     "semantic-release": "^17.0.2",
     "terser": "^4.6.3",
     "ts-node": "^8.6.2",
