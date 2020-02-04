@@ -40,12 +40,9 @@ function () {
       throw new TypeError("Hashids: Provided alphabet has to be a string (is " + typeof alphabet + ")");
     }
 
-    var saltChars = _toConsumableArray(salt);
-
-    var alphabetChars = _toConsumableArray(alphabet);
-
-    var sepsChars = _toConsumableArray(seps);
-
+    var saltChars = Array.from(salt);
+    var alphabetChars = Array.from(alphabet);
+    var sepsChars = Array.from(seps);
     this.salt = saltChars;
     var uniqueAlphabet = keepUnique(alphabetChars);
 
@@ -88,9 +85,9 @@ function () {
       this.alphabet = this.alphabet.slice(guardCount);
     }
 
-    this.guardsRegExp = makeAnyCharRegExp(this.guards);
-    this.sepsRegExp = makeAnyCharRegExp(this.seps);
-    this.allowedCharsRegExp = makeEveryCharRegExp([].concat(_toConsumableArray(this.alphabet), _toConsumableArray(this.guards), _toConsumableArray(this.seps)));
+    this.guardsRegExp = makeAnyOfCharsRegExp(this.guards);
+    this.sepsRegExp = makeAnyOfCharsRegExp(this.seps);
+    this.allowedCharsRegExp = makeAtLeastSomeCharRegExp([].concat(_toConsumableArray(this.alphabet), _toConsumableArray(this.guards), _toConsumableArray(this.seps)));
   }
 
   var _proto = Hashids.prototype;
@@ -187,8 +184,7 @@ function () {
     numbers.forEach(function (number, i) {
       var _ret;
 
-      var buffer = lottery.concat(_this.salt, alphabet); // const buffer = [...lottery, ...this.salt, ...alphabet]
-
+      var buffer = lottery.concat(_this.salt, alphabet);
       alphabet = shuffle(alphabet, buffer);
       var last = toAlphabet(number, alphabet);
 
@@ -234,34 +230,20 @@ function () {
   };
 
   _proto.isValidId = function isValidId(id) {
-    return this.allowedCharsRegExp.test(id); // return this._isValidId([...id])
-  } // private _isValidId(idChars: string[]): boolean {
-  //   return idChars.every(
-  //     (char) =>
-  //       this.alphabet.includes(char) ||
-  //       this.guards.includes(char) ||
-  //       this.seps.includes(char),
-  //   )
-  // }
-  ;
+    return this.allowedCharsRegExp.test(id);
+  };
 
   _proto._decode = function _decode(id) {
     if (!this.isValidId(id)) {
       throw new Error("The provided ID (" + id + ") is invalid, as it contains characters that do not exist in the alphabet (" + this.guards.join('') + this.seps.join('') + this.alphabet.join('') + ")");
     }
 
-    var idGuardsArray = id.split(this.guardsRegExp); // splitAtMatch(idChars, (char) =>
-    //   this.guards.includes(char),
-    // )
-
+    var idGuardsArray = id.split(this.guardsRegExp);
     var splitIndex = idGuardsArray.length === 3 || idGuardsArray.length === 2 ? 1 : 0;
     var idBreakdown = idGuardsArray[splitIndex];
     if (idBreakdown.length === 0) return [];
     var lotteryChar = idBreakdown[Symbol.iterator]().next().value;
-    var idArray = idBreakdown.slice(lotteryChar.length).split(this.sepsRegExp); // const idBreakdownArray = [...idBreakdown]
-    // const [lotteryChar, ...rest] = idBreakdownArray
-    // const idArray = rest.join('').split(this.sepsRegExp)
-
+    var idArray = idBreakdown.slice(lotteryChar.length).split(this.sepsRegExp);
     var lastAlphabet = this.alphabet;
     var result = [];
 
@@ -280,15 +262,12 @@ function () {
       var subId = _ref;
       var buffer = [lotteryChar].concat(_toConsumableArray(this.salt), _toConsumableArray(lastAlphabet));
       var nextAlphabet = shuffle(lastAlphabet, buffer.slice(0, lastAlphabet.length));
-      result.push(fromAlphabet(_toConsumableArray(subId), nextAlphabet));
+      result.push(fromAlphabet(Array.from(subId), nextAlphabet));
       lastAlphabet = nextAlphabet;
     } // if the result is different from what we'd expect, we return an empty result (malformed input):
 
 
-    if (this._encode(result).join('') !== id) return []; // if (this._encode(result).some((char, index) => idChars[index] !== char)) {
-    //   return []
-    // }
-
+    if (this._encode(result).join('') !== id) return [];
     return result;
   };
 
@@ -405,7 +384,7 @@ var splitAtIntervalAndMap = function splitAtIntervalAndMap(str, nth, map) {
   });
 };
 
-var makeAnyCharRegExp = function makeAnyCharRegExp(chars) {
+var makeAnyOfCharsRegExp = function makeAnyOfCharsRegExp(chars) {
   return new RegExp(chars.map(function (char) {
     return escapeRegExp(char);
   }) // we need to sort these from longest to shortest,
@@ -415,7 +394,7 @@ var makeAnyCharRegExp = function makeAnyCharRegExp(chars) {
   }).join('|'));
 };
 
-var makeEveryCharRegExp = function makeEveryCharRegExp(chars) {
+var makeAtLeastSomeCharRegExp = function makeAtLeastSomeCharRegExp(chars) {
   return new RegExp("^[" + chars.map(function (char) {
     return escapeRegExp(char);
   }) // we need to sort these from longest to shortest,
