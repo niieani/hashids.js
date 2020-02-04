@@ -27,9 +27,20 @@
   "module": "esm/index.js",
   "browser": "dist/hashids.min",
   "exports": {
-    "import": "./esm/index.js",
-    "require": "./cjs/index.js",
-    "browser": "dist/hashids.min"
+    ".": {
+      "import": "./esm/index.js",
+      "require": "./cjs/index.js",
+      "browser": "./dist/hashids.min.js"
+    },
+    "./cjs": {
+      "require": "./cjs/index.js"
+    },
+    "./cjs/": {
+      "require": "./cjs/"
+    },
+    "./esm/": {
+      "import": "./esm/"
+    }
   },
   "scripts": {
     "lint": "eslint lib/* tests/*",

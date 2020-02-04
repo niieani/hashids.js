@@ -31,9 +31,9 @@ export default class Hashids {
       )
     }
 
-    const saltChars = [...salt]
-    const alphabetChars = [...alphabet]
-    const sepsChars = [...seps]
+    const saltChars = Array.from(salt)
+    const alphabetChars = Array.from(alphabet)
+    const sepsChars = Array.from(seps)
 
     this.salt = saltChars
 
@@ -265,7 +265,7 @@ export default class Hashids {
         lastAlphabet,
         buffer.slice(0, lastAlphabet.length),
       )
-      result.push(fromAlphabet([...subId], nextAlphabet))
+      result.push(fromAlphabet(Array.from(subId), nextAlphabet))
       lastAlphabet = nextAlphabet
     }
 
