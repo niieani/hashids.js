@@ -305,7 +305,7 @@ function shuffle(alphabetChars: string[], saltChars: string[]): string[] {
   let integer: number
   const transformed = alphabetChars.slice()
 
-  for (let i = transformed.length - 1, v = 0, p = 0; i > 0; i--, v++) {
+  for (let i = transformed.length - 1, v = 0, p = 0; i > 0; i-- , v++) {
     v %= saltChars.length
     p += integer = saltChars[v].codePointAt(0)!
     const j = (integer + v + p) % i
@@ -374,15 +374,31 @@ const fromAlphabet = (
   }, 0 as NumberLike)
 
 const safeToParseNumberRegExp = /^\+?[0-9]+$/
-const safeParseInt10 = (str: string) =>
-  safeToParseNumberRegExp.test(str) ? parseInt(str, 10) : NaN
+const safeParseInt10 = (str: string) => {
+  if (!safeToParseNumberRegExp.test(str)) {
+    return NaN
+  }
+
+  const n = parseInt(str, 10)
+  if (Number.isSafeInteger(n)) {
+    return n
+  } else if (typeof BigInt === 'function') {
+    return BigInt(str)
+  } else {
+    // we do not have support for BigInt:
+    throw new Error(
+      `Unable to encode the provided big-number string without lose information, due to lack of support for BigInt numbers in the current environment`,
+    )
+  }
+}
+
 
 const splitAtIntervalAndMap = <T>(
   str: string,
   nth: number,
   map: (n: string) => T,
 ): T[] =>
-  Array.from<never, T>({length: Math.ceil(str.length / nth)}, (_, index) =>
+  Array.from<never, T>({ length: Math.ceil(str.length / nth) }, (_, index) =>
     map(str.slice(index * nth, (index + 1) * nth)),
   )
 

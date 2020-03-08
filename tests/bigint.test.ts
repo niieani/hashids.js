@@ -19,4 +19,22 @@ describe('BigInt environment', () => {
       hashids.decode('N95VW0Lo06rQBvJDOE2BVvREP86AqvYN4O9g9p'),
     ).toThrow()
   })
+
+  test('throws encoding big-number string on unsupported environment', () => {
+    expect(() =>
+      hashids.encode('90071992547409910'),
+    ).toThrow()
+  })
 })
+
+if (_BigInt) {
+  describe('BigInt tests', () => {
+    test('Encode a big-number string', () => {
+      expect(hashids.encode('90071992547409910123456789')).toEqual('jkqwZ8DW1QrVylvVR')
+    })
+
+    test('Decode a previously encoded big-number string', () => {
+      expect(hashids.decode('jkqwZ8DW1QrVylvVR')).toEqual([BigInt('90071992547409910123456789')])
+    })
+  })
+}

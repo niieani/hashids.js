@@ -373,7 +373,20 @@ var fromAlphabet = function fromAlphabet(inputChars, alphabetChars) {
 var safeToParseNumberRegExp = /^\+?[0-9]+$/;
 
 var safeParseInt10 = function safeParseInt10(str) {
-  return safeToParseNumberRegExp.test(str) ? parseInt(str, 10) : NaN;
+  if (!safeToParseNumberRegExp.test(str)) {
+    return NaN;
+  }
+
+  var n = parseInt(str, 10);
+
+  if (Number.isSafeInteger(n)) {
+    return n;
+  } else if (typeof BigInt === 'function') {
+    return BigInt(str);
+  } else {
+    // we do not have support for BigInt:
+    throw new Error("Unable to encode the provided big-number string without lose information, due to lack of support for BigInt numbers in the current environment");
+  }
 };
 
 var splitAtIntervalAndMap = function splitAtIntervalAndMap(str, nth, map) {
