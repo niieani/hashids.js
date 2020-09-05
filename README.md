@@ -47,7 +47,7 @@ Note: When using Node that supports [conditional exports](https://nodejs.org/api
 <script type="text/javascript" src="hashids.min.js"></script>
 <script type="text/javascript">
 
-    var hashids = new Hashids();
+    var hashids = new Hashids.default();
     console.log(hashids.encode(1));
 
 </script>
