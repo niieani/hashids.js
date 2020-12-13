@@ -27,7 +27,6 @@
   "module": "esm/index.js",
   "exports": {
     ".": {
-      "browser": "./dist/hashids.min.js",
       "import": "./esm/index.js",
       "require": "./cjs/index.js"
     },
