@@ -16,10 +16,11 @@
     "titleBar.inactiveForeground": "#e7e7e799",
     "statusBar.background": "#39698e",
     "statusBarItem.hoverBackground": "#4884b2",
-    "statusBar.foreground": "#e7e7e7"
+    "statusBar.foreground": "#e7e7e7",
+    "activityBar.activeBackground": "#4884b2"
   },
   "peacock.color": "#39698e",
-  "typescript.tsdk": ".vscode/pnpify/typescript/lib",
+  "typescript.tsdk": ".yarn/sdks/typescript/lib",
   "eslint.alwaysShowStatus": true,
   "eslint.packageManager": "yarn",
   "eslint.validate": [
@@ -30,7 +31,12 @@
   ],
   "tslint.packageManager": "yarn",
   "npm.packageManager": "yarn",
-  "eslint.nodePath": ".vscode/pnpify",
-  "prettier.prettierPath": ".vscode/pnpify/prettier",
-  "eslint.enable": true
+  "eslint.nodePath": ".yarn/sdks",
+  "prettier.prettierPath": ".yarn/sdks/prettier/index.js",
+  "eslint.enable": true,
+  "search.exclude": {
+    "**/.yarn": true,
+    "**/.pnp.*": true
+  },
+  "typescript.enablePromptUseWorkspaceTsdk": true
 }
