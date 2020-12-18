@@ -65,8 +65,7 @@ jobs:
       - name: Build and release
         run: |
           yarn
-          yarn build
-          yarn semantic-release
+          ./release.sh
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
           GH_TOKEN: ${{secrets.GH_TOKEN}}
