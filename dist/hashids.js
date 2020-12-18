@@ -8,25 +8,31 @@
       exports: {}
     };
     factory(mod.exports);
-    global.Hashids = mod.exports;
+    global.Hashids = mod.exports.default;
   }
 })(typeof globalThis !== "undefined" ? globalThis : typeof self !== "undefined" ? self : this, function (_exports) {
   "use strict";
 
-  _exports.__esModule = true;
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
   _exports.onlyChars = _exports.withoutChars = _exports.keepUnique = _exports.default = void 0;
 
-  function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+  function _createForOfIteratorHelperLoose(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; return function () { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } it = o[Symbol.iterator](); return it.next.bind(it); }
 
-  function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+  function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
-  function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+  function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
-  function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+  function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
-  var Hashids =
-  /*#__PURE__*/
-  function () {
+  function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+  function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+  function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+  var Hashids = /*#__PURE__*/function () {
     function Hashids(salt, minLength, alphabet, seps) {
       if (salt === void 0) {
         salt = '';
@@ -65,7 +71,7 @@
       var uniqueAlphabet = keepUnique(alphabetChars);
 
       if (uniqueAlphabet.length < minAlphabetLength) {
-        throw new Error("Hashids: alphabet must contain at least " + minAlphabetLength + " unique characters, provided: " + uniqueAlphabet);
+        throw new Error("Hashids: alphabet must contain at least " + minAlphabetLength + " unique characters, provided: " + uniqueAlphabet.join(''));
       }
       /** `alphabet` should not contains `seps` */
 
@@ -265,19 +271,8 @@
       var lastAlphabet = this.alphabet;
       var result = [];
 
-      for (var _iterator = idArray, _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[Symbol.iterator]();;) {
-        var _ref;
-
-        if (_isArray) {
-          if (_i >= _iterator.length) break;
-          _ref = _iterator[_i++];
-        } else {
-          _i = _iterator.next();
-          if (_i.done) break;
-          _ref = _i.value;
-        }
-
-        var subId = _ref;
+      for (var _iterator = _createForOfIteratorHelperLoose(idArray), _step; !(_step = _iterator()).done;) {
+        var subId = _step.value;
         var buffer = [lotteryChar].concat(_toConsumableArray(this.salt), _toConsumableArray(lastAlphabet));
         var nextAlphabet = shuffle(lastAlphabet, buffer.slice(0, lastAlphabet.length));
         result.push(fromAlphabet(Array.from(subId), nextAlphabet));
