@@ -56,6 +56,6 @@ jobs:
       - name: Commit changes
         run: |
           cd .`git log -1 --pretty=%s | awk '{ print $9 }'` # ditto
-          git add yarn.lock .yarn/cache .pnp.* # only add yarn.lock if not using zero-installs
+          git add yarn.lock
           git commit -m "ci: Dependabot autofix"
           git push
