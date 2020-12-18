@@ -1,5 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-var-requires */
-/* eslint-disable @typescript-eslint/camelcase */
 /* eslint-disable no-console */
 import benchmark from 'nodemark'
 import Hashids from '../lib/hashids'

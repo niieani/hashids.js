@@ -35,7 +35,6 @@ module.exports = {
         'jest/no-jasmine-globals': 'error',
         'jest/no-jest-import': 'error',
         'jest/no-test-prefixes': 'error',
-        'jest/no-test-callback': 'error',
         'jest/no-test-return-statement': 'error',
         'jest/prefer-to-have-length': 'warn',
         'jest/prefer-spy-on': 'error',

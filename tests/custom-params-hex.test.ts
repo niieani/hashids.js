@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import Hashids from '../lib/hashids'
 
 const minLength = 30
@@ -27,7 +29,9 @@ describe.each([
   ],
   // bigint format:
   ...(typeof BigInt === 'function'
-    ? require('./bigint-test-cases').customParamsHex
+    ? (require('./bigint-test-cases').customParamsHex as Array<
+        [string, string]
+      >)
     : []),
 ] as [string, string | bigint][])(
   'encodeHex/decodeHex using default params',

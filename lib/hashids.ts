@@ -41,7 +41,9 @@ export default class Hashids {
 
     if (uniqueAlphabet.length < minAlphabetLength) {
       throw new Error(
-        `Hashids: alphabet must contain at least ${minAlphabetLength} unique characters, provided: ${uniqueAlphabet}`,
+        `Hashids: alphabet must contain at least ${minAlphabetLength} unique characters, provided: ${uniqueAlphabet.join(
+          '',
+        )}`,
       )
     }
 
@@ -164,7 +166,7 @@ export default class Hashids {
     return this.encode(numbers)
   }
 
-  public decodeHex(id: string) {
+  public decodeHex(id: string): string {
     return this.decode(id)
       .map((number) => number.toString(16).slice(1))
       .join('')
