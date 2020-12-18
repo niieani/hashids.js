@@ -53,7 +53,7 @@
     "prettier:write": "prettier --write lib/* tests*/*",
     "test": "jest",
     "coverage": "jest --coverage && cat coverage/lcov.info | coveralls",
-    "build:umd": "babel lib/hashids.ts --source-maps -o dist/hashids.js",
+    "build:umd": "babel lib/hashids.ts --source-maps -o dist/hashids.js && replace-in-files --string='global.Hashids = mod.exports;' --replacement='global.Hashids = mod.exports.default;' dist/hashids.js",
     "build:esm": "BABEL_MODULES=1 babel lib/hashids.ts --source-maps -o esm/index.js",
     "minify": "cd dist && terser hashids.js -o hashids.min.js --source-map \"url=hashids.min.js.map\" --compress --mangle",
     "build": "yarn run build:umd && yarn run build:esm && yarn run minify",
@@ -103,6 +103,7 @@
     "terser": "^4.6.3",
     "ts-node": "^8.6.2",
     "typescript": "^3.7.5"
+    "replace-in-files-cli": "^1.0.0",
   },
   "license": "MIT",
   "keywords": [
