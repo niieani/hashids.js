@@ -5,12 +5,11 @@ const _BigInt = typeof BigInt === 'function' ? BigInt : undefined
 
 describe('BigInt environment', () => {
   beforeAll(() => {
-    // @ts-ignore
+    // @ts-expect-error wrong output
     delete global.BigInt
   })
 
   afterAll(() => {
-    // @ts-ignore
     if (_BigInt) global.BigInt = _BigInt
   })
 

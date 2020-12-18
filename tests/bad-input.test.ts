@@ -11,7 +11,7 @@ describe('bad input', () => {
 
   test(`should throw an error when alphabet not a string`, () => {
     expect(() => {
-      // @ts-ignore
+      // @ts-expect-error wrong output
       void new Hashids('', 0, 7)
     }).toThrow(TypeError)
   })
@@ -48,7 +48,7 @@ describe('bad input', () => {
   })
 
   test(`should return an empty string when encoding a null`, () => {
-    // @ts-ignore
+    // @ts-expect-error wrong output
     const id = hashids.encode(null)
     expect(id).toEqual('')
   })
@@ -59,7 +59,7 @@ describe('bad input', () => {
   })
 
   test(`should return an empty string when encoding an undefined`, () => {
-    // @ts-ignore
+    // @ts-expect-error wrong output
     const id = hashids.encode(undefined)
     expect(id).toEqual('')
   })
@@ -70,7 +70,7 @@ describe('bad input', () => {
   })
 
   test(`should return an empty array when decoding nothing`, () => {
-    // @ts-ignore
+    // @ts-expect-error wrong output
     const numbers = hashids.decode()
     expect(numbers).toEqual([])
   })
