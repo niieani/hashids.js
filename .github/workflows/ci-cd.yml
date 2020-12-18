@@ -1,14 +1,18 @@
-name: CD
+name: CI/CD
 
 on:
   push:
     branches:
       - master
       - next
+  pull_request:
+    branches:
+      - '**'
 
 jobs:
   test:
     name: Test on node ${{ matrix.node }}
+    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -38,6 +42,7 @@ jobs:
     name: Publish package to NPM
     needs: test
     runs-on: ubuntu-latest
+    if: github.actor != 'github-actions[bot]' && github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/next')
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
