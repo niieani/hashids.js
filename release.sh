@@ -23,5 +23,4 @@ git commit -m "dist: build release" || true
 
 git push origin "HEAD:$BRANCH"
 
-# NPM_CONFIG_USERCONFIG is set by the GitHub action, we want to use the local .npmrc downloaded above ^
-NPM_CONFIG_USERCONFIG='' yarn semantic-release "$@"
+yarn semantic-release "$@"
