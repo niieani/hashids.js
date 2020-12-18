@@ -1,0 +1,61 @@
+name: Dependabot
+
+on:
+  push:
+    branches: [ dependabot/npm_and_yarn/** ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: (github.actor == 'dependabot[bot]' || github.actor == 'dependabot-preview[bot]')
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 2
+        persist-credentials: false # minimize exposure
+    - name: Use Node.js 12.x
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+    - name: Autofix lockfile
+      run: |
+        # change directory
+        # assuming Angular commit style (build: bump XXX from AAA to BBB in YYY)
+        # use $8 for default commit message style (Bump XXX from AAA to BBB in YYY)
+        cd .`git log -1 --pretty=%s | awk '{ print $9 }'`
+
+        # restore yarn.lock from the previous commit
+        git checkout HEAD^ -- yarn.lock
+
+        # install yarn-plugin-deduplicate
+        yarn plugin import https://raw.githubusercontent.com/eps1lon/yarn-plugin-deduplicate/latest/bin/%40yarnpkg/plugin-deduplicate.js
+
+        # if package.json was not updated, upgrade the dependency
+        # assuming Angular commit style (build: bump XXX from ...)
+        # use $2 for default commit message style (Bump XXX from ...)
+        git diff --name-only HEAD^ HEAD | grep -q 'package.json' || yarn up `git log -1 --pretty=%s | awk '{ print $3 }'`
+
+        # restore package.json from the last commit
+        git checkout HEAD -- package.json
+
+        yarn install
+
+        # deduplicate lockfile
+        yarn deduplicate
+      env:
+        YARN_ENABLE_SCRIPTS: 0 # disable postinstall scripts
+    - name: Config Git
+      run: |
+        # use personal access token to allow triggering new workflow
+        BASIC_AUTH=$(echo -n "x-access-token:${{ secrets.GH_TOKEN }}" | base64)
+        echo "::add-mask::$BASIC_AUTH"
+        git config --global user.name '${{ github.event.commits[0].author.name }}'
+        git config --global user.email '${{ github.event.commits[0].author.email }}'
+        git config --local http.$GITHUB_SERVER_URL/.extraheader "AUTHORIZATION: basic $BASIC_AUTH"
+    - name: Commit changes
+      run: |
+        cd .`git log -1 --pretty=%s | awk '{ print $9 }'` # ditto
+        git add yarn.lock .yarn/cache .pnp.* # only add yarn.lock if not using zero-installs
+        git commit -m "ci: Dependabot autofix"
+        git push
