@@ -23,7 +23,7 @@
   "bugs": {
     "url": "https://github.com/niieani/hashids.js/issues"
   },
-  "main": "esm/index.js",
+  "main": "cjs/index.js",
   "module": "esm/index.js",
   "exports": {
     ".": {
