@@ -12,12 +12,23 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node: [10, 12, 13]
+        node: [10, 12, 14]
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node }}
+      - id: find-yarn-cache-folder
+        name: Find Yarn's cache folder
+        run: echo "::set-output name=path::$(yarn config get cacheFolder)"
+      - name: Cache Yarn's cache folder
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.find-yarn-cache-folder.outputs.path }}
+          key: yarn-cache-folder-os-${{ runner.os }}-node-${{ env.node-version }}-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            yarn-cache-folder-os-${{ runner.os }}-node-${{ env.node-version }}-
+            yarn-cache-folder-os-${{ runner.os }}-
       - name: Install dependencies and test
         run: |
           yarn
@@ -28,13 +39,24 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
         with:
-          node-version: 12
+          node-version: 14
           registry-url: https://registry.npmjs.org/
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+      - id: find-yarn-cache-folder
+        name: Find Yarn's cache folder
+        run: echo "::set-output name=path::$(yarn config get cacheFolder)"
+      - name: Cache Yarn's cache folder
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.find-yarn-cache-folder.outputs.path }}
+          key: yarn-cache-folder-os-${{ runner.os }}-node-${{ env.node-version }}-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            yarn-cache-folder-os-${{ runner.os }}-node-${{ env.node-version }}-
+            yarn-cache-folder-os-${{ runner.os }}-
       - name: Build and release
         run: |
           yarn
