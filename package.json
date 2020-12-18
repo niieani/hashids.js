@@ -26,13 +26,13 @@
   "files": [
     "cjs",
     "esm",
-    "dist"
+    "dist",
+    "lib"
   ],
-  "main": "esm/index.js",
+  "main": "cjs/index.js",
   "module": "esm/index.js",
   "exports": {
     ".": {
-      "browser": "./dist/hashids.min.js",
       "import": "./esm/index.js",
       "require": "./cjs/index.js"
     },
