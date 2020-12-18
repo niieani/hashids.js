@@ -44,7 +44,8 @@
     },
     "./esm/": {
       "import": "./esm/"
-    }
+    },
+    "./package.json": "./package.json"
   },
   "scripts": {
     "lint": "eslint lib/* tests/*",
