@@ -51,7 +51,7 @@
     "lint": "eslint lib/* tests/*",
     "prettier:check": "prettier --check lib/* tests*/*",
     "prettier:write": "prettier --write lib/* tests*/*",
-    "test": "jest",
+    "test": "yarn prettier:check && yarn lint && yarn jest",
     "coverage": "jest --coverage && cat coverage/lcov.info | coveralls",
     "build:umd": "babel lib/hashids.ts --source-maps -o dist/hashids.js && replace-in-files --string='global.Hashids = mod.exports;' --replacement='global.Hashids = mod.exports.default;' dist/hashids.js",
     "build:esm": "BABEL_MODULES=1 babel lib/hashids.ts --source-maps -o esm/index.js",
@@ -59,6 +59,7 @@
     "build": "yarn run build:umd && yarn run build:esm && yarn run minify",
     "clean": "rm -rf coverage yarn-debug.log",
     "all": "yarn run lint && yarn run coverage && yarn run build && yarn run clean",
+    "release": "./release.sh",
     "semantic-release": "semantic-release",
     "benchmark": "yarn ts-node -O '{\"module\": \"commonjs\"}' -T tests/benchmark"
   },
