@@ -13,15 +13,15 @@ git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${G
 git config --global user.email "action@github.com"
 git config --global user.name "GitHub Action"
 
-./yarn prettier:write
+yarn prettier:write
 git add lib
 git commit -m "style: apply prettier" || true
 
-./yarn build
+yarn build
 git add .
 git commit -m "dist: build release" || true
 
 git push origin "HEAD:$BRANCH"
 
 # NPM_CONFIG_USERCONFIG is set by the GitHub action, we want to use the local .npmrc downloaded above ^
-NPM_CONFIG_USERCONFIG='' ./yarn semantic-release "$@"
+NPM_CONFIG_USERCONFIG='' yarn semantic-release "$@"
