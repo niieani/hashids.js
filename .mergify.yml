@@ -1,0 +1,8 @@
+pull_request_rules:
+  - name: Automatic merge for Dependabot pull requests
+    conditions:
+      - author~=^dependabot(|-preview)\[bot\]$
+      - check-success=Test on node 14
+    actions:
+      merge:
+        method: squash
