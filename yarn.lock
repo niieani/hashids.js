@@ -5006,12 +5006,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"find-versions@npm:^3.0.0, find-versions@npm:^3.2.0":
+"find-versions@npm:^3.2.0":
   version: 3.2.0
   resolution: "find-versions@npm:3.2.0"
   dependencies:
     semver-regex: ^2.0.0
   checksum: 2ddc16b4265184e2b7ab68bfd9d84835178fef4193abd957ebe328e0de98e8ca3b31e2a19201c1c8308e24786faa295aab46c0bc21fa89440e2a1bc8174987f0
+  languageName: node
+  linkType: hard
+
+"find-versions@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "find-versions@npm:4.0.0"
+  dependencies:
+    semver-regex: ^3.1.2
+  checksum: 05174128349e522f0746cc343a509f2ce1c8c765e24968ff2ac6f82fda4e4c680f5f71c6a781ce28406d19addc32a205116ac14ee83cb2e336635dd803f56cbd
   languageName: node
   linkType: hard
 
@@ -10308,9 +10317,9 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
-"semantic-release@npm:17.3.0, semantic-release@npm:^17.3.0":
-  version: 17.3.0
-  resolution: "semantic-release@npm:17.3.0"
+"semantic-release@npm:17.3.1, semantic-release@npm:^17.3.0":
+  version: 17.3.1
+  resolution: "semantic-release@npm:17.3.1"
   dependencies:
     "@semantic-release/commit-analyzer": ^8.0.0
     "@semantic-release/error": ^2.2.0
@@ -10323,7 +10332,7 @@ fsevents@~2.1.2:
     env-ci: ^5.0.0
     execa: ^4.0.0
     figures: ^3.0.0
-    find-versions: ^3.0.0
+    find-versions: ^4.0.0
     get-stream: ^5.0.0
     git-log-parser: ^1.2.0
     hook-std: ^2.0.0
@@ -10342,7 +10351,7 @@ fsevents@~2.1.2:
     yargs: ^15.0.1
   bin:
     semantic-release: bin/semantic-release.js
-  checksum: 06c63530f2bca6a1b23ce93a082366e7232f91aa9fed564c19f433e2f8ba52071c8d84eba33756780fa906649b449040d1f52cae1ba209e567e3c30ff4bfc9a3
+  checksum: 083c907f67a36eb35d0faa5b49b2dc8c5ba7e043260899c2545156ebef706c14f7a4644ae28026cc5f06a2b41696f81775754664893c1d4c2946d17be81a857b
   languageName: node
   linkType: hard
 
@@ -10375,6 +10384,13 @@ fsevents@~2.1.2:
   version: 2.0.0
   resolution: "semver-regex@npm:2.0.0"
   checksum: 9b96cc8bd559c1d46968b334ccc88115a2d9d2f7a2125d6838471114ed0c52057e77aae760fbe4932aee06687584733b32aed6d2c9654b2db33e383bfb8f26ce
+  languageName: node
+  linkType: hard
+
+"semver-regex@npm:^3.1.2":
+  version: 3.1.2
+  resolution: "semver-regex@npm:3.1.2"
+  checksum: 6a83740f3fc24379629be068e677c71c57e0d9df4977eb56d863f26a7830b85f14d9f1af71ca3a84df9ac70fcd9ce8821466064f5652ffa0dc343b50ded86698
   languageName: node
   linkType: hard
 
