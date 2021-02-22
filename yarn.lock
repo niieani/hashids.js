@@ -15,8 +15,8 @@ __metadata:
   linkType: hard
 
 "@babel/cli@npm:^7.12.10":
-  version: 7.12.16
-  resolution: "@babel/cli@npm:7.12.16"
+  version: 7.12.17
+  resolution: "@babel/cli@npm:7.12.17"
   dependencies:
     "@nicolo-ribaudo/chokidar-2": 2.1.8-no-fsevents
     chokidar: ^3.4.0
@@ -38,7 +38,7 @@ __metadata:
   bin:
     babel: ./bin/babel.js
     babel-external-helpers: ./bin/babel-external-helpers.js
-  checksum: b58e2581b8671daf437beac97c290261913bf4b21115b7bcc1f1fcd3feaf5ad16cb135a02ba53e9380d1072aa8f691894d9bb03279f1c14ee0ef0a422d0c969e
+  checksum: edafe657ec7a542d602735246ffa8634159e142294cb0f9b97b9e536967129431ebb2bbe60b8f0013a03866c18532e1ed2b09522e2b0590e3c40daa9cacf0386
   languageName: node
   linkType: hard
 
