@@ -30,6 +30,7 @@
     "lib"
   ],
   "main": "cjs/index.js",
+  "browser": "dist/hashids.min.js",
   "module": "esm/index.js",
   "exports": {
     ".": {
