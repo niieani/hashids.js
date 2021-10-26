@@ -55,7 +55,20 @@ Note: When using Node that supports [conditional exports](https://nodejs.org/api
 
 #### Use in **TypeScript**:
 
-Import or require based on the environment (see above).
+Import or require based on the environment (see above). If you want to use the CommonJS module syntax (`require`), you'll need to install the Node.js types from the `DefinitelyTyped` repository.
+
+```
+npm install @types/node
+```
+
+If you want to use the ESM syntax (`import`), you will need to include the following options in your `tsconfig.json`.
+
+```json
+{
+  "allowSyntheticDefaultImports": true,
+  "esModuleInterop": true
+}
+```
 
 If you get errors stating: `Cannot find name 'BigInt'`, add [`"esnext.bigint"`](https://github.com/microsoft/TypeScript/blob/master/src/lib/esnext.bigint.d.ts) or [`"esnext"`](https://github.com/microsoft/TypeScript/blob/master/src/lib/esnext.d.ts) to your `tsconfig.json` file, under `"lib"`:
 
