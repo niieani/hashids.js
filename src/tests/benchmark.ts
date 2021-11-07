@@ -1,4 +1,4 @@
-/* eslint-disable camelcase,import/no-unresolved */
+/* eslint-disable camelcase */
 import benchmark from 'nodemark'
 import requireFromWeb from 'require-from-web'
 import Hashids from '../hashids'
@@ -16,8 +16,8 @@ const benchmarkVersion = (Hashids: HashidsType, version: string) => {
   const decoding = benchmark(() => hashids.decode(encoded))
   const encoding = benchmark(() => hashids.encode(decoded))
 
-  console.log(version, '\tdecoding\t', decoding)
-  console.log(version, '\tencoding\t', encoding)
+  console.log(version, '\t\tdecoding\t', decoding)
+  console.log(version, '\t\tencoding\t', encoding)
 }
 
 async function run() {
@@ -28,13 +28,13 @@ async function run() {
     default: HashidsType
   }>('https://unpkg.com/hashids@2.1.0/dist/hashids.js')
 
-  // eslint-disable-next-line import/extensions
-  const Hashids_transpiled = require('../cjs')
+  // eslint-disable-next-line import/no-unresolved
+  const Hashids_built: HashidsType = require('hashids')
 
   benchmarkVersion(Hashids_v1_2_2, '1.2.2')
   benchmarkVersion(Hashids_v2_1_0, '2.1.0')
-  benchmarkVersion(Hashids_transpiled, 'transpiled')
-  benchmarkVersion(Hashids, 'node')
+  benchmarkVersion(Hashids_built, 'built')
+  benchmarkVersion(Hashids, 'source')
 }
 
 void run()
