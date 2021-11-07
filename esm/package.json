@@ -1,5 +1,5 @@
 {
   "name": "hashids-esm",
   "type": "module",
-  "main": "index.js"
+  "main": "hashids.js"
 }

@@ -1,114 +1,6 @@
 {
-  "author": "hashids.org <npm@invent.life> (https://github.com/hashids)",
   "name": "hashids",
   "description": "Generate YouTube-like ids from numbers. Use Hashids when you do not want to expose your database ids to the user.",
-  "contributors": [
-    {
-      "name": "Ivan Akimov",
-      "email": "ivan@barreleye.com",
-      "url": "https://twitter.com/IvanAkimov"
-    },
-    {
-      "name": "Bazyli Brzóska",
-      "email": "npm@invent.life",
-      "url": "https://twitter.com/niieani"
-    }
-  ],
-  "version": "0.0.0-development",
-  "homepage": "http://hashids.org/javascript",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/niieani/hashids.js.git"
-  },
-  "bugs": {
-    "url": "https://github.com/niieani/hashids.js/issues"
-  },
-  "files": [
-    "cjs",
-    "esm",
-    "dist",
-    "lib"
-  ],
-  "main": "cjs/index.js",
-  "module": "esm/index.js",
-  "exports": {
-    ".": {
-      "import": "./esm/index.js",
-      "require": "./cjs/index.js"
-    },
-    "./cjs": {
-      "require": "./cjs/index.js"
-    },
-    "./cjs/": {
-      "require": "./cjs/"
-    },
-    "./esm/": {
-      "import": "./esm/"
-    },
-    "./package.json": "./package.json"
-  },
-  "scripts": {
-    "lint": "eslint lib/* tests/*",
-    "prettier:check": "prettier --check lib/* tests*/*",
-    "prettier:write": "prettier --write lib/* tests*/*",
-    "test": "yarn prettier:check && yarn lint && yarn jest",
-    "coverage": "jest --coverage && cat coverage/lcov.info | coveralls",
-    "build:umd": "babel lib/hashids.ts --source-maps -o dist/hashids.js && replace-in-files --string='global.Hashids = mod.exports;' --replacement='global.Hashids = mod.exports.default;' dist/hashids.js",
-    "build:esm": "BABEL_MODULES=1 babel lib/hashids.ts --source-maps -o esm/index.js",
-    "minify": "cd dist && terser hashids.js -o hashids.min.js --source-map \"url=hashids.min.js.map\" --compress --mangle",
-    "build": "yarn run build:umd && yarn run build:esm && yarn run minify",
-    "clean": "rm -rf coverage yarn-debug.log",
-    "all": "yarn run lint && yarn run coverage && yarn run build && yarn run clean",
-    "release": "./release.sh",
-    "semantic-release": "semantic-release",
-    "benchmark": "yarn ts-node -O '{\"module\": \"commonjs\"}' -T tests/benchmark"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "yarn run lint && yarn run test"
-    }
-  },
-  "browserslist": [
-    "last 2 version",
-    "> 0.5%",
-    "maintained node versions",
-    "not dead"
-  ],
-  "devDependencies": {
-    "@babel/cli": "^7.13.10",
-    "@babel/core": "^7.13.10",
-    "@babel/helper-plugin-utils": "^7.13.0",
-    "@babel/plugin-syntax-bigint": "^7.8.3",
-    "@babel/plugin-transform-destructuring": "^7.13.0",
-    "@babel/plugin-transform-modules-umd": "^7.13.0",
-    "@babel/plugin-transform-spread": "^7.13.0",
-    "@babel/preset-env": "^7.13.10",
-    "@babel/preset-typescript": "^7.13.0",
-    "@babel/register": "^7.13.8",
-    "@types/jest": "^26.0.21",
-    "@types/node": "^14.14.35",
-    "@typescript-eslint/eslint-plugin": "^4.18.0",
-    "@typescript-eslint/parser": "^4.18.0",
-    "@yarnpkg/pnpify": "^2.4.0",
-    "coveralls": "^3.1.0",
-    "eslint": "^7.22.0",
-    "eslint-config-prettier": "^8.1.0",
-    "eslint-import-resolver-node": "^0.3.4",
-    "eslint-plugin-eslint-comments": "^3.2.0",
-    "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-jest": "^24.3.2",
-    "husky": "^5.1.3",
-    "jest": "^26.6.3",
-    "nodemark": "^0.3.0",
-    "prettier": "^2.2.1",
-    "replace-in-files-cli": "^1.0.0",
-    "require-from-web": "^1.2.0",
-    "semantic-release": "^17.4.2",
-    "terser": "^5.6.1",
-    "ts-node": "^9.1.1",
-    "typescript": "^4.2.3"
-  },
-  "license": "MIT",
   "keywords": [
     "hashids",
     "hashid",
@@ -122,17 +14,104 @@
     "encrypt",
     "decrypt"
   ],
-  "prettier": {
-    "semi": false,
-    "tabWidth": 2,
-    "singleQuote": true,
-    "trailingComma": "all",
-    "arrowParens": "always",
-    "bracketSpacing": false
+  "homepage": "http://hashids.org/javascript",
+  "bugs": {
+    "url": "https://github.com/niieani/hashids.js/issues"
   },
-  "jest": {
-    "collectCoverageFrom": [
-      "lib/**/*.ts"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/niieani/hashids.js.git"
+  },
+  "license": "MIT",
+  "author": "hashids.org <npm@invent.life> (https://github.com/hashids)",
+  "contributors": [
+    {
+      "name": "Ivan Akimov",
+      "email": "ivan@barreleye.com",
+      "url": "https://twitter.com/IvanAkimov"
+    },
+    {
+      "name": "Bazyli Brzóska",
+      "email": "npm@invent.life",
+      "url": "https://twitter.com/niieani"
+    }
+  ],
+  "exports": {
+    ".": {
+      "import": "./esm/hashids.js",
+      "require": "./cjs/index.js"
+    },
+    "./*": {
+      "import": "./esm/*.js",
+      "require": "./cjs/*.js"
+    },
+    "./cjs": {
+      "require": "./cjs/index.js"
+    },
+    "./cjs/*": {
+      "require": "./cjs/*.js"
+    },
+    "./esm/*": {
+      "import": "./esm/*.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "main": "cjs/index.js",
+  "unpkg": "dist/hashids.js",
+  "module": "esm/hashids.js",
+  "source": "src/hashids.ts",
+  "files": [
+    "cjs",
+    "esm",
+    "dist",
+    "lib"
+  ],
+  "scripts": {
+    "benchmark": "yarn ts-node -O '{\"module\": \"commonjs\"}' -T tests/benchmark",
+    "postinstallDev": "yarn prepare",
+    "prepare": "rrun husky install .config/husky && yarn beemo create-config",
+    "build": "yarn build:cjs && yarn build:esm && yarn build:umd",
+    "release": "beemo run-script release",
+    "build:cjs": "yarn rrun tsc --outDir cjs --module commonjs --target es6 -p tsconfig.build.json",
+    "build:esm": "yarn rrun tsc --outDir esm --module esnext --target es6 -p tsconfig.build.json",
+    "build:umd": "beemo webpack --entry=./src/hashids.ts --env 'outDir=dist' --env 'moduleTarget=umd' --env 'engineTarget=web' --env 'codeTarget=es6' --env 'name=Hashids' --env 'export=default' --env 'filename=hashids.js'",
+    "clean": "git clean -dfX --exclude=node_modules src && beemo typescript:sync-project-refs",
+    "test:lint": "rrun eslint 'src/**'",
+    "test:code": "beemo jest",
+    "test:types": "yarn rrun tsc --noEmit",
+    "test:format": "yarn rrun prettier --check \"./{src,tests}/**/*[!.d].{.js,jsx,ts,tsx,json,md}\"",
+    "test": "yarn test:format && yarn test:types && yarn test:lint && yarn test:code",
+    "format": "yarn rrun prettier --write \"./{src,tests}/**/!(*.d).{.js,jsx,ts,tsx,json,md}\""
+  },
+  "browserslist": [
+    "last 2 version",
+    "> 0.5%",
+    "maintained node versions",
+    "not dead"
+  ],
+  "devDependencies": {
+    "@niieani/scaffold": "^1.3.4"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "release": {
+    "branches": [
+      "+([0-9])?(.{+([0-9]),x}).x",
+      "master",
+      {
+        "name": "main",
+        "channel": false
+      },
+      "next",
+      {
+        "name": "beta",
+        "prerelease": true
+      },
+      {
+        "name": "alpha",
+        "prerelease": true
+      }
     ]
   }
 }

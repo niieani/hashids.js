@@ -1,1 +1,1 @@
-module.exports = require('../dist/hashids.js').default
+module.exports = require('./hashids.js').default

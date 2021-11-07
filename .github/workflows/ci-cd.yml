@@ -1,9 +1,10 @@
-name: CI
+name: Continuous Integration
 
 on:
   push:
     branches:
       - master
+      - main
       - next
   pull_request:
     branches:
@@ -16,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node: [10, 12, 14]
+        node: [14, 16]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
@@ -26,7 +27,7 @@ jobs:
         name: Find Yarn's cache folder
         run: echo "::set-output name=path::$(yarn config get cacheFolder)"
       - name: Cache Yarn's cache folder
-        uses: actions/cache@v2.1.4
+        uses: actions/cache@v2.1.6
         with:
           path: ${{ steps.find-yarn-cache-folder.outputs.path }}
           key: yarn-cache-folder-os-${{ runner.os }}-node-${{ env.node-version }}-${{ hashFiles('yarn.lock') }}
@@ -35,27 +36,25 @@ jobs:
             yarn-cache-folder-os-${{ runner.os }}-
       - name: Install dependencies and test
         run: |
-          yarn
+          yarn install --immutable
+          yarn build
           yarn test
 
   publish:
     name: Publish package to NPM
     needs: test
     runs-on: ubuntu-latest
-    if: github.actor != 'github-actions[bot]' && github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/next')
+    if: github.actor != 'github-actions[bot]' && github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/next')
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
-          node-version: 14
-          registry-url: https://registry.npmjs.org/
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+          node-version: 16
       - id: find-yarn-cache-folder
         name: Find Yarn's cache folder
         run: echo "::set-output name=path::$(yarn config get cacheFolder)"
       - name: Cache Yarn's cache folder
-        uses: actions/cache@v2.1.4
+        uses: actions/cache@v2.1.6
         with:
           path: ${{ steps.find-yarn-cache-folder.outputs.path }}
           key: yarn-cache-folder-os-${{ runner.os }}-node-${{ env.node-version }}-${{ hashFiles('yarn.lock') }}
@@ -64,8 +63,9 @@ jobs:
             yarn-cache-folder-os-${{ runner.os }}-
       - name: Build and release
         run: |
-          yarn
-          ./release.sh
+          yarn install --immutable
+          yarn build
+          yarn release
         env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
-          GH_TOKEN: ${{secrets.GH_TOKEN}}
+          NPM_TOKEN: ${{secrets.NPM_TOKEN}}
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}

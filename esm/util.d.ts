@@ -1,0 +1,13 @@
+export declare type NumberLike = bigint | number;
+export declare const keepUnique: <T>(content: Iterable<T>) => T[];
+export declare const withoutChars: (chars: string[], charsToExclude: string[]) => string[];
+export declare const onlyChars: (chars: string[], keepChars: string[]) => string[];
+export declare const isIntegerNumber: (n: NumberLike | string) => boolean;
+export declare const isPositiveAndFinite: (n: NumberLike) => boolean;
+export declare function shuffle(alphabetChars: string[], saltChars: string[]): string[];
+export declare const toAlphabet: (input: NumberLike, alphabetChars: string[]) => string[];
+export declare const fromAlphabet: (inputChars: string[], alphabetChars: string[]) => NumberLike;
+export declare const safeParseInt10: (str: string) => number;
+export declare const splitAtIntervalAndMap: <T>(str: string, nth: number, map: (n: string) => T) => T[];
+export declare const makeAnyOfCharsRegExp: (chars: string[]) => RegExp;
+export declare const makeAtLeastSomeCharRegExp: (chars: string[]) => RegExp;

@@ -1,0 +1,4 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+yarn rrun commitlint --config "node_modules/@niieani/scaffold/src/configs/shared/commitlint.config.js" --edit "$1"
