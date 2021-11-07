@@ -1,4 +1,4 @@
-import { fromAlphabet, isIntegerNumber, isPositiveAndFinite, keepUnique, makeAnyOfCharsRegExp, makeAtLeastSomeCharRegExp, onlyChars, safeParseInt10, shuffle, splitAtIntervalAndMap, toAlphabet, withoutChars, } from './util';
+import { fromAlphabet, isIntegerNumber, isPositiveAndFinite, keepUnique, makeAnyOfCharsRegExp, makeAtLeastSomeCharRegExp, onlyChars, safeParseInt10, shuffle, splitAtIntervalAndMap, toAlphabet, withoutChars, } from './util.js';
 const MIN_ALPHABET_LENGTH = 16;
 const SEPARATOR_DIV = 3.5;
 const GUARD_DIV = 12;

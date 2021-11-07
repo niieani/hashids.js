@@ -1,4 +1,4 @@
-import Hashids from '../../esm/index.js'
+import Hashids from 'hashids'
 
 if (typeof Hashids !== 'function') {
   throw new Error('Hashids is not a function')

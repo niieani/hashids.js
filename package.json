@@ -73,7 +73,7 @@
     "build": "yarn build:cjs && yarn build:esm && yarn build:umd",
     "release": "beemo run-script release",
     "build:cjs": "yarn rrun tsc --outDir cjs --module commonjs --target es6 -p tsconfig.build.json",
-    "build:esm": "yarn rrun tsc --outDir esm --module esnext --target es6 -p tsconfig.build.json",
+    "build:esm": "yarn rrun tsc --outDir esm --module esnext --target es6 -p tsconfig.build.json && ./add-extension.sh",
     "build:umd": "beemo webpack --entry=./src/hashids.ts --env 'outDir=dist' --env 'moduleTarget=umd' --env 'engineTarget=web' --env 'codeTarget=es6' --env 'name=Hashids' --env 'export=default' --env 'filename=hashids.js'",
     "clean": "git clean -dfX --exclude=node_modules src && beemo typescript:sync-project-refs",
     "test:lint": "rrun eslint 'src/**'",
