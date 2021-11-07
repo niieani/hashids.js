@@ -19,7 +19,7 @@ Install Hashids via:
 yarn add hashids
 ```
 
-(or just use the code at `dist/hashids.js`)
+(or just directly use the code at `dist/hashids.js`)
 
 #### Use in **ESM-compatible** environments (webpack, modern browsers)
 
@@ -39,9 +39,9 @@ const hashids = new Hashids()
 console.log(hashids.encode(1))
 ```
 
-Note: When using Node that supports [conditional exports](https://nodejs.org/api/esm.html#esm_conditional_exports), `require('hashids')` will also work.
+Note: When using Node that supports [conditional exports](https://nodejs.org/api/esm.html#esm_conditional_exports), `require('hashids')` (version >=13) will also work.
 
-#### Use as global in the browser (wherever **ES5** is supported; 5KB)
+#### Use as global in the browser (wherever **ES6** is supported; 5KB)
 
 ```javascript
 <script type="text/javascript" src="hashids.min.js"></script>
@@ -55,13 +55,13 @@ Note: When using Node that supports [conditional exports](https://nodejs.org/api
 
 #### Use in **TypeScript**:
 
-Import or require based on the environment (see above). If you want to use the CommonJS module syntax (`require`), you'll need to install the Node.js types from the `DefinitelyTyped` repository.
+`import` or `require`, based on the environment (see above). If you want to use the CommonJS module syntax (`require`), you'll need to install the Node.js types from the `DefinitelyTyped` repository.
 
 ```
 npm install @types/node
 ```
 
-If you want to use the ESM syntax (`import`), you will need to include the following options in your `tsconfig.json`.
+If you want to use the ESM syntax (`import Hashids from 'hashids'`), you will need to include the following options in your `tsconfig.json`.
 
 ```json
 {
@@ -70,9 +70,11 @@ If you want to use the ESM syntax (`import`), you will need to include the follo
 }
 ```
 
+The above is not required if you import the CommonJS version directly: `import Hashids from 'hashids/cjs'`.
+
 If you get errors stating: `Cannot find name 'BigInt'`, add [`"esnext.bigint"`](https://github.com/microsoft/TypeScript/blob/master/src/lib/esnext.bigint.d.ts) or [`"esnext"`](https://github.com/microsoft/TypeScript/blob/master/src/lib/esnext.d.ts) to your `tsconfig.json` file, under `"lib"`:
 
-```
+```json
 {
   "compilerOptions": {
     ...
@@ -83,6 +85,8 @@ If you get errors stating: `Cannot find name 'BigInt'`, add [`"esnext.bigint"`](
   }
 }
 ```
+
+Note that your environment doesn't actually have to support `BigInt` for hashids to function.
 
 ## Quick example
 
