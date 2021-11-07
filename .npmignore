@@ -1,0 +1,6 @@
+**/tests
+**/tests-mjs
+.vscode
+.github
+.config
+.yarn

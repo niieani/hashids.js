@@ -1,0 +1,25 @@
+{
+  "extends": [
+    "config:base",
+    ":ignoreUnstable",
+    ":combinePatchMinorReleases",
+    ":renovatePrefix",
+    ":semanticCommits",
+    ":rebaseStalePrs",
+    ":prNotPending",
+    ":semanticPrefixFixDepsChoreOthers",
+    ":updateNotScheduled",
+    ":automergeDigest",
+    ":automergePatch",
+    ":automergeMinor",
+    ":automergeRequireAllStatusChecks",
+    ":maintainLockFilesWeekly",
+    ":respectLatest",
+    ":updateNotScheduled",
+    "schedule:earlyMondays"
+  ],
+  "prConcurrentLimit": 5,
+	"pin": false,
+  "rangeStrategy": "bump",
+  "ignoreDeps": []
+}

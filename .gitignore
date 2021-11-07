@@ -1,12 +1,47 @@
-node_modules
+.vscode
+.eslintignore
+.eslintrc.js
+.prettierignore
+.editorconfig
+tsconfig.json
+babel.config.js
+jest.config.js
+prettier.config.js
+vite.config.ts
+webpack.config.js
+*.tsbuildinfo
+
+/.yarn/*
+
+!/.yarn/patches
+!/.yarn/plugins
+!/.yarn/releases
+!/.yarn/sdks
+
+# Swap the comments on the following lines if you wish to use zero-installs
+# Documentation here: https://yarnpkg.com/features/zero-installs
+# !/.yarn/cache
+/.pnp.*
+
+# Logs
+logs/
+*.log
+
+# Cache
+.eslintcache
+.idea
+.npm
+.vscode
+.yarnclean
+
+# Directories
+coverage/
+dts/
+mjs/
+node_modules/
+
+# Custom
+*.min.js
+*.map
+
 .DS_Store
-npm-debug.log
-yarn-error.log
-.nyc_output
-coverage
-/.idea
-.yarn/cache
-.yarn/unplugged
-.yarn/build-state.yml
-.yarn/install-state.gz
-.pnp.js

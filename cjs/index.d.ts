@@ -1,3 +1,2 @@
-import Hashids from '../lib/hashids'
-
+import Hashids from './hashids'
 export = Hashids
