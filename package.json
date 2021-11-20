@@ -64,7 +64,8 @@
     "cjs",
     "esm",
     "dist",
-    "lib"
+    "lib",
+    "src"
   ],
   "scripts": {
     "benchmark": "yarn ts-node -O '{\"module\": \"commonjs\"}' -T src/tests/benchmark",
