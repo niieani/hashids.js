@@ -20,7 +20,7 @@ jobs:
         node: [14, 16]
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v3.1.0
         with:
           node-version: ${{ matrix.node }}
       - id: find-yarn-cache-folder
@@ -47,7 +47,7 @@ jobs:
     if: github.actor != 'github-actions[bot]' && github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/next')
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v3.1.0
         with:
           node-version: 16
       - id: find-yarn-cache-folder
