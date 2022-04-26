@@ -43,7 +43,7 @@ Note: When using Node that supports [conditional exports](https://nodejs.org/api
 
 #### Use as global in the browser (wherever **ES6** is supported; 5KB)
 
-```javascript
+```html
 <script type="text/javascript" src="hashids.min.js"></script>
 <script type="text/javascript">
 
