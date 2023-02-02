@@ -1,4 +1,4 @@
-import type { NumberLike } from './util';
+import type { NumberLike } from './util.js';
 export default class Hashids {
     private minLength;
     private alphabet;
