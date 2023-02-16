@@ -17,23 +17,13 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node: [14, 16]
+        node: [16]
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3.4.1
+      - uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node }}
-      - id: find-yarn-cache-folder
-        name: Find Yarn's cache folder
-        run: echo "::set-output name=path::$(yarn config get cacheFolder)"
-      - name: Cache Yarn's cache folder
-        uses: actions/cache@v3.0.5
-        with:
-          path: ${{ steps.find-yarn-cache-folder.outputs.path }}
-          key: yarn-cache-folder-os-${{ runner.os }}-node-${{ env.node-version }}-${{ hashFiles('yarn.lock') }}
-          restore-keys: |
-            yarn-cache-folder-os-${{ runner.os }}-node-${{ env.node-version }}-
-            yarn-cache-folder-os-${{ runner.os }}-
+          cache: 'yarn'
       - name: Install dependencies and test
         run: |
           yarn install --immutable
@@ -47,20 +37,10 @@ jobs:
     if: github.actor != 'github-actions[bot]' && github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/next')
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3.4.1
+      - uses: actions/setup-node@v3
         with:
           node-version: 16
-      - id: find-yarn-cache-folder
-        name: Find Yarn's cache folder
-        run: echo "::set-output name=path::$(yarn config get cacheFolder)"
-      - name: Cache Yarn's cache folder
-        uses: actions/cache@v3.0.5
-        with:
-          path: ${{ steps.find-yarn-cache-folder.outputs.path }}
-          key: yarn-cache-folder-os-${{ runner.os }}-node-${{ env.node-version }}-${{ hashFiles('yarn.lock') }}
-          restore-keys: |
-            yarn-cache-folder-os-${{ runner.os }}-node-${{ env.node-version }}-
-            yarn-cache-folder-os-${{ runner.os }}-
+          cache: 'yarn'
       - name: Build and release
         run: |
           yarn install --immutable
