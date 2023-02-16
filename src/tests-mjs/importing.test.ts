@@ -20,6 +20,7 @@ describeIfEsm('importing', () => {
     })
 
     p.stderr.on('data', (d) => {
+      // eslint-disable-next-line jest/no-conditional-in-test
       if (!d.toString().includes('ExperimentalWarning:')) {
         console.log(d.toString())
       }

@@ -65,7 +65,7 @@ declare module 'nodemark' {
       durationMillis?: number,
     ): BenchmarkResult
     (
-      subject: (callback: (...args: Array<unknown>) => void) => any,
+      subject: (callback: (...args: unknown[]) => void) => any,
       setup?: () => any,
       durationMillis?: number,
     ): Promise<BenchmarkResult>

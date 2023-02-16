@@ -26,49 +26,49 @@ describe('bad input', () => {
 
   it(`should return an empty string when encoding nothing`, () => {
     const id = hashids.encode()
-    expect(id).toEqual('')
+    expect(id).toBe('')
   })
 
   it(`should return an empty string when encoding an empty array`, () => {
     const id = hashids.encode([])
-    expect(id).toEqual('')
+    expect(id).toBe('')
   })
 
   it(`should return an empty string when encoding a negative number`, () => {
     const id = hashids.encode(-1)
-    expect(id).toEqual('')
+    expect(id).toBe('')
   })
 
   it(`should return an empty string when encoding a string with non-numeric characters`, () => {
-    expect(hashids.encode('6B')).toEqual('')
-    expect(hashids.encode('123a')).toEqual('')
+    expect(hashids.encode('6B')).toBe('')
+    expect(hashids.encode('123a')).toBe('')
   })
 
   it(`should return an empty string when encoding infinity`, () => {
     const id = hashids.encode(Number.POSITIVE_INFINITY)
-    expect(id).toEqual('')
+    expect(id).toBe('')
   })
 
   it(`should return an empty string when encoding a null`, () => {
     // @ts-expect-error wrong output
     const id = hashids.encode(null)
-    expect(id).toEqual('')
+    expect(id).toBe('')
   })
 
   it(`should return an empty string when encoding a NaN`, () => {
     const id = hashids.encode(Number.NaN)
-    expect(id).toEqual('')
+    expect(id).toBe('')
   })
 
   it(`should return an empty string when encoding an undefined`, () => {
     // @ts-expect-error wrong output
     const id = hashids.encode(undefined)
-    expect(id).toEqual('')
+    expect(id).toBe('')
   })
 
   it(`should return an empty string when encoding an array with non-numeric input`, () => {
     const id = hashids.encode(['z'])
-    expect(id).toEqual('')
+    expect(id).toBe('')
   })
 
   it(`should return an empty array when decoding nothing`, () => {
@@ -84,7 +84,7 @@ describe('bad input', () => {
 
   it(`should return an empty string when encoding non-numeric input`, () => {
     const id = hashids.encode('z')
-    expect(id).toEqual('')
+    expect(id).toBe('')
   })
 
   it(`should return an empty array when decoding invalid id`, () => {
@@ -94,12 +94,12 @@ describe('bad input', () => {
 
   it(`should return an empty string when encoding non-hex input`, () => {
     const id = hashids.encodeHex('z')
-    expect(id).toEqual('')
+    expect(id).toBe('')
   })
 
   it(`should return an empty string when hex-decoding invalid id`, () => {
     const hex = hashids.decodeHex('f')
-    expect(hex).toEqual('')
+    expect(hex).toBe('')
   })
 
   // reproduction from https://github.com/niieani/hashids.js/issues/126

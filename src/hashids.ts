@@ -205,7 +205,7 @@ export default class Hashids {
       0,
     )
 
-    let ret: string[] = [alphabet[numbersIdInt % alphabet.length]]
+    let ret: string[] = [alphabet[numbersIdInt % alphabet.length]!]
     const lottery = [...ret]
 
     const { seps } = this
@@ -220,24 +220,24 @@ export default class Hashids {
       ret.push(...last)
 
       if (i + 1 < numbers.length) {
-        const charCode = last[0].codePointAt(0)! + i
+        const charCode = last[0]!.codePointAt(0)! + i
         const extraNumber =
           typeof number === 'bigint'
             ? Number(number % BigInt(charCode))
             : number % charCode
-        ret.push(seps[extraNumber % seps.length])
+        ret.push(seps[extraNumber % seps.length]!)
       }
     })
 
     if (ret.length < this.minLength) {
       const prefixGuardIndex =
-        (numbersIdInt + ret[0].codePointAt(0)!) % guards.length
-      ret.unshift(guards[prefixGuardIndex])
+        (numbersIdInt + ret[0]!.codePointAt(0)!) % guards.length
+      ret.unshift(guards[prefixGuardIndex]!)
 
       if (ret.length < this.minLength) {
         const suffixGuardIndex =
-          (numbersIdInt + ret[2].codePointAt(0)!) % guards.length
-        ret.push(guards[suffixGuardIndex])
+          (numbersIdInt + ret[2]!.codePointAt(0)!) % guards.length
+        ret.push(guards[suffixGuardIndex]!)
       }
     }
 
@@ -269,7 +269,7 @@ export default class Hashids {
     const splitIndex =
       idGuardsArray.length === 3 || idGuardsArray.length === 2 ? 1 : 0
 
-    const idBreakdown = idGuardsArray[splitIndex]
+    const idBreakdown = idGuardsArray[splitIndex]!
     if (idBreakdown.length === 0) return []
 
     const lotteryChar = idBreakdown[Symbol.iterator]().next().value as string

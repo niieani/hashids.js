@@ -33,12 +33,12 @@ export function shuffle(
   for (let i = transformed.length - 1, v = 0, p = 0; i > 0; i--, v++) {
     v %= saltChars.length
     // eslint-disable-next-line no-multi-assign
-    p += integer = saltChars[v].codePointAt(0)!
+    p += integer = saltChars[v]!.codePointAt(0)!
     const j = (integer + v + p) % i
 
     // swap characters at positions i and j
-    const a = transformed[i]
-    const b = transformed[j]
+    const a = transformed[i]!
+    const b = transformed[j]!
     transformed[j] = a
     transformed[i] = b
   }
@@ -56,12 +56,12 @@ export const toAlphabet = (
   if (typeof value === 'bigint') {
     const alphabetLength = BigInt(alphabetChars.length)
     do {
-      id.unshift(alphabetChars[Number(value % alphabetLength)])
+      id.unshift(alphabetChars[Number(value % alphabetLength)]!)
       value /= alphabetLength
     } while (value > BigInt(0))
   } else {
     do {
-      id.unshift(alphabetChars[value % alphabetChars.length])
+      id.unshift(alphabetChars[value % alphabetChars.length]!)
       value = Math.floor(value / alphabetChars.length)
     } while (value > 0)
   }

@@ -30,6 +30,6 @@ describe('min length', () => {
   })
 
   it(`should work when 1000`, () => {
-    testMinLength(1000)
+    testMinLength(1_000)
   })
 })
