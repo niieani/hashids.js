@@ -92,13 +92,12 @@ export const fromAlphabet = (
     if (isSafeValue) {
       return value
     }
-    if (typeof BigInt === 'function') {
-      return BigInt(carry) * BigInt(alphabetChars.length) + BigInt(index)
-    }
-    // we do not have support for BigInt:
-    throw new Error(
+
+    throwIfBigIntNotAvailable(
       `Unable to decode the provided string, due to lack of support for BigInt numbers in the current environment`,
     )
+
+    return BigInt(carry) * BigInt(alphabetChars.length) + BigInt(index)
   }, 0)
 
 const safeToParseNumberRegExp = /^\+?\d+$/
@@ -137,3 +136,11 @@ export const makeAtLeastSomeCharRegExp = (chars: string[]) =>
 
 const escapeRegExp = (text: string) =>
   text.replace(/[\s#$()*+,.?[\\\]^{|}-]/g, '\\$&')
+
+const throwIfBigIntNotAvailable = (
+  errorMessage: string = 'BigInt is not available in this environment',
+) => {
+  if (typeof BigInt !== 'function') {
+    throw new TypeError(errorMessage)
+  }
+}
