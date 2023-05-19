@@ -102,8 +102,23 @@ export const fromAlphabet = (
 
 const safeToParseNumberRegExp = /^\+?\d+$/
 
-export const safeParseInt10 = (str: string) =>
-  safeToParseNumberRegExp.test(str) ? Number.parseInt(str, 10) : Number.NaN
+export const safeParseInt10 = (str: string) => {
+  if (!safeToParseNumberRegExp.test(str)) {
+    return Number.NaN
+  }
+
+  const int10 = Number.parseInt(str, 10)
+
+  if (Number.isSafeInteger(int10)) {
+    return int10
+  }
+
+  throwIfBigIntNotAvailable(
+    'Unable to encode the provided BigInt string without loss of information due to lack of support for BigInt type in the current environment',
+  )
+
+  return BigInt(str)
+}
 
 export const splitAtIntervalAndMap = <T>(
   str: string,
