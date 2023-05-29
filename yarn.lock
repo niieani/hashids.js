@@ -2592,9 +2592,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@niieani/scaffold@npm:^1.7.0":
-  version: 1.7.0
-  resolution: "@niieani/scaffold@npm:1.7.0"
+"@niieani/scaffold@npm:^1.7.1":
+  version: 1.7.1
+  resolution: "@niieani/scaffold@npm:1.7.1"
   dependencies:
     "@babel/core": ^7.21.8
     "@babel/preset-env": ^7.21.5
@@ -2638,7 +2638,7 @@ __metadata:
   bin:
     beemo: bin/beemo.js
     rrun: bin/rrun.js
-  checksum: 3414609b479e2e12bbdb1f33b04374e98e89f9613479fc80062b59732325d43b26bf5bf41cdd47972355ad3aef4f16334c42b6e61300e94d2b2bfb3c83501123
+  checksum: adc3df54e2dd9aa3f57dc6ebcb65dd519f982e9e3363e86dd5f5c4b6e35745a4ee2e1030b91fb62af7cae2874683b2e804c0627cfe7218ce5d6ab62d3a5758a7
   languageName: node
   linkType: hard
 
@@ -7785,7 +7785,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "hashids@workspace:."
   dependencies:
-    "@niieani/scaffold": ^1.7.0
+    "@niieani/scaffold": ^1.7.1
     nodemark: ^0.3.0
     require-from-web: ^1.2.0
     ts-node: ^10.9.1
