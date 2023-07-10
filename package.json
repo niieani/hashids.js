@@ -91,7 +91,7 @@
     "not dead"
   ],
   "devDependencies": {
-    "@niieani/scaffold": "^1.7.1",
+    "@niieani/scaffold": "^1.7.3",
     "nodemark": "^0.3.0",
     "require-from-web": "^1.2.0",
     "ts-node": "^10.9.1"
