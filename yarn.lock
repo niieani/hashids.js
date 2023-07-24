@@ -2645,9 +2645,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@niieani/scaffold@npm:^1.7.3":
-  version: 1.7.3
-  resolution: "@niieani/scaffold@npm:1.7.3"
+"@niieani/scaffold@npm:^1.7.4":
+  version: 1.7.4
+  resolution: "@niieani/scaffold@npm:1.7.4"
   dependencies:
     "@babel/core": ^7.21.8
     "@babel/preset-env": ^7.21.5
@@ -2682,7 +2682,7 @@ __metadata:
     prettier: ^2.8.8
     rollup: ^2.79.1
     sort-package-json: ^1.57.0
-    ts-loader: ^9.4.2
+    ts-loader: ^9.4.4
     typescript: ^5.0.4
     webpack: ^5.83.1
     webpack-cli: ^4.10.0
@@ -2691,7 +2691,7 @@ __metadata:
   bin:
     beemo: bin/beemo.js
     rrun: bin/rrun.js
-  checksum: 1c543c8ceffc1fcccb4c70ad907171aa06d20d20d8649262007a0b651f1493922f54e369dec60f4f895756ee286fa9db0c258df32018e1a602e53d06ad718f66
+  checksum: 87817513effbe554ebd5e62a9f6503fefeda769d3cc2e1fa2f41ba48fcbe4016a96601a0055167f2f5cf63a17aa67836c842dfb08a3035561eba196e51481221
   languageName: node
   linkType: hard
 
@@ -7766,7 +7766,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "hashids@workspace:."
   dependencies:
-    "@niieani/scaffold": ^1.7.3
+    "@niieani/scaffold": ^1.7.4
     nodemark: ^0.3.0
     require-from-web: ^1.2.0
     ts-node: ^10.9.1
@@ -13206,7 +13206,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ts-loader@npm:^9.4.2":
+"ts-loader@npm:^9.4.4":
   version: 9.4.4
   resolution: "ts-loader@npm:9.4.4"
   dependencies:
