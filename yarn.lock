@@ -2636,7 +2636,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@niieani/scaffold@npm:^1.7.4":
+"@niieani/scaffold@npm:^1.7.6":
   version: 1.7.6
   resolution: "@niieani/scaffold@npm:1.7.6"
   dependencies:
@@ -7777,7 +7777,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "hashids@workspace:."
   dependencies:
-    "@niieani/scaffold": ^1.7.4
+    "@niieani/scaffold": ^1.7.6
     nodemark: ^0.3.0
     require-from-web: ^1.2.0
     ts-node: ^10.9.1
