@@ -2607,9 +2607,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@niieani/scaffold@npm:^1.7.6":
-  version: 1.7.6
-  resolution: "@niieani/scaffold@npm:1.7.6"
+"@niieani/scaffold@npm:^1.7.7":
+  version: 1.7.7
+  resolution: "@niieani/scaffold@npm:1.7.7"
   dependencies:
     "@babel/core": ^7.21.8
     "@babel/preset-env": ^7.21.5
@@ -2634,7 +2634,7 @@ __metadata:
     "@vitejs/plugin-react": ^2.2.0
     commitlint: ^17.6.7
     eslint: ^8.41.0
-    eslint-config-niieani: 1.2.1
+    eslint-config-niieani: 1.2.2
     eslint-plugin-eslint-comments: ^3.2.0
     husky: ^8.0.3
     jest: ^29.5.0
@@ -2653,7 +2653,7 @@ __metadata:
   bin:
     beemo: bin/beemo.js
     rrun: bin/rrun.js
-  checksum: 66982b8f1353ef06ac506a92b5038e83db652c26b359f21cb56eb89f38d043e78219f7f1eab97a8b78529d8605b8f092fbee88eab3cedf9b34ea0390766262d1
+  checksum: d5ae6f39f9906640afe486a99c01e133532e338ee3ef5c8e258b9dfe21ad78b5a106f2fb2c15beb595fb7861655177983894ade6a1606c6bd3e8980530e579ff
   languageName: node
   linkType: hard
 
@@ -6434,9 +6434,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-config-niieani@npm:1.2.1":
-  version: 1.2.1
-  resolution: "eslint-config-niieani@npm:1.2.1"
+"eslint-config-niieani@npm:1.2.2":
+  version: 1.2.2
+  resolution: "eslint-config-niieani@npm:1.2.2"
   dependencies:
     "@niieani/scaffold-config-constants": 1.0.3
     "@typescript-eslint/eslint-plugin": ^5.59.6
@@ -6445,7 +6445,7 @@ __metadata:
     eslint-config-prettier: ^8.8.0
     eslint-plugin-compat: ^4.1.4
     eslint-plugin-import: ^2.27.5
-    eslint-plugin-jest: ^27.2.2
+    eslint-plugin-jest: ^27.2.3
     eslint-plugin-jsx-a11y: ^6.7.1
     eslint-plugin-node: ^11.1.0
     eslint-plugin-promise: ^6.1.1
@@ -6456,7 +6456,7 @@ __metadata:
     eslint-plugin-unicorn: ^47.0.0
   peerDependencies:
     eslint: ">=7.32.0"
-  checksum: 45803e183efdcfb89288429b070303a8cc588c51b9fbb61fb54d0a78c3b456687e2e4bb363f9627523910e1b0a072cab0fd25fb1ab8413984b4523f87a59f781
+  checksum: a2ad042137cfea7c3c8682ecebba4b58cc67ed3f45847919714d1f75e6b9a2c8f4e6d4873f8b94a01de2a41704732f351777eeac0022dd90c7208aec728020ed
   languageName: node
   linkType: hard
 
@@ -6581,7 +6581,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-jest@npm:^27.2.2":
+"eslint-plugin-jest@npm:^27.2.3":
   version: 27.2.3
   resolution: "eslint-plugin-jest@npm:27.2.3"
   dependencies:
@@ -7776,7 +7776,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "hashids@workspace:."
   dependencies:
-    "@niieani/scaffold": ^1.7.6
+    "@niieani/scaffold": ^1.7.7
     nodemark: ^0.3.0
     require-from-web: ^1.2.0
     ts-node: ^10.9.1
