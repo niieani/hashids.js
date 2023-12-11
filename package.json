@@ -94,7 +94,7 @@
     "@niieani/scaffold": "^1.7.13",
     "nodemark": "^0.3.0",
     "require-from-web": "^1.2.0",
-    "ts-node": "^10.9.1"
+    "ts-node": "^10.9.2"
   },
   "publishConfig": {
     "access": "public"
