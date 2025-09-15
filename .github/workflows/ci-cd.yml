@@ -39,7 +39,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 16.20.2
           cache: 'yarn'
       - name: Build and release
         run: |
