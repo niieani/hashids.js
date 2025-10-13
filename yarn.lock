@@ -80,7 +80,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/core@npm:^7.28.0":
+"@babel/core@npm:^7.28.4":
   version: 7.28.4
   resolution: "@babel/core@npm:7.28.4"
   dependencies:
@@ -2882,11 +2882,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@niieani/scaffold@npm:^1.7.51":
-  version: 1.7.51
-  resolution: "@niieani/scaffold@npm:1.7.51"
+"@niieani/scaffold@npm:^1.7.54":
+  version: 1.7.54
+  resolution: "@niieani/scaffold@npm:1.7.54"
   dependencies:
-    "@babel/core": ^7.28.0
+    "@babel/core": ^7.28.4
     "@babel/preset-env": ^7.27.2
     "@beemo/cli": ^2.0.6
     "@beemo/config-constants": ^2.2.0
@@ -2904,12 +2904,12 @@ __metadata:
     "@niieani/beemo-driver-vite": 1.2.4
     "@niieani/scaffold-config-constants": 1.0.3
     "@rollup/plugin-node-resolve": ^15.3.1
-    "@swc/core": ^1.7.42
+    "@swc/core": ^1.13.5
     "@swc/jest": ^0.2.38
     "@vitejs/plugin-react": ^2.2.0
     commitlint: ^17.8.1
     eslint: ^8.41.0
-    eslint-config-niieani: 1.2.9
+    eslint-config-niieani: 1.2.10
     eslint-plugin-eslint-comments: ^3.2.0
     husky: ^8.0.3
     jest: ^29.5.0
@@ -2928,7 +2928,7 @@ __metadata:
   bin:
     beemo: bin/beemo.js
     rrun: bin/rrun.js
-  checksum: 7804f24cf35af49cc58105bb69a0d92b90d196f875a6e88b69ff0c5b5cbb340e7c613b181ffa6f517094630486e78608bdb987ff12842de7874af22326190251
+  checksum: 06e171c19992de471cb4b35de240accd51aab93c07ef087f0ef5f394ba71202a11e0f37f1c93382e01dc35f3fc55c91c8d4b5b70288041b0c61ff9bb54f2b5ee
   languageName: node
   linkType: hard
 
@@ -3533,92 +3533,92 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@swc/core-darwin-arm64@npm:1.13.5":
-  version: 1.13.5
-  resolution: "@swc/core-darwin-arm64@npm:1.13.5"
+"@swc/core-darwin-arm64@npm:1.13.20":
+  version: 1.13.20
+  resolution: "@swc/core-darwin-arm64@npm:1.13.20"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
 
-"@swc/core-darwin-x64@npm:1.13.5":
-  version: 1.13.5
-  resolution: "@swc/core-darwin-x64@npm:1.13.5"
+"@swc/core-darwin-x64@npm:1.13.20":
+  version: 1.13.20
+  resolution: "@swc/core-darwin-x64@npm:1.13.20"
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
 
-"@swc/core-linux-arm-gnueabihf@npm:1.13.5":
-  version: 1.13.5
-  resolution: "@swc/core-linux-arm-gnueabihf@npm:1.13.5"
+"@swc/core-linux-arm-gnueabihf@npm:1.13.20":
+  version: 1.13.20
+  resolution: "@swc/core-linux-arm-gnueabihf@npm:1.13.20"
   conditions: os=linux & cpu=arm
   languageName: node
   linkType: hard
 
-"@swc/core-linux-arm64-gnu@npm:1.13.5":
-  version: 1.13.5
-  resolution: "@swc/core-linux-arm64-gnu@npm:1.13.5"
+"@swc/core-linux-arm64-gnu@npm:1.13.20":
+  version: 1.13.20
+  resolution: "@swc/core-linux-arm64-gnu@npm:1.13.20"
   conditions: os=linux & cpu=arm64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@swc/core-linux-arm64-musl@npm:1.13.5":
-  version: 1.13.5
-  resolution: "@swc/core-linux-arm64-musl@npm:1.13.5"
+"@swc/core-linux-arm64-musl@npm:1.13.20":
+  version: 1.13.20
+  resolution: "@swc/core-linux-arm64-musl@npm:1.13.20"
   conditions: os=linux & cpu=arm64 & libc=musl
   languageName: node
   linkType: hard
 
-"@swc/core-linux-x64-gnu@npm:1.13.5":
-  version: 1.13.5
-  resolution: "@swc/core-linux-x64-gnu@npm:1.13.5"
+"@swc/core-linux-x64-gnu@npm:1.13.20":
+  version: 1.13.20
+  resolution: "@swc/core-linux-x64-gnu@npm:1.13.20"
   conditions: os=linux & cpu=x64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@swc/core-linux-x64-musl@npm:1.13.5":
-  version: 1.13.5
-  resolution: "@swc/core-linux-x64-musl@npm:1.13.5"
+"@swc/core-linux-x64-musl@npm:1.13.20":
+  version: 1.13.20
+  resolution: "@swc/core-linux-x64-musl@npm:1.13.20"
   conditions: os=linux & cpu=x64 & libc=musl
   languageName: node
   linkType: hard
 
-"@swc/core-win32-arm64-msvc@npm:1.13.5":
-  version: 1.13.5
-  resolution: "@swc/core-win32-arm64-msvc@npm:1.13.5"
+"@swc/core-win32-arm64-msvc@npm:1.13.20":
+  version: 1.13.20
+  resolution: "@swc/core-win32-arm64-msvc@npm:1.13.20"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
-"@swc/core-win32-ia32-msvc@npm:1.13.5":
-  version: 1.13.5
-  resolution: "@swc/core-win32-ia32-msvc@npm:1.13.5"
+"@swc/core-win32-ia32-msvc@npm:1.13.20":
+  version: 1.13.20
+  resolution: "@swc/core-win32-ia32-msvc@npm:1.13.20"
   conditions: os=win32 & cpu=ia32
   languageName: node
   linkType: hard
 
-"@swc/core-win32-x64-msvc@npm:1.13.5":
-  version: 1.13.5
-  resolution: "@swc/core-win32-x64-msvc@npm:1.13.5"
+"@swc/core-win32-x64-msvc@npm:1.13.20":
+  version: 1.13.20
+  resolution: "@swc/core-win32-x64-msvc@npm:1.13.20"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
 
-"@swc/core@npm:^1.7.42":
-  version: 1.13.5
-  resolution: "@swc/core@npm:1.13.5"
+"@swc/core@npm:^1.13.5":
+  version: 1.13.20
+  resolution: "@swc/core@npm:1.13.20"
   dependencies:
-    "@swc/core-darwin-arm64": 1.13.5
-    "@swc/core-darwin-x64": 1.13.5
-    "@swc/core-linux-arm-gnueabihf": 1.13.5
-    "@swc/core-linux-arm64-gnu": 1.13.5
-    "@swc/core-linux-arm64-musl": 1.13.5
-    "@swc/core-linux-x64-gnu": 1.13.5
-    "@swc/core-linux-x64-musl": 1.13.5
-    "@swc/core-win32-arm64-msvc": 1.13.5
-    "@swc/core-win32-ia32-msvc": 1.13.5
-    "@swc/core-win32-x64-msvc": 1.13.5
+    "@swc/core-darwin-arm64": 1.13.20
+    "@swc/core-darwin-x64": 1.13.20
+    "@swc/core-linux-arm-gnueabihf": 1.13.20
+    "@swc/core-linux-arm64-gnu": 1.13.20
+    "@swc/core-linux-arm64-musl": 1.13.20
+    "@swc/core-linux-x64-gnu": 1.13.20
+    "@swc/core-linux-x64-musl": 1.13.20
+    "@swc/core-win32-arm64-msvc": 1.13.20
+    "@swc/core-win32-ia32-msvc": 1.13.20
+    "@swc/core-win32-x64-msvc": 1.13.20
     "@swc/counter": ^0.1.3
-    "@swc/types": ^0.1.24
+    "@swc/types": ^0.1.25
   peerDependencies:
     "@swc/helpers": ">=0.5.17"
   dependenciesMeta:
@@ -3645,7 +3645,7 @@ __metadata:
   peerDependenciesMeta:
     "@swc/helpers":
       optional: true
-  checksum: e69a1dce49eeaa1cd3899a7b6545ba53668782578645802fbb56e46cc699bdb7a077aa4d06ad57a496813e449356bcd1088ee32e85e6d7147fff219dad9b8a38
+  checksum: 6a2cd6773f939d48353910722774ec46f01317ee2c3ee658aaa39e7a2a22a2e0599b6742c38f840add5a3b8cd46440444a58d898ba67db66185f6ff11fc1b70b
   languageName: node
   linkType: hard
 
@@ -3669,7 +3669,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@swc/types@npm:^0.1.24":
+"@swc/types@npm:^0.1.25":
   version: 0.1.25
   resolution: "@swc/types@npm:0.1.25"
   dependencies:
@@ -6806,15 +6806,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-config-niieani@npm:1.2.9":
-  version: 1.2.9
-  resolution: "eslint-config-niieani@npm:1.2.9"
+"eslint-config-niieani@npm:1.2.10":
+  version: 1.2.10
+  resolution: "eslint-config-niieani@npm:1.2.10"
   dependencies:
     "@niieani/scaffold-config-constants": 1.0.3
     "@typescript-eslint/eslint-plugin": ^5.62.0
     "@typescript-eslint/parser": ^5.62.0
     eslint-config-airbnb-base: ^15.0.0
-    eslint-config-prettier: ^8.10.0
+    eslint-config-prettier: ^8.10.2
     eslint-plugin-compat: ^4.2.0
     eslint-plugin-import: ^2.27.5
     eslint-plugin-jest: ^27.2.3
@@ -6828,11 +6828,11 @@ __metadata:
     eslint-plugin-unicorn: ^47.0.0
   peerDependencies:
     eslint: ">=7.32.0"
-  checksum: 2898640b6d71ac913d31843cf2c40028052e5a9cc098918744f8e7b06a4c8819382a490e821065eaa629a2637cc80fcbddb93beb0ce57b66aed01a80d1aa8c44
+  checksum: f71941a6cc97b0043b7619a1e3eff186192a9f8f6a2745fb6fd70fc2d104c7dc931a0bad3a57c2fd6ca3a776106a0eece69bd520cb4592c83697cb7cd8591453
   languageName: node
   linkType: hard
 
-"eslint-config-prettier@npm:^8.10.0":
+"eslint-config-prettier@npm:^8.10.2":
   version: 8.10.2
   resolution: "eslint-config-prettier@npm:8.10.2"
   peerDependencies:
@@ -8201,7 +8201,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "hashids@workspace:."
   dependencies:
-    "@niieani/scaffold": ^1.7.51
+    "@niieani/scaffold": ^1.7.54
     nodemark: ^0.3.0
     require-from-web: ^1.2.0
     ts-node: ^10.9.2
