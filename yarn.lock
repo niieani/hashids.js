@@ -2882,9 +2882,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@niieani/scaffold@npm:^1.7.54":
-  version: 1.7.54
-  resolution: "@niieani/scaffold@npm:1.7.54"
+"@niieani/scaffold@npm:^1.7.55":
+  version: 1.7.55
+  resolution: "@niieani/scaffold@npm:1.7.55"
   dependencies:
     "@babel/core": ^7.28.4
     "@babel/preset-env": ^7.27.2
@@ -2905,7 +2905,7 @@ __metadata:
     "@niieani/scaffold-config-constants": 1.0.3
     "@rollup/plugin-node-resolve": ^15.3.1
     "@swc/core": ^1.13.5
-    "@swc/jest": ^0.2.38
+    "@swc/jest": ^0.2.39
     "@vitejs/plugin-react": ^2.2.0
     commitlint: ^17.8.1
     eslint: ^8.41.0
@@ -2928,7 +2928,7 @@ __metadata:
   bin:
     beemo: bin/beemo.js
     rrun: bin/rrun.js
-  checksum: 06e171c19992de471cb4b35de240accd51aab93c07ef087f0ef5f394ba71202a11e0f37f1c93382e01dc35f3fc55c91c8d4b5b70288041b0c61ff9bb54f2b5ee
+  checksum: 81747332100a02b05f3ab809ec35e31322b6b9588daa40d86381ff2ae7c0aceb8d4217a2493a900437cfe6bf068802484c1a65f884984c9b3ef9f5fedde08cc2
   languageName: node
   linkType: hard
 
@@ -3656,7 +3656,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@swc/jest@npm:^0.2.38":
+"@swc/jest@npm:^0.2.39":
   version: 0.2.39
   resolution: "@swc/jest@npm:0.2.39"
   dependencies:
@@ -8201,7 +8201,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "hashids@workspace:."
   dependencies:
-    "@niieani/scaffold": ^1.7.54
+    "@niieani/scaffold": ^1.7.55
     nodemark: ^0.3.0
     require-from-web: ^1.2.0
     ts-node: ^10.9.2
