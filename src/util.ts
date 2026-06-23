@@ -17,7 +17,7 @@ export const isIntegerNumber = (n: NumberLike | string) =>
   (!Number.isNaN(Number(n)) && Math.floor(Number(n)) === n)
 
 export const isPositiveAndFinite = (n: NumberLike) =>
-  typeof n === 'bigint' || (n >= 0 && Number.isSafeInteger(n))
+  typeof n === 'bigint' ? n >= BigInt(0) : n >= 0 && Number.isSafeInteger(n)
 
 export function shuffle(
   alphabetChars: string[],
